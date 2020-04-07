@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?><!--CardView卡片式布局   简单的FrameLayout 额外提供了圆角和阴影效果 具有立体感觉-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10px"
+    android:padding="8px"
+    app:cardBackgroundColor="#eeeeee">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="180px"
+        android:layout_margin="20px">
+<LinearLayout
+    android:id="@+id/user"
+    android:layout_width="0dp"
+    android:layout_weight="1"
+    android:layout_height="wrap_content">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avator"
+            android:layout_width="150px"
+            android:layout_height="150px"
+            android:layout_gravity="center"
+            android:layout_marginLeft="50px"
+            android:src="@mipmap/m10" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="0dp"
+            android:layout_height="120px"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30px"
+            android:layout_weight="1"
+            android:gravity="left|center"
+            android:text="用户名"
+            android:textSize="18sp" />
+    </LinearLayout>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/focusCard"
+            android:layout_width="300px"
+            android:layout_height="100px"
+            android:layout_gravity="center"
+            app:cardBackgroundColor="#dddddd"
+            app:cardCornerRadius="10px">
+
+            <TextView
+                android:id="@+id/focus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="已关注"
+                android:textColor="#999999"
+                android:textSize="15sp" />
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</LinearLayout>

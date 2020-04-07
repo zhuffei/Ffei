@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="150px"
+    android:clipChildren="false"
+    android:orientation="vertical">
+    <!--线条灰色线条-->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3px"
+        android:background="@drawable/line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:background="#eeeeee">
+
+        <LinearLayout
+            android:id="@+id/mFootBar"
+            android:layout_width="match_parent"
+            android:layout_height="150px"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:id="@+id/mLinFX"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/mBtnFX"
+                    android:layout_width="70px"
+                    android:layout_height="70px"
+                    android:background="@mipmap/faxian_pressed"
+                    android:button="@null"
+                    android:clickable="false" />
+
+                <TextView
+                    android:id="@+id/mTvFaXian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10px"
+                    android:text="发现"
+                    android:textColor="#eb4f38" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/mLinGuanZhu"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/mBtnGZ"
+                    android:layout_width="70px"
+                    android:layout_height="70px"
+                    android:background="@mipmap/focus_normal"
+                    android:clickable="false" />
+
+                <TextView
+                    android:id="@+id/mTvGuanZhu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5px"
+                    android:text="关注" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="10px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mLinLiaoTian"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/mBtnLT"
+                    android:layout_width="70px"
+                    android:layout_height="70px"
+                    android:background="@mipmap/chat_normal"
+                    android:clickable="false" />
+
+                <TextView
+                    android:id="@+id/mTvLiaoTian"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10px"
+                    android:text="聊天" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/mLinUser"
+                android:layout_width="0px"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/mBtnWD"
+                    android:layout_width="70px"
+                    android:layout_height="70px"
+                    android:background="@mipmap/user_normal"
+                    android:clickable="false" />
+
+                <TextView
+                    android:id="@+id/mTvUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10px"
+                    android:text="我的" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+
+            <ImageView
+                android:id="@+id/mBtnPlus"
+                android:layout_width="170px"
+                android:layout_height="170px"
+                android:src="@mipmap/plus"
+                android:clickable="false"
+                android:layout_gravity="center"
+                android:layout_marginTop="-180px"
+
+                />
+    </LinearLayout>
+</LinearLayout>

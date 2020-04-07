@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_marginTop="50px"
+        android:layout_marginLeft="40px"
+        android:layout_width="80px"
+        android:layout_height="80px"
+        android:src="@drawable/back"
+        />
+    <EditText
+        android:id="@+id/phone_input"
+        android:gravity="center"
+        android:layout_width="900px"
+        android:layout_height="wrap_content"
+        android:hint="@string/tip_phone"
+        android:layout_marginTop="75dp"
+        android:background="@drawable/rounded_edittext"
+        android:textCursorDrawable="@null"
+        android:textSize="20sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/password_input"
+        android:layout_alignStart="@+id/password_input" />
+    <EditText
+        android:layout_marginTop="60px"
+        android:id="@+id/password_input"
+        android:gravity="center"
+        android:layout_marginLeft="15px"
+        android:layout_marginRight="15px"
+        android:background="@drawable/rounded_edittext"
+        android:layout_width="900px"
+        android:layout_height="wrap_content"
+        android:hint="@string/tip_password"
+        android:inputType="textPassword"
+        android:layout_below="@id/phone_input"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_marginTop="60px"
+        android:textSize="20sp"
+        android:layout_width="900px"
+        android:layout_height="130px"
+        android:text="@string/signin"
+        android:textColor="@color/white"
+        android:layout_below="@id/password_input"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_round"/>
+
+    <TextView
+        android:id="@+id/register"
+        android:layout_marginTop="20px"
+        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="没有账号？去注册"
+        android:textColor="#3d6be6"
+        android:layout_below="@id/btn_login"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+
+        />
+
+</RelativeLayout>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.zhuffei.ffei"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:leon="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eee"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50px"
+                android:background="@drawable/mine"
+                android:orientation="horizontal"
+                android:paddingBottom="100px"
+                android:paddingTop="100px">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="200px"
+                    android:layout_height="200px"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="80px"
+                    android:src="@mipmap/nologin"
+                    app:civ_border_color="#FFFFFF"
+                    app:civ_border_width="2dp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="30px"
+                        android:layout_marginLeft="60px"
+                        android:layout_marginTop="10px"
+                        android:text="未登录"
+                        android:textColor="@color/white"
+                        android:textSize="25sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="50px"
+                        android:text="登录发现更多精彩"
+                        android:textColor="@color/white"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="150px"
+                android:layout_marginBottom="50px"
+                android:layout_marginLeft="100px"
+                android:layout_marginRight="100px"
+                android:background="@drawable/card">
+
+                <LinearLayout
+                    android:id="@+id/focus"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|right"
+                        android:paddingRight="10px"
+                        android:text="0"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical|left"
+                        android:text="关注"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="|"
+                    android:textSize="20sp" />
+                <LinearLayout
+                    android:id="@+id/fans"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:paddingRight="10px"
+                    android:text="0"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|left"
+                    android:text="粉丝"
+                    android:textSize="20sp" />
+                    </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <com.leon.lib.settingview.LSettingItem
+            android:id="@+id/item_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            leon:leftIcon="@mipmap/fabu"
+            leon:leftText="我的发布" />
+
+        <com.leon.lib.settingview.LSettingItem
+            android:id="@+id/item_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="0px"
+            leon:leftIcon="@mipmap/shoucang"
+            leon:leftText="我的收藏" />
+
+
+        <com.leon.lib.settingview.LSettingItem
+            android:id="@+id/item_three"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            leon:leftIcon="@mipmap/yigou"
+            leon:leftText="已购列表" />
+
+        <com.leon.lib.settingview.LSettingItem
+            android:id="@+id/item_four"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            leon:leftIcon="@mipmap/yishou"
+            leon:leftText="已售列表" />
+
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="130px"
+        android:layout_marginBottom="50px"
+        android:background="#ffffff"
+        android:gravity="center"
+        android:text="退出登录"
+        android:textColor="#ff0000"
+        android:textSize="18sp">
+
+    </TextView>
+</LinearLayout>
