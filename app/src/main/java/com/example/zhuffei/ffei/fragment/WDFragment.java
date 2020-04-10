@@ -4,11 +4,14 @@ package com.example.zhuffei.ffei.fragment;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,9 +24,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.FileProvider;
+
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.activity.FocusActivity;
 import com.example.zhuffei.ffei.activity.MyGoodsActivity;
+import com.example.zhuffei.ffei.tool.AsyncImageLoader;
+import com.example.zhuffei.ffei.tool.FileUtil;
 import com.example.zhuffei.ffei.tool.Tool;
 import com.leon.lib.settingview.LSettingItem;
 
@@ -37,9 +44,11 @@ import static android.app.Activity.RESULT_CANCELED;
  */
 public class WDFragment extends BaseFragment {
 
+    private boolean isLogin  = false;
+
     private Context mContext;
 
-    private ImageView profile_image;
+    private ImageView avator;
     /* 请求识别码 */
     private static final int CODE_GALLERY_REQUEST = 0xa0;
     private static final int CODE_CAMERA_REQUEST = 0xa1;
@@ -58,20 +67,20 @@ public class WDFragment extends BaseFragment {
 
     LinearLayout focus,fans;
 
+    TextView cancel,local,camera,userName,phone;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment4, container, false);
-        profile_image = view.findViewById(R.id.profile_image);
+        findView(view);
+//        initPhotoError();
         mContext = this.getActivity();
-        profile_image.setOnClickListener(new View.OnClickListener() {
+        avator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Dialog dialog = new Dialog(mContext, R.style.BottomDialogStyle);
                 View view = View.inflate(mContext, R.layout.activity_avator, null);
-                TextView cancel = view.findViewById(R.id.cancle);
-                TextView local = view.findViewById(R.id.local);
-                TextView camera = view.findViewById(R.id.camera);
                 dialog.setContentView(view);
                 dialog.setCanceledOnTouchOutside(true);
                 view.setMinimumHeight((int) (Tool.getScreenHeight(mContext) * 0.2f));
@@ -81,6 +90,9 @@ public class WDFragment extends BaseFragment {
                 lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
                 lp.gravity = Gravity.BOTTOM;
                 dialogWindow.setAttributes(lp);
+                cancel = view.findViewById(R.id.cancle);
+                local = view.findViewById(R.id.local);
+                camera = view.findViewById(R.id.camera);
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -103,7 +115,6 @@ public class WDFragment extends BaseFragment {
                 dialog.show();
             }
         });
-        itemOne = view.findViewById(R.id.item_one);
         itemOne.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click() {
@@ -112,7 +123,6 @@ public class WDFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
-        itemTwo = view.findViewById(R.id.item_two);
         itemTwo.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click() {
@@ -121,7 +131,6 @@ public class WDFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
-        itemThree = view.findViewById(R.id.item_three);
         itemThree.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click() {
@@ -130,7 +139,6 @@ public class WDFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
-        itemFour = view.findViewById(R.id.item_four);
         itemFour.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click() {
@@ -140,7 +148,6 @@ public class WDFragment extends BaseFragment {
             }
         });
 
-        focus = view .findViewById(R.id.focus);
         focus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -149,7 +156,6 @@ public class WDFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
-        fans = view .findViewById(R.id.fans);
         fans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -158,7 +164,38 @@ public class WDFragment extends BaseFragment {
                 startActivity(intent);
             }
         });
+        setUser();
         return view;
+    }
+
+    private void findView(View view){
+        phone = view.findViewById(R.id.phone);
+        avator = view.findViewById(R.id.avator);
+        itemOne = view.findViewById(R.id.item_one);
+        itemTwo = view.findViewById(R.id.item_two);
+        itemThree = view.findViewById(R.id.item_three);
+        itemFour = view.findViewById(R.id.item_four);
+        focus = view .findViewById(R.id.focus);
+        fans = view .findViewById(R.id.fans);
+        userName = view.findViewById(R.id.userName);
+    }
+
+
+    //展示已登录用户的信息
+    public void setUser(){
+        SharedPreferences sp = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String name = sp.getString("name","");
+        String img = sp.getString("img","");
+        String phoneNumber =  sp.getString("phone","");
+
+        if(!name.isEmpty()){
+            phoneNumber = phoneNumber.substring(0,3)+"****"+phoneNumber.substring(7,11);
+            userName.setText(name);
+            phone.setText(phoneNumber);
+            AsyncImageLoader asyncImageLoader = new AsyncImageLoader(mContext);
+            asyncImageLoader.asyncloadImage(avator,img);
+        }
+
     }
 
     private void choseHeadImageFromGallery() {
@@ -174,11 +211,13 @@ public class WDFragment extends BaseFragment {
 
         // 判断存储卡是否可用，存储照片文件
         if (hasSdcard()) {
-            intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT, Uri
-                    .fromFile(new File(Environment
+            intentFromCapture.putExtra(MediaStore.EXTRA_OUTPUT,
+                    FileProvider.getUriForFile(mContext,"com.zhuffei.ffei.fileprovider", new File(Environment
                             .getExternalStorageDirectory(), IMAGE_FILE_NAME)));
+//                    Uri
+//                    .fromFile(new File(Environment
+//                            .getExternalStorageDirectory(), IMAGE_FILE_NAME)));
         }
-
         startActivityForResult(intentFromCapture, CODE_CAMERA_REQUEST);
     }
 
@@ -198,13 +237,11 @@ public class WDFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent intent) {
-
         // 用户没有进行有效的设置操作，返回
         if (resultCode == RESULT_CANCELED) {
             Toast.makeText(mContext, "操作取消", Toast.LENGTH_LONG).show();
             return;
         }
-
         switch (requestCode) {
             case CODE_GALLERY_REQUEST:
                 cropRawPhoto(intent.getData());
@@ -215,7 +252,8 @@ public class WDFragment extends BaseFragment {
                     File tempFile = new File(
                             Environment.getExternalStorageDirectory(),
                             IMAGE_FILE_NAME);
-                    cropRawPhoto(Uri.fromFile(tempFile));
+//                    cropRawPhoto(Uri.fromFile(tempFile));
+                   cropRawPhoto( FileProvider.getUriForFile(mContext,"com.zhuffei.ffei.fileprovider", tempFile));
                 } else {
                     Toast.makeText(mContext, "没有SDCard!", Toast.LENGTH_LONG)
                             .show();
@@ -238,7 +276,7 @@ public class WDFragment extends BaseFragment {
      * 裁剪原始的图片
      */
     public void cropRawPhoto(Uri uri) {
-
+        Log.d("aaaaaaaa",uri.toString());
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
 
@@ -264,7 +302,7 @@ public class WDFragment extends BaseFragment {
         Bundle extras = intent.getExtras();
         if (extras != null) {
             Bitmap photo = extras.getParcelable("data");
-            profile_image.setImageBitmap(photo);
+            avator.setImageBitmap(photo);
         }
     }
 

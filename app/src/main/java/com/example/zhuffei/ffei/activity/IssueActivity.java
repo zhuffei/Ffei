@@ -1,8 +1,17 @@
 package com.example.zhuffei.ffei.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.tool.FileUploadManager;
+import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.lidong.photopicker.ImageCaptureManager;
 import com.lidong.photopicker.PhotoPickerActivity;
 import com.lidong.photopicker.PhotoPreviewActivity;
@@ -28,6 +38,7 @@ import com.lidong.photopicker.intent.PhotoPreviewIntent;
 import org.json.JSONArray;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class IssueActivity extends AppCompatActivity {
@@ -50,6 +61,7 @@ public class IssueActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue);
+        initPermission();
         gridView = (GridView) findViewById(R.id.gridView);
         mButton = (Button) findViewById(R.id.button);
         textView= (EditText)findViewById(R.id.title);
@@ -101,6 +113,54 @@ public class IssueActivity extends AppCompatActivity {
                 IssueActivity.this.finish();
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        boolean hasPermissionDismiss = false;//有权限没有通过
+        if (mRequestCode == requestCode) {
+            for (int i = 0; i < grantResults.length; i++) {
+                if (grantResults[i] == -1) {
+                    hasPermissionDismiss = true;
+                }
+            }
+            //如果有权限没有被允许
+            if (hasPermissionDismiss) {
+                finish();//跳转到系统设置权限页面，或者直接关闭页面，不让他继续访问
+            }else{
+                //全部权限通过，可以进行下一步操作。。。
+
+            }
+        }
+    }
+
+    //申请两个权限，录音和文件读写
+    //1、首先声明一个数组permissions，将需要的权限都放在里面
+    String[] permissions = new String[]{Manifest.permission.CAMERA,
+            Manifest.permission.READ_EXTERNAL_STORAGE};
+    //2、创建一个mPermissionList，逐个判断哪些权限未授予，未授予的权限存储到mPerrrmissionList中
+    List<String> mPermissionList = new ArrayList<>();
+
+    private final int mRequestCode = 100;//权限请求码
+    //权限判断和申请
+    private void initPermission() {
+
+        mPermissionList.clear();//清空没有通过的权限
+
+        //逐个判断你要的权限是否已经通过
+        for (int i = 0; i < permissions.length; i++) {
+            if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
+                mPermissionList.add(permissions[i]);//添加还未授予的权限
+            }
+        }
+
+        //申请权限
+        if (mPermissionList.size() > 0) {//有权限没有通过，需要申请
+            ActivityCompat.requestPermissions(this, permissions, mRequestCode);
+        }else{
+            //说明权限都已经通过，可以做你想做的事情去
+        }
     }
 
 

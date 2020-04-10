@@ -22,7 +22,7 @@ public class User {
 
     private int schoolId;
 
-    private int img;
+    private String img;
 
     private boolean focus;
 
@@ -82,11 +82,11 @@ public class User {
         this.schoolId = schoolId;
     }
 
-    public int getImg() {
+    public String getImg() {
         return img;
     }
 
-    public void setImg(int img) {
+    public void setImg(String img) {
         this.img = img;
     }
 
@@ -98,7 +98,7 @@ public class User {
         this.focus = focus;
     }
 
-    public User(boolean focus, int img, String name) {
+    public User(boolean focus, String  img, String name) {
         this.focus = focus;
         this.img = img;
         this.name = name;

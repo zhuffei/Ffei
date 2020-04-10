@@ -5,6 +5,6 @@ package com.example.zhuffei.ffei.tool;
  */
 
 public class UrlTool {
-    public static final String LOGIN = "http://192.168.2.102:8080/ffei/user/login";
-    public static final String REGISTER = "http://192.168.2.102:8080/ffei/user/register";
+    public static final String LOGIN = "http://192.168.1.6:8080/ffei/user/login";
+    public static final String REGISTER = "http://192.168.1.6:8080/ffei/user/register";
 }

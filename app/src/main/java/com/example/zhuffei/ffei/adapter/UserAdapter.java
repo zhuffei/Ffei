@@ -55,8 +55,8 @@ public class UserAdapter extends BaseAdapter {
         final User user = data.get(position);
         View view = LayoutInflater.from(context).inflate(R.layout.user_item, null);
         CircleImageView avator = view.findViewById(R.id.avator);
-        avator.setImageResource(user.getImg());
-
+//        avator.setImageResource(user.getImg());
+        avator.setImageResource(R.mipmap.fabu);
         TextView userName = view.findViewById(R.id.userName);
         userName.setText(user.getName());
 

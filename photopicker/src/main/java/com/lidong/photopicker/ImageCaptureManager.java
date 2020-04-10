@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 
+import androidx.core.content.FileProvider;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -57,7 +59,7 @@ public class ImageCaptureManager {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(photoFile));
+                        FileProvider.getUriForFile(mContext,"com.zhuffei.ffei.fileprovider", photoFile));
             }
         }
         return takePictureIntent;
@@ -67,8 +69,13 @@ public class ImageCaptureManager {
     public void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         File f = new File(mCurrentPhotoPath);
-        Uri contentUri = Uri.fromFile(f);
-        mediaScanIntent.setData(contentUri);
+//        Uri contentUri = Uri.fromFile(f);
+        Uri contentUri = FileProvider.getUriForFile(
+                mContext,
+                 "com.zhuffei.ffei.fileprovider",
+                f);
+        mediaScanIntent.putExtra(MediaStore.EXTRA_OUTPUT, f);
+//        mediaScanIntent.setData(contentUri);
         mContext.sendBroadcast(mediaScanIntent);
     }
 

@@ -16,6 +16,8 @@ import java.util.List;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
+import static com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade;
+
 /**
  * Created by donglua on 15/6/21.
  */
@@ -55,12 +57,9 @@ public class PhotoPagerAdapter extends PagerAdapter {
     } else {
       uri = Uri.fromFile(new File(path));
     }
-    Glide.with(mContext)
-            .load(uri)
-//            .placeholder(R.mipmap.default_error)
-            .error(R.mipmap.default_error)
-            .crossFade()
-            .into(imageView);
+
+    Glide.with(mContext).load(R.mipmap.default_error).transition(withCrossFade()).into(imageView);
+
 
     imageView.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
         @Override
