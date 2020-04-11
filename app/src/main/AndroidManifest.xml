@@ -142,7 +142,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.zhuffei.ffei.fileprovider"
+            android:authorities="com.example.zhuffei.ffei.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

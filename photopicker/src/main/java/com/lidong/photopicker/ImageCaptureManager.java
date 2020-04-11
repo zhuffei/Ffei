@@ -59,7 +59,7 @@ public class ImageCaptureManager {
             // Continue only if the File was successfully created
             if (photoFile != null) {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        FileProvider.getUriForFile(mContext,"com.zhuffei.ffei.fileprovider", photoFile));
+                        FileProvider.getUriForFile(mContext,"com.example.zhuffei.ffei.fileprovider", photoFile));
             }
         }
         return takePictureIntent;
@@ -72,7 +72,7 @@ public class ImageCaptureManager {
 //        Uri contentUri = Uri.fromFile(f);
         Uri contentUri = FileProvider.getUriForFile(
                 mContext,
-                 "com.zhuffei.ffei.fileprovider",
+                 "com.example.zhuffei.ffei.fileprovider",
                 f);
         mediaScanIntent.putExtra(MediaStore.EXTRA_OUTPUT, f);
 //        mediaScanIntent.setData(contentUri);
