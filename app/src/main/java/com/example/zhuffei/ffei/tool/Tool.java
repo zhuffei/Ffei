@@ -2,6 +2,7 @@ package com.example.zhuffei.ffei.tool;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 
@@ -15,6 +16,8 @@ import java.util.regex.Pattern;
  */
 
 public class Tool {
+
+    public static Bitmap bitmap ;
     /**
      * 检测字符串是否为手机号
      * @param phone

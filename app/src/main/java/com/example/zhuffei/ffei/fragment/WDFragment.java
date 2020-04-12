@@ -27,6 +27,7 @@ import android.widget.Toast;
 import androidx.core.content.FileProvider;
 
 import com.example.zhuffei.ffei.R;
+import com.example.zhuffei.ffei.activity.CropActivity;
 import com.example.zhuffei.ffei.activity.FocusActivity;
 import com.example.zhuffei.ffei.activity.MyGoodsActivity;
 import com.example.zhuffei.ffei.tool.AsyncImageLoader;
@@ -62,6 +63,8 @@ public class WDFragment extends BaseFragment {
     /* 头像文件 */
     private static final String IMAGE_FILE_NAME = "temp_head_image.jpg";
 
+
+    Dialog dialog;
     LSettingItem itemOne, itemTwo, itemThree, itemFour;
 
     LinearLayout focus, fans;
@@ -78,7 +81,7 @@ public class WDFragment extends BaseFragment {
         avator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(mContext, R.style.BottomDialogStyle);
+                dialog = new Dialog(mContext, R.style.BottomDialogStyle);
                 View view = View.inflate(mContext, R.layout.activity_avator, null);
                 dialog.setContentView(view);
                 dialog.setCanceledOnTouchOutside(true);
@@ -205,6 +208,7 @@ public class WDFragment extends BaseFragment {
         startActivityForResult(intentFromGallery, CODE_GALLERY_REQUEST);
     }
 
+    //启动相机拍照
     private void choseHeadImageFromCameraCapture() {
         Intent intentFromCapture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
@@ -238,6 +242,9 @@ public class WDFragment extends BaseFragment {
         // 用户没有进行有效的设置操作，返回
         if (resultCode == RESULT_CANCELED) {
             Toast.makeText(mContext, "操作取消", Toast.LENGTH_LONG).show();
+            if(null!=dialog){
+                dialog.dismiss();
+            }
             return;
         }
         switch (requestCode) {
@@ -250,8 +257,8 @@ public class WDFragment extends BaseFragment {
                     File tempFile = new File(
                             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
                             IMAGE_FILE_NAME);
-//                    cropRawPhoto(Uri.fromFile(tempFile));
-                    cropRawPhoto(FileProvider.getUriForFile(mContext, "com.example.zhuffei.ffei.fileprovider", tempFile));
+                    cropRawPhoto(Uri.fromFile(tempFile));
+//                    cropRawPhoto(FileProvider.getUriForFile(mContext, "com.example.zhuffei.ffei.fileprovider", tempFile));
                 } else {
                     Toast.makeText(mContext, "没有SDCard!", Toast.LENGTH_LONG)
                             .show();
@@ -274,32 +281,8 @@ public class WDFragment extends BaseFragment {
      * 裁剪原始的图片
      */
     public void cropRawPhoto(Uri uri) {
-        Log.d("aaaaaaaa", uri.toString());
-
-        Intent intent = new Intent("com.android.camera.action.CROP");
-//        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-//        Uri imguri = Uri.fromFile(new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_FILE_NAME));
-        intent.setDataAndType(uri, "image/*");
-
-        // 设置裁剪
-        intent.putExtra("crop", "true");
-
-        // aspectX , aspectY :宽高的比例
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-
-        // outputX , outputY : 裁剪图片宽高
-        intent.putExtra("outputX", output_X);
-        intent.putExtra("outputY", output_Y);
-        intent.putExtra("return-data", true);
-        intent.putExtra("outputFormat", "JPEG");
-        intent.putExtra("noFaceDetection", true);
-//        intent.putExtra("output", imguri);
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT, new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), IMAGE_FILE_NAME));
-//        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-//        intent.putExtra("noFaceDetection", true);
-
+        Intent intent = new Intent(mContext, CropActivity.class);
+        intent.setData(uri);
         startActivityForResult(intent, CODE_RESULT_REQUEST);
     }
 
@@ -307,10 +290,16 @@ public class WDFragment extends BaseFragment {
      * 提取保存裁剪之后的图片数据，并设置头像部分的View
      */
     private void setImageToHeadView(Intent intent) {
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            Bitmap photo = extras.getParcelable("data");
-            avator.setImageBitmap(photo);
+//        Bundle extras = intent.getExtras();
+//        if (extras != null) {
+//            Bitmap photo = extras.getParcelable("bitmap");
+//            avator.setImageBitmap(photo);
+//        }
+        if(null!=Tool.bitmap){
+            avator.setImageBitmap(Tool.bitmap);
+        }
+        if(null!=dialog){
+            dialog.dismiss();
         }
     }
 

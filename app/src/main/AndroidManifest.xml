@@ -111,6 +111,9 @@
             android:name=".activity.DetailActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
+            android:name=".activity.CropActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
             android:name=".activity.PlusActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
@@ -129,6 +132,7 @@
         <activity
             android:name="com.lidong.photopicker.PhotoPreviewActivity"
             android:theme="@style/PhotoPickerTheme" />
+
         <activity
             android:name=".activity.MyGoodsActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
