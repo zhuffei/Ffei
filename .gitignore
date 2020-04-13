@@ -7,7 +7,7 @@
 /build
 /captures
 .externalNativeBuild
-
+/.idea
 # Project exclude paths
 /uikit/build/
 /uikit/build/intermediates/javac/debug/classes/
