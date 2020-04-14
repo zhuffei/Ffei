@@ -1,19 +1,19 @@
 package com.example.zhuffei.ffei.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.zhuffei.ffei.R;
+import com.example.zhuffei.ffei.service.LoginService;
 import com.example.zhuffei.ffei.tool.CheckSumBuilder;
-import com.example.zhuffei.ffei.tool.ToastHelper;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.example.zhuffei.ffei.tool.Tool;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -43,9 +43,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        findView();
+        setEvent();
+        login();
+
+//        new MThread().start();
+    }
+
+    public void findView(){
         textView = (TextView) findViewById(R.id.register);
         homePage = (Button) findViewById(R.id.homePage);
         button2 = (Button) findViewById(R.id.login);
+    }
+
+    public void login(){
+        SharedPreferences sp = this.getSharedPreferences("user", Context.MODE_PRIVATE);
+        String phone = sp.getString("phone", "");
+        String pwd = sp.getString("pwd", "");
+        Tool.logout(this);
+        if (null!=phone&&!phone.isEmpty()) {
+            LoginService loginService = new LoginService(phone,pwd,this);
+            loginService.login();
+        }
+    }
+    public void setEvent(){
         homePage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -69,9 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-//        new MThread().start();
     }
-
     public void test() throws Exception {
         DefaultHttpClient httpClient = new DefaultHttpClient();
         String url = "https://api.netease.im/nimserver/user/create.action";
@@ -99,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
 
         // 执行请求
         HttpResponse response = httpClient.execute(httpPost);
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         // 打印执行结果
         System.out.println(EntityUtils.toString(response.getEntity(), "utf-8"));
     }

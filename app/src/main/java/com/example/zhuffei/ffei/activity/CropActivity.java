@@ -1,12 +1,8 @@
 package com.example.zhuffei.ffei.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,8 +13,6 @@ import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.tool.FileUtil;
 import com.example.zhuffei.ffei.tool.Tool;
 import com.github.cropbitmap.LikeQQCropView;
-
-import java.io.FileDescriptor;
 
 /**
  * @author zhuffei

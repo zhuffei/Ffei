@@ -2,8 +2,8 @@ package com.example.zhuffei.ffei.tool;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.util.DisplayMetrics;
 
 import com.example.zhuffei.ffei.activity.DetailActivity;
@@ -56,6 +56,18 @@ public class Tool {
     public static void toDetail(Context context){
         Intent intent = new Intent(context, DetailActivity.class);
         context.startActivity(intent);
+    }
+
+    /**
+     * 退出登录，清除用户数据
+     * @param context
+     */
+    public static void logout(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+
+        editor.apply();
     }
 
 

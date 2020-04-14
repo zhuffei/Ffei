@@ -2,22 +2,22 @@ package com.example.zhuffei.ffei.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.zhuffei.ffei.R;
-import com.example.zhuffei.ffei.fragment.LTFragment;
-import com.example.zhuffei.ffei.fragment.GZFragment;
-import com.example.zhuffei.ffei.fragment.WDFragment;
 import com.example.zhuffei.ffei.fragment.FXFragment;
-import com.example.zhuffei.ffei.tool.ToastHelper;
+import com.example.zhuffei.ffei.fragment.GZFragment;
+import com.example.zhuffei.ffei.fragment.LTFragment;
+import com.example.zhuffei.ffei.fragment.WDFragment;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;

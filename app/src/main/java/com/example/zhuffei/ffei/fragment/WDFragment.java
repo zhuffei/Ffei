@@ -56,8 +56,8 @@ public class WDFragment extends BaseFragment {
     private static final int CODE_RESULT_REQUEST = 0xa2;
 
     // 裁剪后图片的宽(X)和高(Y),480 X 480的正方形。
-    private static int output_X = 480;
-    private static int output_Y = 480;
+//    private static int output_X = 480;
+//    private static int output_Y = 480;
 
 
     /* 头像文件 */
@@ -190,7 +190,7 @@ public class WDFragment extends BaseFragment {
         String img = sp.getString("img", "");
         String phoneNumber = sp.getString("phone", "");
 
-        if (!name.isEmpty()) {
+        if (null!=name&&!name.isEmpty()) {
             phoneNumber = phoneNumber.substring(0, 3) + "****" + phoneNumber.substring(7, 11);
             userName.setText(name);
             phone.setText(phoneNumber);
