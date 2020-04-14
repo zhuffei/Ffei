@@ -60,7 +60,6 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (!Tool.isPhoneNumber(phone)) {
                     ToastHelper.showToast(LoginActivity.this, "手机号格式有误");
                 } else {
-
                         LoginService loginService = new LoginService(phone, password, LoginActivity.this);
                         loginService.login();
                 }

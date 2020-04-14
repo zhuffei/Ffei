@@ -34,37 +34,7 @@ public class LoginService {
 
     private Context context;
 
-    Handler handler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            String text = (String) ((Map) msg.obj).get("msg");
-            if (null != text && !text.isEmpty()) {
-                ToastHelper.showToast(context, text);
-            }
-            //登录成功
-            if (null != ((Map) msg.obj).get("state") &&(boolean) ((Map) msg.obj).get("state") == true) {
-                User user = ((JSONObject) ((Map) msg.obj).get("data")).toJavaObject(User.class);
 
-                //保存登录信息
-                SharedPreferences sp = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-                sp.edit().putString("name", user.getName())
-                        .putString("pwd", user.getPwd())
-                        .putString("phone", user.getPhone())
-                        .putString("img", user.getImg())
-                        .apply();
-            }else{
-                Log.d("aaaaaaa", "aaaaaaaaaa");
-                System.out.println(context);
-                ToastHelper.showToast(context,"连接服务器失败");
-            }
-
-            context.startActivity(new Intent(context, HomeActivity.class));
-//            else{
-//                ToastHelper.showToast(context,"用户名或密码错误,登陆失败");
-//            }
-
-        }
-    };
 
     public LoginService(String phone, String pwd, Context context) {
         this.phone = phone;
@@ -73,6 +43,38 @@ public class LoginService {
     }
 
     public void login() {
+        Handler handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                String text = (String) ((Map) msg.obj).get("msg");
+                if (null != text && !text.isEmpty()) {
+                    ToastHelper.showToast(context, text);
+                }
+                //登录成功
+                if (null != ((Map) msg.obj).get("state") &&(boolean) ((Map) msg.obj).get("state") == true) {
+                    User user = ((JSONObject) ((Map) msg.obj).get("data")).toJavaObject(User.class);
+
+                    //保存登录信息
+                    SharedPreferences sp = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+                    sp.edit().putString("name", user.getName())
+                            .putString("pwd", user.getPwd())
+                            .putString("phone", user.getPhone())
+                            .putString("img", user.getImg())
+                            .apply();
+                }else{
+                    Log.d("aaaaaaa", "aaaaaaaaaa");
+                    System.out.println(context);
+                    ToastHelper.showToast(context,"连接服务器失败");
+                }
+
+                context.startActivity(new Intent(context, HomeActivity.class));
+//            else{
+//                ToastHelper.showToast(context,"用户名或密码错误,登陆失败");
+//            }
+
+            }
+        };
+
         RequestBody requestBody = new FormBody.Builder()
                 .add("phone", phone)
                 .add("password", pwd)

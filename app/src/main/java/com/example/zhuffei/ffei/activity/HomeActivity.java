@@ -18,6 +18,7 @@ import com.example.zhuffei.ffei.fragment.FXFragment;
 import com.example.zhuffei.ffei.fragment.GZFragment;
 import com.example.zhuffei.ffei.fragment.LTFragment;
 import com.example.zhuffei.ffei.fragment.WDFragment;
+import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -240,7 +241,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         RequestCallback<LoginInfo> callbak = new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
-//                ToastHelper.showToast(HomeActivity.this,"登录成功");
+                ToastHelper.showToast(HomeActivity.this,"登录成功");
                 NimUIKitImpl.setAccount(loginInfo.getAccount());
             }
 
