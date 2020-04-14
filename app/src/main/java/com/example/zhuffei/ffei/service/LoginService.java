@@ -51,7 +51,7 @@ public class LoginService {
                     ToastHelper.showToast(context, text);
                 }
                 //登录成功
-                if (null != ((Map) msg.obj).get("state") &&(boolean) ((Map) msg.obj).get("state") == true) {
+                if (null != ((Map) msg.obj).get("state") &&(boolean) ((Map) msg.obj).get("state")) {
                     User user = ((JSONObject) ((Map) msg.obj).get("data")).toJavaObject(User.class);
 
                     //保存登录信息
@@ -60,14 +60,16 @@ public class LoginService {
                             .putString("pwd", user.getPwd())
                             .putString("phone", user.getPhone())
                             .putString("img", user.getImg())
+                            .putInt("uId", user.getId())
                             .apply();
+                    context.startActivity(new Intent(context, HomeActivity.class));
                 }else{
                     Log.d("aaaaaaa", "aaaaaaaaaa");
                     System.out.println(context);
                     ToastHelper.showToast(context,"连接服务器失败");
                 }
 
-                context.startActivity(new Intent(context, HomeActivity.class));
+
 //            else{
 //                ToastHelper.showToast(context,"用户名或密码错误,登陆失败");
 //            }

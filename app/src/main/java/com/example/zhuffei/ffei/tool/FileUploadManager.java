@@ -25,7 +25,7 @@ import retrofit2.http.PartMap;
  */
 public class FileUploadManager {
 
-    private static final String ENDPOINT = "http://192.168.1.21:8080";
+//    private static final String ENDPOINT = "http://192.168.1.21:8080";
     private static String TAG = FileUploadManager.class.getSimpleName();
 
     public interface FileUploadService {
@@ -75,7 +75,7 @@ public class FileUploadManager {
     }
 
     private static final Retrofit sRetrofit = new Retrofit .Builder()
-            .baseUrl(ENDPOINT)
+            .baseUrl(UrlTool.prefix)
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 

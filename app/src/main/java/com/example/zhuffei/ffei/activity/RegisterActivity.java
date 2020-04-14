@@ -3,11 +3,12 @@ package com.example.zhuffei.ffei.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
 import com.example.zhuffei.ffei.R;
@@ -45,12 +46,12 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        btn_register = (Button) findViewById(R.id.btn_register);
-        usernameInput = (EditText) findViewById(R.id.username_input);
-        phoneInput = (EditText) findViewById(R.id.phone_input);
-        passwordInput = (EditText) findViewById(R.id.password_input);
-        passwordInput2 = (EditText) findViewById(R.id.password_input2);
-        back = (ImageView)findViewById(R.id.back) ;
+        btn_register = findViewById(R.id.btn_register);
+        usernameInput = findViewById(R.id.username_input);
+        phoneInput = findViewById(R.id.phone_input);
+        passwordInput = findViewById(R.id.password_input);
+        passwordInput2 = findViewById(R.id.password_input2);
+        back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

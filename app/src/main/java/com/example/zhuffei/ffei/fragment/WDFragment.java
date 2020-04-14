@@ -5,20 +5,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,8 +27,8 @@ import com.example.zhuffei.ffei.activity.CropActivity;
 import com.example.zhuffei.ffei.activity.FocusActivity;
 import com.example.zhuffei.ffei.activity.MyGoodsActivity;
 import com.example.zhuffei.ffei.tool.AsyncImageLoader;
-import com.example.zhuffei.ffei.tool.FileUtil;
 import com.example.zhuffei.ffei.tool.Tool;
+import com.example.zhuffei.ffei.tool.UrlTool;
 import com.leon.lib.settingview.LSettingItem;
 
 import java.io.File;
@@ -195,7 +191,7 @@ public class WDFragment extends BaseFragment {
             userName.setText(name);
             phone.setText(phoneNumber);
             AsyncImageLoader asyncImageLoader = new AsyncImageLoader(mContext);
-            asyncImageLoader.asyncloadImage(avator, img);
+            asyncImageLoader.asyncloadImage(avator, UrlTool.prefix+"avator/"+img);
         }
 
     }
