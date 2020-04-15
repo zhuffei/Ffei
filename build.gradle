@@ -30,7 +30,7 @@ task clean(type: Delete) {
 ext{
     compileSdkVersion = 28
     buildToolsVersion = '28.0.3'
-    minSdkVersion = 17
+    minSdkVersion = 23
     targetSdkVersion = 26
     appTargetSdkVersion = 28
     versionCode = 90

@@ -382,8 +382,8 @@ public class RefreshRelativeLayout extends RelativeLayout {
                     rlyHeadState3.setVisibility(VISIBLE);
                 }
                 //无论当前再什么位置，都跳到正在刷新的地方
-                moveViewAnimation(rlyHead, 0);
-                moveViewAnimation(recyclerView, rlyHead.getHeight());
+                moveViewAnimation(rlyHead, 0,false);
+                moveViewAnimation(recyclerView, rlyHead.getHeight(),false);
                 break;
             case PULL_DOWN_STATE_4:
                 //刷新成功
@@ -394,8 +394,8 @@ public class RefreshRelativeLayout extends RelativeLayout {
                 postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        moveViewAnimation(rlyHead, -1 * rlyHead.getHeight());
-                        moveViewAnimation(recyclerView, 0);
+                        moveViewAnimation(rlyHead, -1 * rlyHead.getHeight(),false);
+                        moveViewAnimation(recyclerView, 0,false);
                     }
                 }, afterRefreshDelayTime);
                 break;
@@ -450,8 +450,8 @@ public class RefreshRelativeLayout extends RelativeLayout {
                     rlyFootState3.setVisibility(VISIBLE);
                 }
                 //无论当前再什么位置，都跳到正在刷新的地方
-                moveViewAnimation(rlyFoot, getHeight() - rlyFoot.getHeight());
-                moveViewAnimation(recyclerView, rlyFoot.getHeight() * -1);
+                moveViewAnimation(rlyFoot, getHeight() - rlyFoot.getHeight(),false);
+                moveViewAnimation(recyclerView, rlyFoot.getHeight() * -1,false);
                 break;
             case PULL_UP_STATE_4:
                 //刷新成功
@@ -462,8 +462,8 @@ public class RefreshRelativeLayout extends RelativeLayout {
                 postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        moveViewAnimation(rlyFoot, getHeight());
-                        moveViewAnimation(recyclerView, 0);
+                        moveViewAnimation(recyclerView, rectRlv.top,true);
+                        moveViewAnimation(rlyFoot, rlyFoot.getTop() - rectRlyFoot.top, 0, rectRlyFoot,true);
                     }
                 }, afterRefreshDelayTime);
                 break;
@@ -611,9 +611,9 @@ public class RefreshRelativeLayout extends RelativeLayout {
                     setPullUpState(PULL_UP_STATE_3);
                 } else {
                     //开始回移动画
-                    moveViewAnimation(recyclerView, rectRlv.top);
-                    moveViewAnimation(rlyHead, rlyHead.getTop() + rlyHead.getHeight(), 0, rectRlyHead);
-                    moveViewAnimation(rlyFoot, rlyFoot.getTop() - rectRlyFoot.top, 0, rectRlyFoot);
+                    moveViewAnimation(recyclerView, rectRlv.top,true);
+                    moveViewAnimation(rlyHead, rlyHead.getTop() + rlyHead.getHeight(), 0, rectRlyHead,true);
+                    moveViewAnimation(rlyFoot, rlyFoot.getTop() - rectRlyFoot.top, 0, rectRlyFoot,true);
                 }
                 //重置一些参数
                 startY = 0;
@@ -632,8 +632,8 @@ public class RefreshRelativeLayout extends RelativeLayout {
      * @param view  待移动的控件
      * @param stopY 移动到的目标位置
      */
-    private void moveViewAnimation(View view, int stopY) {
-        moveViewAnimation(view, view.getTop() - stopY, 0, new Rect(view.getLeft(), stopY, view.getRight(), stopY + view.getHeight()));
+    private void moveViewAnimation(View view, int stopY,boolean isDone) {
+        moveViewAnimation(view, view.getTop() - stopY, 0, new Rect(view.getLeft(), stopY, view.getRight(), stopY + view.getHeight()),isDone);
     }
 
     /**
@@ -646,7 +646,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
      * @param bottom 动画结束后的位置，即设置控件本身bottom的位置
      */
     private void moveViewAnimation(View view, int startY, int stopY, int top, int bottom) {
-        moveViewAnimation(view, startY, stopY, new Rect(view.getLeft(), top, view.getRight(), bottom));
+        moveViewAnimation(view, startY, stopY, new Rect(view.getLeft(), top, view.getRight(), bottom),true);
     }
 
     /**
@@ -657,7 +657,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
      * @param stopY  移动结束的位置（相对控件本身）
      * @param rect   动画结束后的位置，即设置控件本身的位置
      */
-    private void moveViewAnimation(final View view, int startY, int stopY, Rect rect) {
+    private void moveViewAnimation(final View view, int startY, int stopY, Rect rect,Boolean isDone) {
         if (isTouching) {
             return;//如果还按压着屏幕，则不播放任何动画
         }
@@ -668,7 +668,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
         //设置阻尼动画效果
         animation.setInterpolator(new DampInterpolator());
         view.setAnimation(animation);
-        view.layout(rect.left, rect.top, rect.right, rect.bottom);
+        if(isDone) view.layout(rect.left, rect.top, rect.right, rect.bottom);
         recordLayoutRect();//记录位置，用于重绘
     }
 
