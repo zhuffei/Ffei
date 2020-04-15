@@ -3,13 +3,14 @@ package com.example.zhuffei.ffei.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import androidx.cardview.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.cardview.widget.CardView;
 
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.activity.UserActivity;
@@ -83,14 +84,14 @@ public class UserAdapter extends BaseAdapter {
             public void onClick(View v) {
                 if (focus.getText().equals("已关注")) {
 
-                    ToastHelper.showToast(context, "已取关");
+                    ToastHelper.showToast("已取关");
                     focusCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
                     focus.setTextColor(Color.parseColor("#111111"));
                     focus.setText("关注");
                 } else {
                     focusCard.setCardBackgroundColor(Color.parseColor("#DDDDDD"));
                     focus.setTextColor(Color.parseColor("#999999"));
-                    ToastHelper.showToast(context,"已关注");
+                    ToastHelper.showToast("已关注");
                     focus.setText("已关注");
                 }
             }

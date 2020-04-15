@@ -241,7 +241,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         RequestCallback<LoginInfo> callbak = new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
-                ToastHelper.showToast(HomeActivity.this,"登录成功");
+                ToastHelper.showToast("登录成功");
                 NimUIKitImpl.setAccount(loginInfo.getAccount());
             }
 

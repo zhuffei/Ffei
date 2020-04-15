@@ -7,9 +7,8 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +19,18 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.activity.SearchActivity;
 import com.example.zhuffei.ffei.adapter.GoodsItemAdapter;
 import com.example.zhuffei.ffei.entity.Goods;
 import com.example.zhuffei.ffei.tool.GlideImageLoader;
-import com.example.zhuffei.ffei.tool.RecyclerViewClickListener;
+import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.example.zhuffei.ffei.tool.Tool;
+import com.example.zhuffei.ffei.view.RefreshRelativeLayout;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -40,8 +44,8 @@ import java.util.List;
 public class FXFragment extends BaseFragment {
 
     private Handler handler = new Handler();
-    private boolean isFlipping = false; // 是否启用预警信息轮播
-    private List<String> mWarningTextList = new ArrayList<>();
+    private boolean isFlipping = false; // 是否启用信息轮播
+    private List<String> mWarningTextList;
 
     private RecyclerView recyclerView;
 
@@ -57,6 +61,12 @@ public class FXFragment extends BaseFragment {
 
     private TextSwitcher mTextSwitcher;
 
+    private View headerView;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+    private RefreshRelativeLayout refresh;
+
     @Override
     protected void setTitle(TextView tvTitle) {
 
@@ -65,28 +75,36 @@ public class FXFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment1, container, false);
+        refresh = view.findViewById(R.id.refresh);
         mContext = this.getActivity();
-        mTextSwitcher =  view.findViewById(R.id.text_switcher);
-        search =  view.findViewById(R.id.search);
-        Drawable drawable = getResources().getDrawable(R.mipmap.search);
-        //获取屏幕分辨率
-        int screenWidth = Tool.getScreenWidth(mContext);
-        drawable.setBounds(200 - screenWidth, 0, 250 - screenWidth, 50);
-        search.setCompoundDrawables(null, null, drawable, null);
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(mContext, SearchActivity.class);
-                startActivity(intent);
-            }
-        });
+        findViews(view);
+        //设置头部搜索框
+        setSearchBar();
+        //配置轮播图数据
+        setBanner();
+        //设置滚动字幕样式
+        setTextSwitcher();
+        //设置滚动字幕内容
+        setData();
+        //设置adapter
+        GoodsItemAdapter adapter = new GoodsItemAdapter(data, mContext);
+
+        adapter.setHeaderView(headerView);
+        Log.d("aaaaaaaa","aaaaaaaaaaa");
+        recyclerView.setAdapter(adapter);
+        //解决滑动冲突
+//        recyclerView.setNestedScrollingEnabled(false);
+        setListener();
+        return view;
+    }
+    //配置轮播图数据
+    private void setBanner() {
         List images = new ArrayList<>();
         images.add(R.drawable.s111);
         images.add(R.drawable.s222);
         List titles = new ArrayList();
         titles.add("的网Ada的网");
         titles.add("刚看见没发过");
-        banner = (Banner) view.findViewById(R.id.banner);
         //设置banner样式
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
         //设置图片加载器
@@ -99,36 +117,72 @@ public class FXFragment extends BaseFragment {
         //banner设置方法全部调用完毕时最后调用
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR_TITLE);
         banner.start();
-        mWarningTextList.add("求一台二手笔记本能打lol");
-        mWarningTextList.add("求一本有笔记的马原书");
-        setTextSwitcher();
-        setData();
-
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        //使用瀑布流布局,第一个参数 spanCount 列数,第二个参数 orentation 排列方向
-        StaggeredGridLayoutManager recyclerViewLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(recyclerViewLayoutManager);
-        initData();
-
-        GoodsItemAdapter adapter = new GoodsItemAdapter(data, mContext);
-        //设置adapter
-        recyclerView.setAdapter(adapter);
-        //解决滑动冲突
-        recyclerView.setNestedScrollingEnabled(false);
-        recyclerView.addOnItemTouchListener(new RecyclerViewClickListener(mContext, new RecyclerViewClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Tool.toDetail(mContext);
-            }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-            }
-        }));
-        return view;
     }
 
+    public void findViews(View view) {
+        refresh = view.findViewById(R.id.refresh);
+        recyclerView = refresh.getRecyclerView();
+        //加载推荐商品数据
+        initGoodsData();
+        headerView = LayoutInflater.from(mContext).inflate(R.layout.fragment1_header,recyclerView,false);
+
+        mTextSwitcher = headerView.findViewById(R.id.text_switcher);
+        search = view.findViewById(R.id.search);
+        banner = headerView.findViewById(R.id.banner);
+//        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+    }
+
+    public void setListener(){
+//        recyclerView.addOnItemTouchListener(new RecyclerViewClickListener(mContext, new RecyclerViewClickListener.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                Tool.toDetail(mContext);
+//            }
+//
+//            @Override
+//            public void onItemLongClick(View view, int position) {
+//
+//            }
+//        }));
+//        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+//            @Override
+//            public void onRefresh() {
+//                Log.d("aaaaaa","刷新一波");
+//                ToastHelper.showToast("刷新一波");
+//                swipeRefreshLayout.setRefreshing(false);
+//            }
+//        });
+        refresh.setOnRefreshListener(new RefreshRelativeLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                ToastHelper.showToast("刷新一波");
+                refresh.setRefreshing(false);
+
+            }
+        });
+        refresh.setOnLoadListener(new RefreshRelativeLayout.OnLoadListener() {
+            @Override
+            public void onLoad() {
+                ToastHelper.showToast("加载一波");
+                refresh.setLoading(false);
+            }
+        });
+    }
+
+    public void setSearchBar() {
+        Drawable drawable = getResources().getDrawable(R.mipmap.search);
+        //获取屏幕分辨率
+        int screenWidth = Tool.getScreenWidth(mContext);
+        drawable.setBounds(200 - screenWidth, 0, 250 - screenWidth, 50);
+        search.setCompoundDrawables(null, null, drawable, null);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
 
     //设置滚动字幕格式
     private void setTextSwitcher() {
@@ -186,8 +240,11 @@ public class FXFragment extends BaseFragment {
         }
     }
 
-    //设置数据
+    //设置滚动字幕数据
     private void setData() {
+        mWarningTextList = new ArrayList<>();
+        mWarningTextList.add("求一台二手笔记本能打lol");
+        mWarningTextList.add("求一本有笔记的马原书");
         if (mWarningTextList.size() == 1) {
             mTextSwitcher.setText(mWarningTextList.get(0));
             index = 0;
@@ -199,38 +256,39 @@ public class FXFragment extends BaseFragment {
                     mTextSwitcher.setText(mWarningTextList.get(0));
                     index = 0;
                 }
-            }, 1000);
+            }, 2000);
             mTextSwitcher.setInAnimation(AnimationUtils.loadAnimation(mContext, R.anim.slide_in_bottom));
             mTextSwitcher.setOutAnimation(AnimationUtils.loadAnimation(mContext, R.anim.slide_out_top));
             startFlipping();
         }
     }
 
-    private void initData() {
+    private void initGoodsData() {
+        //使用瀑布流布局,第一个参数 spanCount 列数,第二个参数 orentation 排列方向
+        StaggeredGridLayoutManager recyclerViewLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(recyclerViewLayoutManager);
+
         data = new ArrayList<>();
         Goods goods;
-            goods = new Goods("【求购】阿瓦达多无无多", 15.0, 0);
-            data.add(goods);
-            goods = new Goods("阿瓦达无多", 125.1, R.mipmap.m2);
-            data.add(goods);
-            goods = new Goods("阿温大道", 66.66, R.mipmap.m3);
-            data.add(goods);
-            goods = new Goods("就感飞觉", 489.51, R.mipmap.m4);
-            data.add(goods);
-            goods = new Goods("反倒是官方", 56.2, R.mipmap.m5);
-            data.add(goods);
-            goods = new Goods("根深蒂固", 1.00, R.mipmap.m6);
-            data.add(goods);
-            goods = new Goods("防守打法范玮琪", 6.55, R.mipmap.m7);
-            data.add(goods);
-            goods = new Goods("富森合同", 98.3, R.mipmap.m8);
-            data.add(goods);
-            goods = new Goods("看一看UK一天课题与人体", 66.8, R.mipmap.m9);
-            data.add(goods);
-            goods = new Goods("刘天稳定", 99.9, R.mipmap.m10);
-            data.add(goods);
-
+        goods = new Goods("【求购】阿瓦达多无无多", 15.0, 0);
+        data.add(goods);
+        goods = new Goods("阿瓦达无多", 125.1, R.mipmap.m2);
+        data.add(goods);
+        goods = new Goods("阿温大道", 66.66, R.mipmap.m3);
+        data.add(goods);
+        goods = new Goods("就感飞觉", 489.51, R.mipmap.m4);
+        data.add(goods);
+        goods = new Goods("反倒是官方", 56.2, R.mipmap.m5);
+        data.add(goods);
+        goods = new Goods("根深蒂固", 1.00, R.mipmap.m6);
+        data.add(goods);
+        goods = new Goods("防守打法范玮琪", 6.55, R.mipmap.m7);
+        data.add(goods);
+        goods = new Goods("富森合同", 98.3, R.mipmap.m8);
+        data.add(goods);
+        goods = new Goods("看一看UK一天课题与人体", 66.8, R.mipmap.m9);
+        data.add(goods);
+        goods = new Goods("刘天稳定", 99.9, R.mipmap.m10);
+        data.add(goods);
     }
 }
-
-

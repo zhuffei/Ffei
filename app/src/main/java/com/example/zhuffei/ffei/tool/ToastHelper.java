@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import com.example.zhuffei.ffei.FfeiApplication;
+
 /**
  * Created by zhuffei on 2020/3/14.
  */
@@ -40,6 +42,20 @@ public class ToastHelper {
         } else {
             mToast.setText(text);
             mToast.setDuration(Toast.LENGTH_LONG);
+        }
+        mToast.setGravity(Gravity.CENTER, 0, 0);
+        mToast.show();
+    }
+
+    public static void showToast( String text) {
+        Context context = FfeiApplication.context;
+        if (mToast == null) {
+            mToast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
+            mToast.setText(text);
+        } else {
+            mToast.cancel();
+            mToast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
+            mToast.setText(text);
         }
         mToast.setGravity(Gravity.CENTER, 0, 0);
         mToast.show();

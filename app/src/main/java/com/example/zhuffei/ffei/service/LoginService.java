@@ -48,7 +48,7 @@ public class LoginService {
             public void handleMessage(Message msg) {
                 String text = (String) ((Map) msg.obj).get("msg");
                 if (null != text && !text.isEmpty()) {
-                    ToastHelper.showToast(context, text);
+                    ToastHelper.showToast( text);
                 }
                 //登录成功
                 if (null != ((Map) msg.obj).get("state") &&(boolean) ((Map) msg.obj).get("state")) {
@@ -65,8 +65,7 @@ public class LoginService {
                     context.startActivity(new Intent(context, HomeActivity.class));
                 }else{
                     Log.d("aaaaaaa", "aaaaaaaaaa");
-                    System.out.println(context);
-                    ToastHelper.showToast(context,"连接服务器失败");
+                    ToastHelper.showToast("连接服务器失败");
                 }
 
 
@@ -103,7 +102,7 @@ public class LoginService {
             });
         } catch (Exception e) {
             e.printStackTrace();
-            ToastHelper.showToast(context, "服务器异常");
+            ToastHelper.showToast( "服务器异常");
         }
     }
 }

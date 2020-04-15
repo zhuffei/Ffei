@@ -71,7 +71,7 @@ public class WDFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment4, container, false);
-        findView(view);
+        findViews(view);
 //        initPhotoError();
         mContext = this.getActivity();
         avator.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +166,7 @@ public class WDFragment extends BaseFragment {
         return view;
     }
 
-    private void findView(View view) {
+    private void findViews(View view) {
         phone = view.findViewById(R.id.phone);
         avator = view.findViewById(R.id.avator);
         itemOne = view.findViewById(R.id.item_one);

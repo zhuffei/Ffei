@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eeeeee">
-
+    android:background="#eeeeee"
+    android:orientation="vertical">
     <TextView
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="100px"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp"
         android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/rounded_edittext"
         android:drawableLeft="@mipmap/search"
@@ -21,49 +19,25 @@
         android:textColor="#dddddd"
         android:textSize="12sp" />
 
-    <ScrollView
+    <com.example.zhuffei.ffei.view.RefreshRelativeLayout
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/search">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
 
-            <com.youth.banner.Banner
-                android:id="@+id/banner"
-                android:layout_width="match_parent"
-                android:layout_height="600px"
-                android:layout_marginTop="30px" />
+        <!--        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
+        <!--            android:id="@+id/swipeRefreshLayout"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent">-->
 
-            <TextSwitcher
-                android:id="@+id/text_switcher"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_below="@id/banner"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/warning_bg" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="热门推荐"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_gravity="center"
-                android:textColor="#aaaaaa"/>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:descendantFocusability="blocksDescendants">
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></androidx.recyclerview.widget.RecyclerView>
-            </RelativeLayout>
-        </LinearLayout>
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/recycler_view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_below="@id/search">-->
 
-    </ScrollView>
-</RelativeLayout>
+<!--        </androidx.recyclerview.widget.RecyclerView>-->
+        <!--        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
+    </com.example.zhuffei.ffei.view.RefreshRelativeLayout>
+</LinearLayout>

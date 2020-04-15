@@ -54,11 +54,11 @@ public class LoginActivity extends AppCompatActivity {
                 String phone = phoneInput.getText().toString();
                 String password = passwordInput.getText().toString();
                 if (phone.isEmpty()) {
-                    ToastHelper.showToast(LoginActivity.this, "请输入手机号");
+                    ToastHelper.showToast("请输入手机号");
                 } else if (password.isEmpty()) {
-                    ToastHelper.showToast(LoginActivity.this, "请输入密码");
+                    ToastHelper.showToast( "请输入密码");
                 } else if (!Tool.isPhoneNumber(phone)) {
-                    ToastHelper.showToast(LoginActivity.this, "手机号格式有误");
+                    ToastHelper.showToast( "手机号格式有误");
                 } else {
                         LoginService loginService = new LoginService(phone, password, LoginActivity.this);
                         loginService.login();

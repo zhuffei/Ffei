@@ -67,22 +67,22 @@ public class RegisterActivity extends AppCompatActivity {
                 String password2 = passwordInput2.getText().toString();
                 if (username.isEmpty() || phone.isEmpty() || password.isEmpty() || password2.isEmpty()) {
                     if (username.isEmpty()) {
-                        ToastHelper.showToast(RegisterActivity.this, "请输入用户名");
+                        ToastHelper.showToast( "请输入用户名");
                     } else if (phone.isEmpty()) {
-                        ToastHelper.showToast(RegisterActivity.this, "请输入手机号");
+                        ToastHelper.showToast( "请输入手机号");
                     } else if (password.isEmpty()) {
-                        ToastHelper.showToast(RegisterActivity.this, "请输入密码");
+                        ToastHelper.showToast( "请输入密码");
                     } else if (password2.isEmpty()) {
-                        ToastHelper.showToast(RegisterActivity.this, "请确认密码");
+                        ToastHelper.showToast( "请确认密码");
                     }
                 } else if (username.length() < 2 || username.length() > 7) {
-                    ToastHelper.showToast(RegisterActivity.this, "用户名需2-7个字符");
+                    ToastHelper.showToast( "用户名需2-7个字符");
                 } else if (!Tool.isPhoneNumber(phone)){
-                    ToastHelper.showToast(RegisterActivity.this, "手机号格式不正确");
+                    ToastHelper.showToast( "手机号格式不正确");
                 } else if(!Tool.TestPassword(password)||password.length()<4||password.length()>10){
-                    ToastHelper.showToast(RegisterActivity.this, "密码长度需要在4-10位之间且只能为数字、字母、符号");
+                    ToastHelper.showToast( "密码长度需要在4-10位之间且只能为数字、字母、符号");
                 }else if(!password.equals(password2)){
-                    ToastHelper.showToast(RegisterActivity.this, "两次输入的密码不一致");
+                    ToastHelper.showToast( "两次输入的密码不一致");
                 }else{
                     RequestBody requestBody = new FormBody.Builder()
                             .add("userName", username)
@@ -119,7 +119,7 @@ public class RegisterActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             String text = (String)((Map)msg.obj).get("msg");
             if(!text.isEmpty()){
-                ToastHelper.showToast(RegisterActivity.this,text);
+                ToastHelper.showToast(text);
             }
 
         }

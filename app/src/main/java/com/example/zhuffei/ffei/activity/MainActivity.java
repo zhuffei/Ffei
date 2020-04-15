@@ -43,14 +43,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findView();
+        findViews();
         setEvent();
         login();
-
 //        new MThread().start();
+//        LoadingViewManager.with(this).setHintText("bbbb").setMaxAnimTime(2000).build();
     }
 
-    public void findView(){
+    public void findViews(){
         textView = (TextView) findViewById(R.id.register);
         homePage = (Button) findViewById(R.id.homePage);
         button2 = (Button) findViewById(R.id.login);

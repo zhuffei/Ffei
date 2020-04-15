@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +31,7 @@ import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.tool.EditInputFilter;
 import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.example.zhuffei.ffei.tool.UrlTool;
+import com.example.zhuffei.ffei.view.LoadingViewManager;
 import com.lidong.photopicker.PhotoPickerActivity;
 import com.lidong.photopicker.PhotoPreviewActivity;
 import com.lidong.photopicker.SelectModel;
@@ -63,6 +67,14 @@ public class IssueActivity extends AppCompatActivity {
     private EditText title, describe, location, price;
     private String TAG = IssueActivity.class.getSimpleName();
     private ImageView back;
+
+    private Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            LoadingViewManager.dismiss();
+        }
+
+    };
 
 
     @Override
@@ -106,15 +118,16 @@ public class IssueActivity extends AppCompatActivity {
             @Override
             //开始商品信息上传
             public void onClick(View v) {
+                Log.d("aaaaaaaaa", "开始"+Thread.currentThread().getName());
                 if (title.getText().toString().isEmpty() ||
                         describe.getText().toString().isEmpty() ||
                         location.getText().toString().isEmpty() ||
                         price.getText().toString().isEmpty()) {
-                    ToastHelper.showToast(IssueActivity.this, "请填写完整信息");
+                    ToastHelper.showToast( "请填写完整信息");
                     return;
                 }
                 if (imagePaths.size() < 2) {
-                    ToastHelper.showToast(IssueActivity.this, "请上传至少一张图片");
+                    ToastHelper.showToast( "请上传至少一张图片");
                     return;
                 }
                 imagePaths.remove("000000");
@@ -128,13 +141,17 @@ public class IssueActivity extends AppCompatActivity {
                 IssueActivity.this.finish();
             }
         });
+
     }
 
     private void upLoad(List<String> list) {
+        //开启加载动画
+        LoadingViewManager.with(IssueActivity.this).setHintText("请稍后").setMinAnimTime(1500).build();
+
         //获取已登录用户的id
-        int uId = this.getSharedPreferences("user", Context.MODE_PRIVATE).getInt("uId",0);
-        if(uId == 0){
-            ToastHelper.showToast(this,"登录失效，请重新登录");
+        int uId = this.getSharedPreferences("user", Context.MODE_PRIVATE).getInt("uId", 0);
+        if (uId == 0) {
+            ToastHelper.showToast( "登录失效，请重新登录");
             return;
         }
         File file;
@@ -148,12 +165,12 @@ public class IssueActivity extends AppCompatActivity {
                     builder.addFormDataPart("img", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file));
                 }
             }
-            builder.addFormDataPart("title",title.getText().toString());
-            builder.addFormDataPart("type","1");//1代表是出售的商品
+            builder.addFormDataPart("title", title.getText().toString());
+            builder.addFormDataPart("type", "1");//1代表是出售的商品
             builder.addFormDataPart("uId", String.valueOf(uId));
-            builder.addFormDataPart("describe",describe.getText().toString());
-            builder.addFormDataPart("location",location.getText().toString());
-            builder.addFormDataPart("price",price.getText().toString());
+            builder.addFormDataPart("describe", describe.getText().toString());
+            builder.addFormDataPart("location", location.getText().toString());
+            builder.addFormDataPart("price", price.getText().toString());
             RequestBody requestBody = builder.build();
             Request request = new Request.Builder()
                     .url(UrlTool.ADDGOODS)
@@ -167,7 +184,8 @@ public class IssueActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                                Toast.makeText(MainActivity.this, "失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(IssueActivity.this, "发布失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                            handler.sendEmptyMessage(0);
                         }
                     });
                 }
@@ -178,7 +196,10 @@ public class IssueActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                                Toast.makeText(MainActivity.this, "成功", Toast.LENGTH_SHORT).show();
+                            handler.sendEmptyMessage(0);
+                            Toast.makeText(IssueActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(IssueActivity.this,HomeActivity.class));
+                            finish();
                         }
                     });
                 }
@@ -291,6 +312,7 @@ public class IssueActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     private class GridAdapter extends BaseAdapter {
         private ArrayList<String> listUrls;
         private LayoutInflater inflater;
