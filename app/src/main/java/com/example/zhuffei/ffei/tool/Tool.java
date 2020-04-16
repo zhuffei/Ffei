@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 
+import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.activity.DetailActivity;
 
 import java.util.regex.Matcher;
@@ -53,17 +54,17 @@ public class Tool {
         return dm.heightPixels;
     }
 
-    public static void toDetail(Context context){
+    public static void toDetail(Context context,Integer gid){
         Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra("gid",gid);
         context.startActivity(intent);
     }
 
     /**
      * 退出登录，清除用户数据
-     * @param context
      */
-    public static void logout(Context context) {
-        SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+    public static void logout() {
+        SharedPreferences preferences = FfeiApplication.context.getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
 

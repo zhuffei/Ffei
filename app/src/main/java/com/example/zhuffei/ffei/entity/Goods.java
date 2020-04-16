@@ -70,4 +70,7 @@ public class Goods {
         this.price = price;
         this.img = img;
     }
+
+    public Goods() {
+    }
 }

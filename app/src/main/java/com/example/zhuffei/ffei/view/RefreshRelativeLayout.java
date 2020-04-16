@@ -60,6 +60,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
     private RelativeLayout rlyFootState2;
     private RelativeLayout rlyFootState3;
     private RelativeLayout rlyFootState4;
+    private RelativeLayout noMore;
 
     /**
      * 变量
@@ -70,7 +71,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
     private int pullUpState = PULL_UP_STATE_1;//上拉状态
     private boolean isRefreshing = false;//正在刷新
     private boolean isLoading = false;//正在加载更多
-    private int afterRefreshDelayTime = 500;//刷新完成之后，延迟收起头部视图的时间
+    private int afterRefreshDelayTime = 200;//刷新完成之后，延迟收起头部视图的时间
     private boolean isTouching = false;//是否正在按压着屏幕
 
     // y方向上当前触摸点的前一次记录位置
@@ -127,6 +128,8 @@ public class RefreshRelativeLayout extends RelativeLayout {
         rlyFootState2 = getFootState2Layout(findViewById(R.id.rly_foot_state_2));
         rlyFootState3 = getFootState3Layout(findViewById(R.id.rly_foot_state_3));
         rlyFootState4 = getFootState4Layout(findViewById(R.id.rly_foot_state_4));
+        noMore = getFootState1Layout(findViewById(R.id.no_more));
+        noMore.setVisibility(INVISIBLE);
 
         //初始化一下三大件的位置
         initLayoutRect();
@@ -179,6 +182,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
         this.pullUpType = type;
         if (type == PULL_UP_TYPE_NOT_PULL) {
             rlyFoot.setVisibility(GONE);
+            noMore.setVisibility(VISIBLE);
         } else {
             rlyFoot.setVisibility(VISIBLE);
         }
@@ -383,7 +387,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
                 }
                 //无论当前再什么位置，都跳到正在刷新的地方
                 moveViewAnimation(rlyHead, 0,false);
-                moveViewAnimation(recyclerView, rlyHead.getHeight(),false);
+                moveViewAnimation(recyclerView, rlyHead.getHeight()*2,false);
                 break;
             case PULL_DOWN_STATE_4:
                 //刷新成功
@@ -394,8 +398,8 @@ public class RefreshRelativeLayout extends RelativeLayout {
                 postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        moveViewAnimation(rlyHead, -1 * rlyHead.getHeight(),false);
-                        moveViewAnimation(recyclerView, 0,false);
+                        moveViewAnimation(recyclerView, rlyHead.getTop() + rlyHead.getHeight()*2,0,rectRlv,true);
+                        moveViewAnimation(rlyHead, rlyHead.getTop() + rlyHead.getHeight(), 0, rectRlyHead,true);
                     }
                 }, afterRefreshDelayTime);
                 break;
@@ -516,13 +520,14 @@ public class RefreshRelativeLayout extends RelativeLayout {
             }
         });
     }
-
+    boolean isPullRecyclerView = false;
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        boolean isPullRecyclerView = false;//如果把头拉下来了然后再推回上去的时候，必须把recyclerView的触摸事件屏蔽掉，以免列表上移
+         //如果把头拉下来了然后再推回上去的时候，必须把recyclerView的触摸事件屏蔽掉，以免列表上移
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                isPullRecyclerView = false;
                 isTouching = true;
                 startY = (int) event.getY();
                 previousY = startY;

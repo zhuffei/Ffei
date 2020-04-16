@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.service.LoginService;
 import com.example.zhuffei.ffei.tool.CheckSumBuilder;
-import com.example.zhuffei.ffei.tool.Tool;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -60,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sp = this.getSharedPreferences("user", Context.MODE_PRIVATE);
         String phone = sp.getString("phone", "");
         String pwd = sp.getString("pwd", "");
-        Tool.logout(this);
         if (null!=phone&&!phone.isEmpty()) {
             LoginService loginService = new LoginService(phone,pwd,this);
             loginService.login();

@@ -3,20 +3,20 @@ package com.example.zhuffei.ffei.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.adapter.GoodsItemAdapter;
-import com.example.zhuffei.ffei.entity.Goods;
+import com.example.zhuffei.ffei.entity.GoodsUserOV;
 import com.example.zhuffei.ffei.tool.RecyclerViewClickListener;
 import com.example.zhuffei.ffei.tool.Tool;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class GZFragment extends BaseFragment {
     private RecyclerView recyclerView;
-    private List<Goods> data;
+    private List<GoodsUserOV> data;
     private Context mContext;
 
     @Override
@@ -47,11 +47,11 @@ public class GZFragment extends BaseFragment {
         //设置adapter
         recyclerView.setAdapter(adapter);
         //解决滑动冲突
-        recyclerView.setNestedScrollingEnabled(false);
+//        recyclerView.setNestedScrollingEnabled(false);
         recyclerView.addOnItemTouchListener(new RecyclerViewClickListener(mContext, new RecyclerViewClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Tool.toDetail(mContext);
+                Tool.toDetail(mContext,data.get(position).getId());
             }
 
             @Override
@@ -63,28 +63,28 @@ public class GZFragment extends BaseFragment {
     }
 
     private void initData() {
-        data = new ArrayList<>();
-        Goods goods;
-        goods = new Goods("阿瓦达多无无多", 15.0, R.mipmap.m1);
-        data.add(goods);
-        goods = new Goods("阿瓦达无多", 125.1, R.mipmap.m2);
-        data.add(goods);
-        goods = new Goods("阿温大道", 66.66, R.mipmap.m3);
-        data.add(goods);
-        goods = new Goods("就感飞觉", 489.51, R.mipmap.m4);
-        data.add(goods);
-        goods = new Goods("反倒是官方", 56.2, R.mipmap.m5);
-        data.add(goods);
-        goods = new Goods("根深蒂固", 1.00, R.mipmap.m6);
-        data.add(goods);
-        goods = new Goods("防守打法范玮琪", 6.55, R.mipmap.m7);
-        data.add(goods);
-        goods = new Goods("富森合同", 98.3, R.mipmap.m8);
-        data.add(goods);
-        goods = new Goods("看一看UK一天课题与人体", 66.8, R.mipmap.m9);
-        data.add(goods);
-        goods = new Goods("刘天稳定", 99.9, R.mipmap.m10);
-        data.add(goods);
+//        data = new ArrayList<>();
+//        GoodsUserOV goods;
+//        goods = new Goods("阿瓦达多无无多", 15.0, R.mipmap.m1);
+//        data.add(goods);
+//        goods = new Goods("阿瓦达无多", 125.1, R.mipmap.m2);
+//        data.add(goods);
+//        goods = new Goods("阿温大道", 66.66, R.mipmap.m3);
+//        data.add(goods);
+//        goods = new Goods("就感飞觉", 489.51, R.mipmap.m4);
+//        data.add(goods);
+//        goods = new Goods("反倒是官方", 56.2, R.mipmap.m5);
+//        data.add(goods);
+//        goods = new Goods("根深蒂固", 1.00, R.mipmap.m6);
+//        data.add(goods);
+//        goods = new Goods("防守打法范玮琪", 6.55, R.mipmap.m7);
+//        data.add(goods);
+//        goods = new Goods("富森合同", 98.3, R.mipmap.m8);
+//        data.add(goods);
+//        goods = new Goods("看一看UK一天课题与人体", 66.8, R.mipmap.m9);
+//        data.add(goods);
+//        goods = new Goods("刘天稳定", 99.9, R.mipmap.m10);
+//        data.add(goods);
 
     }
 }

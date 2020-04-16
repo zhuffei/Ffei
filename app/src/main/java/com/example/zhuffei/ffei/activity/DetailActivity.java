@@ -2,13 +2,14 @@ package com.example.zhuffei.ffei.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.tool.GlideImageLoader;
@@ -39,9 +40,9 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         List images = new ArrayList();
-        images.add(R.mipmap.m4);
-        images.add(R.mipmap.m9);
-        images.add(R.mipmap.m10);
+//        images.add(R.mipmap.m4);
+//        images.add(R.mipmap.m9);
+//        images.add(R.mipmap.m10);
         banner = (Banner) findViewById(R.id.banner);
         //设置banner样式
         banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
