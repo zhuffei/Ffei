@@ -1,6 +1,5 @@
 package com.example.zhuffei.ffei.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -8,11 +7,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.adapter.GoodsAdapter;
 import com.example.zhuffei.ffei.entity.Goods;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MyGoodsActivity extends AppCompatActivity {
@@ -42,38 +42,38 @@ public class MyGoodsActivity extends AppCompatActivity {
                 MyGoodsActivity.this.finish();
             }
         });
-        initData(position);
+//        initData(position);
         listView.setAdapter(new GoodsAdapter(goodsList, this));
 
     }
 
-    void initData(int i) {
-        goodsList = new ArrayList<>();
-        switch (i) {
-            case RELEASE:
-                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m1, "已发布"));
-                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m2, "待审核"));
-                goodsList.add(new Goods("【求购】二手笔记本电脑", 65.01, R.mipmap.qiugou, "已发布"));
-                title.setText("我的发布     ");
-                break;
-            case COLLECTION:
-                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m1, "已发布"));
-                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m2, "已下架"));
-                goodsList.add(new Goods("【求购】二手笔记本电脑", 65.01, R.mipmap.qiugou, "已发布"));
-                title.setText("我的收藏     ");
-                break;
-            case BUY:
-                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m1, "订单完成"));
-                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m2, "订单完成"));
-                goodsList.add(new Goods("【求购】二手笔记本电脑", 65.01, R.mipmap.qiugou, "订单完成"));
-                title.setText("已购列表     ");
-                break;
-            case SELL:
-                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m1, "订单完成"));
-                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m2, "订单完成"));
-                goodsList.add(new Goods("【求购】二手笔记本电脑", 65.01, R.mipmap.qiugou, "订单完成"));
-                title.setText("已售列表     ");
-                break;
-        }
-    }
+//    void initData(int i) {
+//        goodsList = new ArrayList<>();
+//        switch (i) {
+//            case RELEASE:
+//                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m1, "已发布"));
+//                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m2, "待审核"));
+//                goodsList.add(new Goods("【求购】二手笔记本电脑", 65.01, R.mipmap.qiugou, "已发布"));
+//                title.setText("我的发布     ");
+//                break;
+//            case COLLECTION:
+//                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m1, "已发布"));
+//                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m2, "已下架"));
+//                goodsList.add(new Goods("【求购】二手笔记本电脑", 65.01, R.mipmap.qiugou, "已发布"));
+//                title.setText("我的收藏     ");
+//                break;
+//            case BUY:
+//                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m1, "订单完成"));
+//                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m2, "订单完成"));
+//                goodsList.add(new Goods("【求购】二手笔记本电脑", 65.01, R.mipmap.qiugou, "订单完成"));
+//                title.setText("已购列表     ");
+//                break;
+//            case SELL:
+//                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m1, "订单完成"));
+//                goodsList.add(new Goods("二手笔记本电脑", 65.01, R.mipmap.m2, "订单完成"));
+//                goodsList.add(new Goods("【求购】二手笔记本电脑", 65.01, R.mipmap.qiugou, "订单完成"));
+//                title.setText("已售列表     ");
+//                break;
+//        }
+//    }
 }

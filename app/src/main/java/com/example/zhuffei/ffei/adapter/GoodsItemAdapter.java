@@ -11,16 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.zhuffei.ffei.R;
-import com.example.zhuffei.ffei.entity.GoodsUserOV;
+import com.example.zhuffei.ffei.entity.GoodsUserVO;
 import com.example.zhuffei.ffei.tool.AsyncImageLoader;
 import com.example.zhuffei.ffei.tool.Tool;
 import com.example.zhuffei.ffei.tool.UrlTool;
-import com.example.zhuffei.ffei.view.CircleImageView;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Mr.Dong on 2019/3/10.
@@ -37,16 +35,15 @@ public class GoodsItemAdapter extends RecyclerView.Adapter<GoodsItemAdapter.Good
     /**
      * 数据集合
      */
-    private List<GoodsUserOV> data;
+    private List<GoodsUserVO> data;
 
     private AsyncImageLoader asyncImageLoader;
 
     private View mHeaderView;
 
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 
-    public GoodsItemAdapter(List<GoodsUserOV> data, Context context) {
+    public GoodsItemAdapter(List<GoodsUserVO> data, Context context) {
         this.data = data;
         this.mContext = context;
         asyncImageLoader = new AsyncImageLoader(context);
@@ -66,10 +63,16 @@ public class GoodsItemAdapter extends RecyclerView.Adapter<GoodsItemAdapter.Good
         if (getItemViewType(position) == TYPE_HEADER) return;
         final int pos = getRealPosition(holder);
         //将数据设置到item上
-        GoodsUserOV goods = data.get(pos);
+        GoodsUserVO goods = data.get(pos);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Tool.toDetail(mContext, goods.getId());
+            }
+        });
         holder.price.setText(goods.getPrice() + "");
         holder.name.setText(goods.getName());
-        holder.time.setText(parseTime(goods.getCreateTime()));
+        holder.time.setText(Tool.parseTime(goods.getCreateTime()));
         holder.userName.setText(goods.getUserName());
         asyncImageLoader.asyncloadImage(holder.goodsImage, UrlTool.GOODSIMG + goods.getImg1());
         asyncImageLoader.asyncloadImage(holder.avator, UrlTool.AVATOR + goods.getAvator());
@@ -87,6 +90,7 @@ public class GoodsItemAdapter extends RecyclerView.Adapter<GoodsItemAdapter.Good
     }
 
     static class GoodsViewHolder extends RecyclerView.ViewHolder {
+        View itemView;
         ImageView goodsImage;
         TextView name;
         TextView price;
@@ -96,6 +100,7 @@ public class GoodsItemAdapter extends RecyclerView.Adapter<GoodsItemAdapter.Good
 
         public GoodsViewHolder(View itemView) {
             super(itemView);
+            this.itemView = itemView;
             time = itemView.findViewById(R.id.time);
             userName = itemView.findViewById(R.id.userName);
             avator = itemView.findViewById(R.id.avator);
@@ -134,36 +139,5 @@ public class GoodsItemAdapter extends RecyclerView.Adapter<GoodsItemAdapter.Good
         return mHeaderView;
     }
 
-    public String parseTime(String time) {
 
-        Date date = null;
-        try {
-            date = simpleDateFormat.parse(time);
-            Date now = new Date();
-            long l = now.getTime() - date.getTime();
-            long day = l / (24 * 60 * 60 * 1000);
-            long hour = (l / (60 * 60 * 1000) - day * 24);
-            long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
-            long s = (l / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
-            String s1 = "";
-            if (day > 0) {
-                s1 = day + "天前";
-                return s1;
-            }
-            if (hour > 0) {
-                s1 = hour + "小时前";
-                return s1;
-            }
-            if (min > 0){
-                s1 = min + "分钟前";
-            return s1;}else {
-                return  "刚刚";
-            }
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return "未知时间";
-        }
-
-    }
 }

@@ -4,15 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.entity.Goods;
-import com.lidong.photopicker.Image;
 
 import java.util.List;
 
@@ -56,7 +53,7 @@ public class GoodsAdapter extends BaseAdapter{
         TextView goodsPrice = view.findViewById(R.id.goodsPrice);
         TextView goodsState = view.findViewById(R.id.goodsState);
         Goods goods = goodsList.get(position);
-        img.setImageResource(goods.getImg());
+//        img.setImageResource(goods.getImg1());
         goodsName.setText(goods.getName());
         goodsPrice.setText(goods.getPrice()+"");
         goodsState.setText(goods.getState());

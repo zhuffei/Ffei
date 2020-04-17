@@ -18,18 +18,15 @@
         android:hint="搜索二手"
         android:textColor="#dddddd"
         android:textSize="12sp" />
-
+    <!--        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
+    <!--            android:id="@+id/swipeRefreshLayout"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent">-->
     <com.example.zhuffei.ffei.view.RefreshRelativeLayout
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-
-        <!--        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout-->
-        <!--            android:id="@+id/swipeRefreshLayout"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent">-->
 
 <!--        <androidx.recyclerview.widget.RecyclerView-->
 <!--            android:id="@+id/recycler_view"-->
@@ -38,7 +35,7 @@
 <!--            android:layout_below="@id/search">-->
 
 <!--        </androidx.recyclerview.widget.RecyclerView>-->
-        <!--        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
-    </com.example.zhuffei.ffei.view.RefreshRelativeLayout>
 
+    </com.example.zhuffei.ffei.view.RefreshRelativeLayout>
+    <!--        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 </LinearLayout>

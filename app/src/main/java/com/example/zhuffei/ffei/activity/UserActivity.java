@@ -1,10 +1,11 @@
 package com.example.zhuffei.ffei.activity;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.adapter.GoodsAdapter;
@@ -35,8 +36,8 @@ public class UserActivity extends AppCompatActivity {
 
     private void initData() {
         data = new ArrayList<>();
-        data.add(new Goods("电风扇",20.0,R.mipmap.btn_selected));
-        data.add(new Goods("手电筒",20.0,R.mipmap.fabu));
-        data.add(new Goods("自行车",20.0,R.mipmap.m9));
+//        data.add(new Goods("电风扇",20.0,R.mipmap.btn_selected));
+//        data.add(new Goods("手电筒",20.0,R.mipmap.fabu));
+//        data.add(new Goods("自行车",20.0,R.mipmap.m9));
     }
 }

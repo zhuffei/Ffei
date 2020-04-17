@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:layout_marginLeft="20px">
-            <com.example.zhuffei.ffei.view.CircleImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/avator"
                 android:layout_width="60px"
                 android:layout_height="60px"

@@ -185,6 +185,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
             noMore.setVisibility(VISIBLE);
         } else {
             rlyFoot.setVisibility(VISIBLE);
+            noMore.setVisibility(INVISIBLE);
         }
         initLayoutRect();
     }
@@ -195,6 +196,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
      * @param bln
      */
     public void setRefreshing(final boolean bln) {
+
         if (bln) {
             setPullDownState(PULL_DOWN_STATE_3);
         } else {
@@ -333,7 +335,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
      * @return
      */
     public int getAnimTime(){
-        return 760;
+        return 1500;
     }
 
     //如需自定义样式，可以继承后重写上方的方法↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑分隔线↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
@@ -350,10 +352,16 @@ public class RefreshRelativeLayout extends RelativeLayout {
             return;
         }
         pullDownState = state;
+
         if (onRefreshListener != null && state == PULL_DOWN_STATE_3) {
             //下拉刷新
+
+            changePullDownState();
             onRefreshListener.onRefresh();
+            return;
         }
+
+        Log.d("aaaaaaaa",state+"");
         changePullDownState();
     }
 
@@ -382,12 +390,13 @@ public class RefreshRelativeLayout extends RelativeLayout {
             case PULL_DOWN_STATE_3:
                 //正在刷新
                 isRefreshing = true;//除了正在刷新之外，其他状态都不在刷新
+
                 if (pullDownType != PULL_DOWN_TYPE_NOT_PULL) {
                     rlyHeadState3.setVisibility(VISIBLE);
                 }
                 //无论当前再什么位置，都跳到正在刷新的地方
-                moveViewAnimation(rlyHead, 0,false);
-                moveViewAnimation(recyclerView, rlyHead.getHeight()*2,false);
+                moveViewAnimation(rlyHead, rectRlyHead.top,true);
+                moveViewAnimation(recyclerView, rectRlyHead.top+rlyHead.getHeight()*2,true);
                 break;
             case PULL_DOWN_STATE_4:
                 //刷新成功
@@ -398,8 +407,8 @@ public class RefreshRelativeLayout extends RelativeLayout {
                 postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        moveViewAnimation(rlyHead, rlyHead.getTop() + rlyHead.getHeight()*2, 0, rectRlyHead,true);
                         moveViewAnimation(recyclerView, rlyHead.getTop() + rlyHead.getHeight()*2,0,rectRlv,true);
-                        moveViewAnimation(rlyHead, rlyHead.getTop() + rlyHead.getHeight(), 0, rectRlyHead,true);
                     }
                 }, afterRefreshDelayTime);
                 break;
@@ -515,7 +524,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
                 rlyFoot.requestLayout();
 
                 //初始化状态
-                setPullDownState(PULL_DOWN_STATE_1);
+//                setPullDownState(PULL_DOWN_STATE_1);
                 setPullUpState(PULL_UP_STATE_1);
             }
         });
@@ -565,14 +574,15 @@ public class RefreshRelativeLayout extends RelativeLayout {
                     //阻力值限制再0.3-0.5之间，平滑过度
                     damping *= 0.25;
                     damping += 0.25;
+                        moveHeight = moveHeight + (deltaY * damping);
+                        recyclerView.layout(rectRlv.left, (int) (rectRlv.top + moveHeight), rectRlv.right,
+                                (int) (rectRlv.bottom + moveHeight));
+                        rlyHead.layout(rectRlyHead.left, (int) (rectRlyHead.top + moveHeight), rectRlyHead.right,
+                                (int) (rectRlyHead.bottom + moveHeight));
+                        rlyFoot.layout(rectRlyFoot.left, (int) (rectRlyFoot.top + moveHeight), rectRlyFoot.right,
+                                (int) (rectRlyFoot.bottom + moveHeight));
 
-                    moveHeight = moveHeight + (deltaY * damping);
-                    recyclerView.layout(rectRlv.left, (int) (rectRlv.top + moveHeight), rectRlv.right,
-                            (int) (rectRlv.bottom + moveHeight));
-                    rlyHead.layout(rectRlyHead.left, (int) (rectRlyHead.top + moveHeight), rectRlyHead.right,
-                            (int) (rectRlyHead.bottom + moveHeight));
-                    rlyFoot.layout(rectRlyFoot.left, (int) (rectRlyFoot.top + moveHeight), rectRlyFoot.right,
-                            (int) (rectRlyFoot.bottom + moveHeight));
+
 
                     //判定是否是下拉动作并处于可以下拉刷新状态
                     if (pullDownType == PULL_DOWN_TYPE_REFRESH && moveHeight > 0) {

@@ -15,4 +15,7 @@ public class UrlTool {
     public static final String LISTRECENTGOODS = prefix + "goods/listRecentGoods";
     public static final String GETBANNER = prefix+"goods/getBanner";
     public static final String GETROLLTEXT = prefix +"goods/getRollText";
+    public static final String GETGOODSBYID = prefix+"goods/getGoodsById";
+    public static final String VIEWGOODS = prefix+"goods/viewGoods";
+    public static final String LISTCOMMENTBYGID = prefix+"goods/listCommentByGid";
 }

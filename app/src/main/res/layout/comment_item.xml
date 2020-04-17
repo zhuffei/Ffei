@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="left"
+    android:layout_marginLeft="20px"
+    android:layout_marginTop="10px">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/avator"
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:layout_margin="10px"
+        app:border_color="#ffffff"
+        app:border_width="0px" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="100px"
+            android:layout_margin="10px"
+            android:paddingTop="8px"
+            android:textColor="#000000"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/commentText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-20px"
+            android:textColor="#333333" />
+
+        <TextView
+            android:id="@+id/createTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="40px" />
+
+    </LinearLayout>
+</LinearLayout>

@@ -1,12 +1,12 @@
 package com.example.zhuffei.ffei.entity;
 
-public class GoodsUserOV {
+public class GoodsUserVO {
     private int id;
     private int uId;
     private String userName;
     private String avator;
     private String name;
-    private String describe;
+    private String des;
     private Double price;
     private int type;
     private String img1;
@@ -61,12 +61,12 @@ public class GoodsUserOV {
         this.name = name;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getDes() {
+        return des;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDes(String des) {
+        this.des = des;
     }
 
     public Double getPrice() {

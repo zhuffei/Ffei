@@ -30,10 +30,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.activity.SearchActivity;
 import com.example.zhuffei.ffei.adapter.GoodsItemAdapter;
-import com.example.zhuffei.ffei.entity.GoodsUserOV;
+import com.example.zhuffei.ffei.entity.GoodsUserVO;
 import com.example.zhuffei.ffei.tool.GlideImageLoader;
 import com.example.zhuffei.ffei.tool.HttpUtil;
-import com.example.zhuffei.ffei.tool.RecyclerViewClickListener;
 import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.example.zhuffei.ffei.tool.Tool;
 import com.example.zhuffei.ffei.tool.UrlTool;
@@ -70,7 +69,7 @@ public class FXFragment extends BaseFragment {
 
     private RecyclerView recyclerView;
 
-    private List<GoodsUserOV> data;
+    private List<GoodsUserVO> data;
 
     private Context mContext;
 
@@ -96,6 +95,8 @@ public class FXFragment extends BaseFragment {
 
     private Map<String, Integer> rollTextMap;
 
+    boolean isRefreshing = false;
+
     private int textIndex = 0;
 
     Thread thread;
@@ -118,24 +119,25 @@ public class FXFragment extends BaseFragment {
                         index = 0;
                     }
                     if (mWarningTextList.size() > 1) {
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
+//                        handler.postDelayed(
+//                        new Runnable() {
+//                            @Override
+//                            public void run() {
                                 try {
                                     mTextSwitcher.setText(mWarningTextList.get(0));
                                 } catch (Exception e) {
 
                                 }
                                 index = 0;
-                            }
-                        }, 4000);
+//                            }};
+//                        }, 4000);
 
                         thread = new Thread() {
                             @Override
                             public void run() {
                                 while (textIndex < mWarningTextList.size()) {
                                     synchronized (this) {
-                                        SystemClock.sleep(4000);//每隔2秒滚动一次
+                                        SystemClock.sleep(4000);//每隔4秒滚动一次
                                         textHandler.sendEmptyMessage(1);
                                     }
                                 }
@@ -145,15 +147,19 @@ public class FXFragment extends BaseFragment {
                     }
                     break;
                 case 1:
-                    textIndex++;
+                    if (textIndex == mWarningTextList.size()-1) {
+                        textIndex = 0;
+                    }else{
+                        textIndex++;
+                    }
                     try {
-                        mTextSwitcher.setText(mWarningTextList.get(textIndex - 1));
+
+                        mTextSwitcher.setText(mWarningTextList.get(textIndex));
+
                     } catch (Exception e) {
 
                     }
-                    if (textIndex == mWarningTextList.size()) {
-                        textIndex = 0;
-                    }
+
                     break;
                 default:
                     break;
@@ -170,13 +176,14 @@ public class FXFragment extends BaseFragment {
                 ToastHelper.showToast("网络异常");
                 return;
             }
-            List<GoodsUserOV> list = (List<GoodsUserOV>) msg.obj;
+            List<GoodsUserVO> list = (List<GoodsUserVO>) msg.obj;
             if (list.size() < 10) {
                 //没有数据时设置不能上拉加载
                 refresh.setPullUpType(RefreshRelativeLayout.PULL_UP_TYPE_NOT_PULL);
             }
             data.addAll(list);
             pageNumber++;
+            if (isRefreshing) return;
             adapter.notifyDataSetChanged();
 
         }
@@ -185,10 +192,10 @@ public class FXFragment extends BaseFragment {
     private Handler bannerHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            List<GoodsUserOV> list = (List<GoodsUserOV>) ((Map) msg.obj).get("data");
+            List<GoodsUserVO> list = (List<GoodsUserVO>) ((Map) msg.obj).get("data");
             List<String> images = new ArrayList<>();
             List<String> titles = new ArrayList();
-            for (GoodsUserOV g : list) {
+            for (GoodsUserVO g : list) {
                 images.add(g.getImg1());
                 titles.add(g.getName());
                 bannerIds.add(g.getId());
@@ -267,7 +274,7 @@ public class FXFragment extends BaseFragment {
                 String json = response.body().string();
                 Message msg = new Message();
                 Map<String, Object> map = JSON.parseObject(json);
-                List<GoodsUserOV> goodsList = JSONObject.parseArray(((JSONArray) map.get("data")).toJSONString(), GoodsUserOV.class);
+                List<GoodsUserVO> goodsList = JSONObject.parseArray(((JSONArray) map.get("data")).toJSONString(), GoodsUserVO.class);
                 map.put("data", goodsList);
                 map.put("isFirstTime", isFirstTime);
                 msg.obj = map;
@@ -294,19 +301,7 @@ public class FXFragment extends BaseFragment {
     }
 
     public void setListener() {
-        recyclerView.addOnItemTouchListener(new RecyclerViewClickListener(mContext, new RecyclerViewClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                if (position > 0) {
-                    Tool.toDetail(mContext, data.get(position - 1).getId());
-                }
-            }
 
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-            }
-        }));
         mTextSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -328,18 +323,22 @@ public class FXFragment extends BaseFragment {
             @Override
             //下拉刷新
             public void onRefresh() {
-                refresh.setRefreshing(false);
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                isRefreshing = true;
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
                 thread.interrupt();
                 data = new ArrayList<>();
                 pageNumber = 1;
                 initBannerData(false);
-                initGoodsData();
                 initTextData();
+                initGoodsData();
+                refresh.setRefreshing(false);
+                adapter.notifyDataSetChanged();
+                refresh.setPullUpType(RefreshRelativeLayout.PULL_UP_TYPE_LOAD_PULL);
+                isRefreshing = false;
 
             }
         });
@@ -437,7 +436,7 @@ public class FXFragment extends BaseFragment {
 //                try {
                 String responseBody = response.body().string();
                 Map<String, Object> map = JSON.parseObject(responseBody);
-                List<GoodsUserOV> goodsList = JSONObject.parseArray(((JSONArray) map.get("data")).toJSONString(), GoodsUserOV.class);
+                List<GoodsUserVO> goodsList = JSONObject.parseArray(((JSONArray) map.get("data")).toJSONString(), GoodsUserVO.class);
                 message.obj = goodsList;
                 handler1.sendMessage(message);
 //                } catch (Exception e) {

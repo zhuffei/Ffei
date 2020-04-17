@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.adapter.GoodsItemAdapter;
-import com.example.zhuffei.ffei.entity.GoodsUserOV;
+import com.example.zhuffei.ffei.entity.GoodsUserVO;
 import com.example.zhuffei.ffei.tool.RecyclerViewClickListener;
 import com.example.zhuffei.ffei.tool.Tool;
 
@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class GZFragment extends BaseFragment {
     private RecyclerView recyclerView;
-    private List<GoodsUserOV> data;
+    private List<GoodsUserVO> data;
     private Context mContext;
 
     @Override

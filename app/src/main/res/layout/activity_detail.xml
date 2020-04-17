@@ -22,17 +22,19 @@
                 android:layout_height="800px" />
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20px"
-                android:text="标题标题标题标题标题"
+                android:text=""
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/describe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="20px"
-                android:text="描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述描述"
+                android:text=""
                 android:textColor="#aaaaaa"
                 android:textSize="15sp" />
 
@@ -55,7 +57,7 @@
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/goods_price"
+                    android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="50.00"
@@ -68,11 +70,12 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/browser"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:layout_marginRight="70px"
-                        android:text="浏览：20" />
+                        android:text="浏览：0" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -97,38 +100,40 @@
                         android:layout_marginLeft="20px"
                         android:layout_marginTop="20px">
 
-                        <com.example.zhuffei.ffei.view.CircleImageView
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/avator"
                             android:layout_width="100px"
                             android:layout_height="100px"
                             android:layout_margin="10px"
-                            android:src="@mipmap/m1"
                             app:border_color="#ffffff"
                             app:border_width="0px" />
 
                         <TextView
                             android:layout_width="wrap_content"
+                            android:id="@+id/userName"
                             android:layout_height="100px"
                             android:layout_margin="10px"
                             android:paddingTop="12px"
-                            android:text="用户11"
                             android:textColor="#000000"
                             android:textSize="18sp" />
 
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/createTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="40px"
                         android:layout_marginTop="15px"
-                        android:text="发布于  5分钟前" />
+                        android:text="发布于： "/>
 
                     <TextView
+                        android:id="@+id/updateTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="40px"
                         android:layout_marginTop="15px"
-                        android:text="更新于  5分钟前" />
+                        android:text="更新于： "/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -144,10 +149,10 @@
                             android:src="@mipmap/location" />
 
                         <TextView
+                            android:id="@+id/location"
                             android:layout_width="wrap_content"
                             android:layout_height="60px"
-                            android:paddingTop="20px"
-                            android:text="58号楼" />
+                            android:paddingTop="20px" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -176,52 +181,13 @@
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"></ListView>
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginLeft="20px"
-                android:layout_marginTop="10px">
+        </ListView>
 
-                <com.example.zhuffei.ffei.view.CircleImageView
-                    android:layout_width="100px"
-                    android:layout_height="100px"
-                    android:layout_margin="10px"
-                    android:src="@mipmap/m1"
-                    app:border_color="#ffffff"
-                    app:border_width="0px" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="100px"
-                        android:layout_margin="10px"
-                        android:paddingTop="8px"
-                        android:text="用户11"
-                        android:textColor="#000000"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="-20px"
-                        android:text="不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错.不错."
-                        android:textColor="#333333" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:layout_marginRight="40px"
-                        android:text="2020-2-3" />
-
-                </LinearLayout>
-            </LinearLayout>
         </LinearLayout>
 
     </ScrollView>

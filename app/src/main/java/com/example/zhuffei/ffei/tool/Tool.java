@@ -9,6 +9,9 @@ import android.util.DisplayMetrics;
 import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.activity.DetailActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +22,9 @@ import java.util.regex.Pattern;
 public class Tool {
 
     public static Bitmap bitmap ;
+
+
+    private static  SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     /**
      * 检测字符串是否为手机号
      * @param phone
@@ -69,6 +75,42 @@ public class Tool {
         editor.clear();
 
         editor.apply();
+    }
+
+    public static String parseTime(String time) {
+
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(time);
+            Date now = new Date();
+            long l = now.getTime() - date.getTime();
+            long day = l / (24 * 60 * 60 * 1000);
+            long hour = (l / (60 * 60 * 1000) - day * 24);
+            long min = ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
+            long s = (l / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
+            String s1 = "";
+            if (day > 0) {
+                if(day>10){
+                    return time.substring(0,10);
+                }else{
+                s1 = day + "天前";
+                return s1;}
+            }
+            if (hour > 0) {
+                s1 = hour + "小时前";
+                return s1;
+            }
+            if (min > 0){
+                s1 = min + "分钟前";
+                return s1;}else {
+                return  "刚刚";
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "未知时间";
+        }
+
     }
 
 
