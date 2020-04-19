@@ -360,8 +360,6 @@ public class RefreshRelativeLayout extends RelativeLayout {
             onRefreshListener.onRefresh();
             return;
         }
-
-        Log.d("aaaaaaaa",state+"");
         changePullDownState();
     }
 
@@ -396,7 +394,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
                 }
                 //无论当前再什么位置，都跳到正在刷新的地方
                 moveViewAnimation(rlyHead, rectRlyHead.top,true);
-                moveViewAnimation(recyclerView, rectRlyHead.top+rlyHead.getHeight()*2,true);
+                moveViewAnimation(recyclerView, rectRlyHead.top+rlyHead.getHeight(),true);
                 break;
             case PULL_DOWN_STATE_4:
                 //刷新成功

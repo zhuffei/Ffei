@@ -3,6 +3,7 @@ package com.example.zhuffei.ffei;
 import android.app.Application;
 import android.content.Context;
 
+import com.example.zhuffei.ffei.entity.User;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.util.NIMUtil;
@@ -15,6 +16,10 @@ import com.netease.nimlib.sdk.util.NIMUtil;
 public class FfeiApplication extends Application {
 
     public static Context context;
+
+    public static boolean isLogin = false;
+
+    public static User user;
 
 
     @Override

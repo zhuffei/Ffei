@@ -9,6 +9,7 @@ import android.os.Message;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.activity.HomeActivity;
 import com.example.zhuffei.ffei.entity.User;
 import com.example.zhuffei.ffei.tool.HttpUtil;
@@ -41,15 +42,16 @@ public class LoginService {
                 ToastHelper.showToast(text);
             }
             if(null == ((Map) msg.obj).get("state")){
-                ToastHelper.showToast("网络异常");
+                ToastHelper.showToast("服务器异常");
                 return;
             }
             if (!(boolean) ((Map) msg.obj).get("state")) {
                 Tool.logout();
-                return;
             }else{
                 Tool.logout();
                 User user = ((JSONObject) ((Map) msg.obj).get("data")).toJavaObject(User.class);
+                FfeiApplication.isLogin = true;
+                FfeiApplication.user = user;
                 //保存登录信息
                 SharedPreferences sp = context.getSharedPreferences("user", Context.MODE_PRIVATE);
                 sp.edit().putString("name", user.getName())

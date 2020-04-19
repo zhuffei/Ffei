@@ -1,5 +1,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
@@ -9,7 +10,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -42,9 +44,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginBottom="10px"
                 android:layout_marginLeft="20px"
                 android:layout_marginTop="10px"
+                android:layout_marginBottom="10px"
                 android:orientation="horizontal"
 
                 >
@@ -60,7 +62,6 @@
                     android:id="@+id/price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="50.00"
                     android:textColor="#ff2424"
                     android:textSize="25sp" />
 
@@ -109,8 +110,8 @@
                             app:border_width="0px" />
 
                         <TextView
-                            android:layout_width="wrap_content"
                             android:id="@+id/userName"
+                            android:layout_width="wrap_content"
                             android:layout_height="100px"
                             android:layout_margin="10px"
                             android:paddingTop="12px"
@@ -125,7 +126,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="40px"
                         android:layout_marginTop="15px"
-                        android:text="发布于： "/>
+                        android:text="发布于： " />
 
                     <TextView
                         android:id="@+id/updateTime"
@@ -133,13 +134,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="40px"
                         android:layout_marginTop="15px"
-                        android:text="更新于： "/>
+                        android:text="更新于： " />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="20px"
-                        android:layout_marginLeft="20px">
+                        android:layout_marginLeft="20px"
+                        android:layout_marginBottom="20px">
 
                         <ImageView
                             android:layout_width="60px"
@@ -178,16 +179,32 @@
                 android:text="评论"
                 android:textSize="19sp" />
 
-            <ListView
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></ListView>
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:descendantFocusability="blocksDescendants">
 
-        </ListView>
+                <com.example.zhuffei.ffei.view.MyListView
+                    android:id="@+id/listView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
+                </com.example.zhuffei.ffei.view.MyListView>
+
+                <TextView
+                    android:id="@+id/none"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="暂无评论"
+                    android:textSize="14sp"
+                    android:layout_below="@+id/listView"
+                    android:layout_gravity="center"
+                    android:layout_margin="20px"
+                    android:textColor="#999999"
+                    android:visibility="gone"
+                    ></TextView>
+            </RelativeLayout>
         </LinearLayout>
 
     </ScrollView>
@@ -196,6 +213,7 @@
         android:layout_width="match_parent"
         android:layout_height="200px"
         android:layout_gravity="bottom"
+        android:layout_marginTop="10dp"
         android:background="#ffffff">
 
         <LinearLayout
@@ -213,10 +231,10 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_margin="10px"
                     android:layout_width="60px"
                     android:layout_height="60px"
                     android:layout_gravity="center"
+                    android:layout_margin="10px"
                     android:src="@mipmap/liaotian" />
 
                 <TextView
@@ -235,10 +253,10 @@
 
                 <ImageView
                     android:id="@+id/star"
-                    android:layout_margin="10px"
                     android:layout_width="60px"
                     android:layout_height="60px"
                     android:layout_gravity="center"
+                    android:layout_margin="10px"
                     android:src="@mipmap/shoucang" />
 
                 <TextView
@@ -258,10 +276,10 @@
 
                 <ImageView
 
-                    android:layout_margin="10px"
                     android:layout_width="60px"
                     android:layout_height="60px"
                     android:layout_gravity="center"
+                    android:layout_margin="10px"
                     android:src="@mipmap/jubao" />
 
                 <TextView
@@ -278,29 +296,30 @@
 
             <LinearLayout
 
-                android:layout_margin="10px"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_margin="10px"
                 android:layout_weight="3"
                 android:padding="10px">
+
                 <Button
 
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="@drawable/button_want"
-                    android:textSize="12sp"
                     android:text="聊聊"
-                    />
+                    android:textSize="12sp" />
+
                 <Button
                     android:id="@+id/buy"
-                    android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:background="@drawable/button_buy"
                     android:text="购买"
-                    android:textSize="12sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
