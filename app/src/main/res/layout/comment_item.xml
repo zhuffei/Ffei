@@ -36,12 +36,27 @@
             android:layout_marginTop="-20px"
             android:textColor="#333333" />
 
-        <TextView
-            android:id="@+id/createTime"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="40px" />
+            android:layout_marginTop="10px">
+            <TextView
+                android:id="@+id/delete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="删除"
+                android:layout_gravity="center"
+                android:textColor="@color/color_blue_0888ff"
+                android:visibility="invisible"></TextView>
+            <TextView
+                android:id="@+id/createTime"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </LinearLayout>

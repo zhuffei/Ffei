@@ -4,15 +4,17 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,7 +56,11 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-
+/**
+ * @author zhuffei
+ * @version 1.0
+ * @date 2020/3/24 13:11
+ */
 public class IssueActivity extends AppCompatActivity {
 
     private static final int REQUEST_CAMERA_CODE = 10;
@@ -68,7 +74,7 @@ public class IssueActivity extends AppCompatActivity {
     private String TAG = IssueActivity.class.getSimpleName();
     private ImageView back;
 
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler(Looper.getMainLooper()){
         @Override
         public void handleMessage(Message msg) {
             LoadingViewManager.dismiss();
@@ -91,49 +97,42 @@ public class IssueActivity extends AppCompatActivity {
         gridView.setNumColumns(cols);
 
         // preview
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String imgs = (String) parent.getItemAtPosition(position);
-                if ("000000".equals(imgs)) {
-                    PhotoPickerIntent intent = new PhotoPickerIntent(IssueActivity.this);
-                    intent.setSelectModel(SelectModel.MULTI);
-                    intent.setShowCarema(true); // 是否显示拍照
-                    intent.setMaxTotal(6); // 最多选择照片数量，默认为6
-                    intent.setSelectedPaths(imagePaths); // 已选中的照片地址， 用于回显选中状态
-                    startActivityForResult(intent, REQUEST_CAMERA_CODE);
-                } else {
-                    PhotoPreviewIntent intent = new PhotoPreviewIntent(IssueActivity.this);
-                    intent.setCurrentItem(position);
-                    intent.setPhotoPaths(imagePaths);
-                    startActivityForResult(intent, REQUEST_PREVIEW_CODE);
-                }
+        gridView.setOnItemClickListener((parent, view, position, id) -> {
+            String imgs = (String) parent.getItemAtPosition(position);
+            if ("000000".equals(imgs)) {
+                PhotoPickerIntent intent = new PhotoPickerIntent(IssueActivity.this);
+                intent.setSelectModel(SelectModel.MULTI);
+                intent.setShowCarema(true); // 是否显示拍照
+                intent.setMaxTotal(6); // 最多选择照片数量，默认为6
+                intent.setSelectedPaths(imagePaths); // 已选中的照片地址， 用于回显选中状态
+                startActivityForResult(intent, REQUEST_CAMERA_CODE);
+            } else {
+                PhotoPreviewIntent intent = new PhotoPreviewIntent(IssueActivity.this);
+                intent.setCurrentItem(position);
+                intent.setPhotoPaths(imagePaths);
+                startActivityForResult(intent, REQUEST_PREVIEW_CODE);
             }
         });
         imagePaths.add("000000");
         gridAdapter = new GridAdapter(imagePaths);
         gridView.setAdapter(gridAdapter);
 
-        mButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            //开始商品信息上传
-            public void onClick(View v) {
-                Log.d("aaaaaaaaa", "开始"+Thread.currentThread().getName());
-                if (title.getText().toString().isEmpty() ||
-                        describe.getText().toString().isEmpty() ||
-                        location.getText().toString().isEmpty() ||
-                        price.getText().toString().isEmpty()) {
-                    ToastHelper.showToast( "请填写完整信息");
-                    return;
-                }
-                if (imagePaths.size() < 2) {
-                    ToastHelper.showToast( "请上传至少一张图片");
-                    return;
-                }
-                imagePaths.remove("000000");
-                upLoad(imagePaths);
-
+        //开始商品信息上传
+        mButton.setOnClickListener(v -> {
+            if (title.getText().toString().isEmpty() ||
+                    describe.getText().toString().isEmpty() ||
+                    location.getText().toString().isEmpty() ||
+                    price.getText().toString().isEmpty()) {
+                ToastHelper.showToast( "请填写完整信息");
+                return;
             }
+            if (imagePaths.size() < 2) {
+                ToastHelper.showToast( "请上传至少一张图片");
+                return;
+            }
+            imagePaths.remove("000000");
+            upLoad(imagePaths);
+
         });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,18 +158,27 @@ public class IssueActivity extends AppCompatActivity {
             OkHttpClient okHttpClient = new OkHttpClient();
             MultipartBody.Builder builder = new MultipartBody.Builder()
                     .setType(MultipartBody.MIXED);
+            double ratio = 0;
+            //不加载图片到内存而获取其宽高比
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            Bitmap bitmap = BitmapFactory.decodeFile(list.get(0),options);
+            ratio = (double) options.outHeight/options.outWidth;
+
             for (int i = 0; i < list.size(); i++) {
                 file = new File(list.get(i));
                 if (null != file) {
                     builder.addFormDataPart("img", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file));
                 }
             }
+
             builder.addFormDataPart("title", title.getText().toString());
             builder.addFormDataPart("type", "1");//1代表是出售的商品
             builder.addFormDataPart("uId", String.valueOf(uId));
             builder.addFormDataPart("describe", describe.getText().toString());
             builder.addFormDataPart("location", location.getText().toString());
             builder.addFormDataPart("price", price.getText().toString());
+            builder.addFormDataPart("ratio", ratio+"");
             RequestBody requestBody = builder.build();
             Request request = new Request.Builder()
                     .url(UrlTool.ADDGOODS)

@@ -24,7 +24,11 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
-
+/**
+ * @author zhuffei
+ * @version 1.0
+ * @date 2020/3/20 15:21
+ */
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
     //聊天页面常量
@@ -91,19 +95,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
      * 初始化所有控件
      */
     private void initView() {
-        btnPlus = (ImageView) findViewById(R.id.mBtnPlus);
-        mLinFX = (LinearLayout) findViewById(R.id.mLinFX);
-        mLinLT = (LinearLayout) findViewById(R.id.mLinLiaoTian);
-        mLinGZ = (LinearLayout) findViewById(R.id.mLinGuanZhu);
-        mLinWD = (LinearLayout) findViewById(R.id.mLinUser);
-        mGZIBtn = (ImageButton) findViewById(R.id.mBtnGZ);
-        mFXIBtn = (ImageButton) findViewById(R.id.mBtnFX);
-        mLTIBtn = (ImageButton) findViewById(R.id.mBtnLT);
-        mWDIBtn = (ImageButton) findViewById(R.id.mBtnWD);
-        mGZTv = (TextView) findViewById(R.id.mTvGuanZhu);
-        mFXTv = (TextView) findViewById(R.id.mTvFaXian);
-        mLTTv = (TextView) findViewById(R.id.mTvLiaoTian);
-        mWDTv = (TextView) findViewById(R.id.mTvUser);
+        btnPlus = findViewById(R.id.mBtnPlus);
+        mLinFX = findViewById(R.id.mLinFX);
+        mLinLT = findViewById(R.id.mLinLiaoTian);
+        mLinGZ = findViewById(R.id.mLinGuanZhu);
+        mLinWD = findViewById(R.id.mLinUser);
+        mGZIBtn = findViewById(R.id.mBtnGZ);
+        mFXIBtn = findViewById(R.id.mBtnFX);
+        mLTIBtn = findViewById(R.id.mBtnLT);
+        mWDIBtn = findViewById(R.id.mBtnWD);
+        mGZTv = findViewById(R.id.mTvGuanZhu);
+        mFXTv = findViewById(R.id.mTvFaXian);
+        mLTTv = findViewById(R.id.mTvLiaoTian);
+        mWDTv = findViewById(R.id.mTvUser);
         manager = getSupportFragmentManager();
     }
 

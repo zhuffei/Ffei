@@ -6,11 +6,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -45,7 +43,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
@@ -71,6 +68,7 @@ public class DetailActivity extends AppCompatActivity {
     GoodsUserVO data;
     List<String> images = new ArrayList();
     List<CommentUserVO> comments;
+    CommentAdapter adapter;
     boolean isCollected = false;
     public static final int CHECK = 2;
     public static final int ADD = 3;
@@ -79,6 +77,9 @@ public class DetailActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case -1:
+                    ToastHelper.showToast("网络异常");
+                    break;
                 case 0:
                     displayData();
                     initImages();
@@ -87,8 +88,33 @@ public class DetailActivity extends AppCompatActivity {
                 case 1:
                     if (comments.isEmpty()) {
                         none.setVisibility(View.VISIBLE);
+                        break;
                     }
-                    listView.setAdapter(new CommentAdapter(comments, DetailActivity.this));
+                    adapter = new CommentAdapter(comments, DetailActivity.this);
+                    listView.setAdapter(adapter);
+                    adapter.setOnDeletelistener(id -> {
+                        Map map = new HashMap();
+                        map.put("id", id);
+                        String param = JSON.toJSONString(map);
+                        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), param);
+                        HttpUtil.sendHttpRequest(UrlTool.DELETECOMMENT, requestBody, new okhttp3.Callback() {
+                            @Override
+                            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                                handler.sendEmptyMessage(-1);
+                            }
+
+                            @Override
+                            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                                String json = response.body().string();
+                                Map map = JSON.parseObject(json, HashMap.class);
+                                Integer code = (Integer) map.get("data");
+                                Message msg = new Message();
+                                msg.obj = code;
+                                msg.what = 6;
+                                handler.sendMessage(msg);
+                            }
+                        });
+                    });
                     break;
                 case CHECK:
                     if ((Integer) msg.obj == 1) {
@@ -106,6 +132,24 @@ public class DetailActivity extends AppCompatActivity {
                         setCollected(true);
                         ToastHelper.showToast("已收藏");
                     }
+                    break;
+                case 5:
+                    if ((Integer) msg.obj == 1) {
+                        ToastHelper.showToast("评论发布成功");
+                        refreshComment();
+                    } else {
+                        ToastHelper.showToast("评论发布失败");
+                    }
+                    break;
+                case 6:
+                    if ((Integer) msg.obj == 1) {
+                        ToastHelper.showToast("评论已删除");
+                        refreshComment();
+                    } else {
+                        ToastHelper.showToast("评论删除失败");
+                    }
+                    break;
+
             }
         }
     };
@@ -126,46 +170,67 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        findViews();
         Intent intent = getIntent();
         gid = intent.getIntExtra("gid", 0);
-        getGoodsInfo(gid);
+        setListener();
+        getGoodsInfo();
+        getComments();
         changeCollect(CHECK);
-        findViews();
-        comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputTextMsgDialog dialog = new InputTextMsgDialog(DetailActivity.this, R.style.dialog_center);
-                dialog.show();
-            }
-        });
-        //举报
-        report.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    }
+
+    private void setListener() {
+        //评论
+        comment.setOnClickListener(v -> {
+            InputTextMsgDialog dialog = new InputTextMsgDialog(DetailActivity.this, R.style.dialog_center);
+            dialog.setmOnTextSendListener(msg -> {
                 if (FfeiApplication.isLogin) {
-                    Intent intent = new Intent(DetailActivity.this, ReportActivity.class);
-                    intent.putExtra("gid", gid);
-                    intent.putExtra("userName", data.getUserName());
-                    intent.putExtra("name", data.getName());
-                    startActivity(intent);
-                }else{
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("gid", gid);
+                    map.put("uid", FfeiApplication.user.getId());
+                    map.put("comment", msg);
+                    String param = JSON.toJSONString(map);
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), param);
+                    HttpUtil.sendHttpRequest(UrlTool.COMMENT, requestBody, new Callback() {
+                        @Override
+                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                            handler.sendEmptyMessage(-1);
+                        }
+
+                        @Override
+                        public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                            String json = response.body().string();
+                            Map map = JSON.parseObject(json, HashMap.class);
+                            Integer code = (Integer) map.get("data");
+                            Message msg = new Message();
+                            msg.obj = code;
+                            msg.what = 5;
+                            handler.sendMessage(msg);
+                        }
+                    });
+                } else {
                     ToastHelper.showToast("请登录");
                 }
+            });
+            dialog.show();
+        });
+        //举报
+        report.setOnClickListener(v -> {
+            if (FfeiApplication.isLogin) {
+                Intent intent1 = new Intent(DetailActivity.this, ReportActivity.class);
+                intent1.putExtra("gid", gid);
+                intent1.putExtra("userName", data.getUserName());
+                intent1.putExtra("name", data.getName());
+                startActivity(intent1);
+            } else {
+                ToastHelper.showToast("请登录");
             }
         });
 
-        shoucang.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeCollect(isCollected ? CANCEL : ADD);
-            }
-        });
-        buy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(DetailActivity.this, BuyActivity.class);
-                startActivity(intent);
-            }
+        shoucang.setOnClickListener(v -> changeCollect(isCollected ? CANCEL : ADD));
+        buy.setOnClickListener(v -> {
+            Intent intent = new Intent(DetailActivity.this, BuyActivity.class);
+            startActivity(intent);
         });
 
     }
@@ -190,6 +255,7 @@ public class DetailActivity extends AppCompatActivity {
         shoucang = findViewById(R.id.shoucang);
         star = findViewById(R.id.star);
         scText = findViewById(R.id.scText);
+        listView.setItemsCanFocus(true);
     }
 
     private void displayData() {
@@ -231,7 +297,7 @@ public class DetailActivity extends AppCompatActivity {
         banner.start();
     }
 
-    private void getGoodsInfo(Integer gid) {
+    private void getGoodsInfo() {
         Map<String, Integer> map = new HashMap<>();
         map.put("gid", gid);
         String param = JSON.toJSONString(map);
@@ -242,7 +308,7 @@ public class DetailActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ToastHelper.showToast("网络异常");
+                        handler.sendEmptyMessage(-1);
                     }
                 });
             }
@@ -255,13 +321,21 @@ public class DetailActivity extends AppCompatActivity {
                 handler.sendEmptyMessage(0);
             }
         });
+
+    }
+
+    void getComments() {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("gid", gid);
+        String param = JSON.toJSONString(map);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), param);
         HttpUtil.sendHttpRequest(UrlTool.LISTCOMMENTBYGID, requestBody, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ToastHelper.showToast("网络异常");
+                        handler.sendEmptyMessage(-1);
                     }
                 });
             }
@@ -298,7 +372,7 @@ public class DetailActivity extends AppCompatActivity {
             HttpUtil.sendHttpRequest(url, requestBody, new Callback() {
                 @Override
                 public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                    ToastHelper.showToast("网络异常");
+                    handler.sendEmptyMessage(-1);
                 }
 
                 @Override
@@ -317,5 +391,11 @@ public class DetailActivity extends AppCompatActivity {
                 ToastHelper.showToast("请登录");
         }
 
+    }
+
+    void refreshComment() {
+        comments = new ArrayList<>();
+        none.setVisibility(View.GONE);
+        getComments();
     }
 }

@@ -37,6 +37,8 @@ public class Goods {
 
     private String img6;
 
+    private double ratio;
+
     private Integer browse;
 
     private String createTime;
@@ -60,9 +62,19 @@ public class Goods {
                 ", img4='" + img4 + '\'' +
                 ", img5='" + img5 + '\'' +
                 ", img6='" + img6 + '\'' +
+                ", ratio=" + ratio +
                 ", browse=" + browse +
-                ", createTime=" + createTime +
+                ", createTime='" + createTime + '\'' +
+                ", updateTime='" + updateTime + '\'' +
                 '}';
+    }
+
+    public double getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(double ratio) {
+        this.ratio = ratio;
     }
 
     public int getId() {

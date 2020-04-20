@@ -39,7 +39,6 @@ import com.example.zhuffei.ffei.tool.UrlTool;
 import com.example.zhuffei.ffei.view.RefreshRelativeLayout;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
-import com.youth.banner.listener.OnBannerListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -63,8 +62,6 @@ import okhttp3.Response;
  */
 public class FXFragment extends BaseFragment {
 
-    private Handler handler = new Handler();
-    private boolean isFlipping = false; // 是否启用信息轮播
     private List<String> mWarningTextList;
 
     private RecyclerView recyclerView;
@@ -181,6 +178,7 @@ public class FXFragment extends BaseFragment {
                 //没有数据时设置不能上拉加载
                 refresh.setPullUpType(RefreshRelativeLayout.PULL_UP_TYPE_NOT_PULL);
             }
+            if(list.size()==0) return;
             data.addAll(list);
             pageNumber++;
             if (isRefreshing) return;
@@ -227,7 +225,6 @@ public class FXFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment1, container, false);
-        refresh = view.findViewById(R.id.refresh);
         mContext = this.getActivity();
         findViews(view);
         //设置头部搜索框
@@ -284,9 +281,6 @@ public class FXFragment extends BaseFragment {
 
     }
 
-    private void refreshBanner() {
-
-    }
 
     public void findViews(View view) {
         refresh = view.findViewById(R.id.refresh);
@@ -302,53 +296,33 @@ public class FXFragment extends BaseFragment {
 
     public void setListener() {
 
-        mTextSwitcher.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Tool.toDetail(mContext, rollTextMap.get(mWarningTextList.get(textIndex)));
+        mTextSwitcher.setOnClickListener(v -> Tool.toDetail(mContext, rollTextMap.get(mWarningTextList.get(textIndex))));
+
+        banner.setOnBannerListener(position -> {
+            Integer gid = bannerIds.get(position);
+            if (gid != null) {
+                Tool.toDetail(mContext, gid);
             }
         });
 
-        banner.setOnBannerListener(new OnBannerListener() {
-            @Override
-            public void OnBannerClick(int position) {
-                Integer gid = bannerIds.get(position);
-                if (gid != null) {
-                    Tool.toDetail(mContext, gid);
-                }
-            }
-        });
+        //下拉刷新
+        refresh.setOnRefreshListener(() -> {
+            isRefreshing = true;
+            data .clear();
+            pageNumber = 1;
+            initBannerData(false);
+            initTextData();
+            initGoodsData();
+            refresh.setRefreshing(false);
+            adapter.notifyDataSetChanged();
+            refresh.setPullUpType(RefreshRelativeLayout.PULL_UP_TYPE_LOAD_PULL);
+            isRefreshing = false;
 
-        refresh.setOnRefreshListener(new RefreshRelativeLayout.OnRefreshListener() {
-            @Override
-            //下拉刷新
-            public void onRefresh() {
-                isRefreshing = true;
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-                thread.interrupt();
-                data = new ArrayList<>();
-                pageNumber = 1;
-                initBannerData(false);
-                initTextData();
-                initGoodsData();
-                refresh.setRefreshing(false);
-                adapter.notifyDataSetChanged();
-                refresh.setPullUpType(RefreshRelativeLayout.PULL_UP_TYPE_LOAD_PULL);
-                isRefreshing = false;
-
-            }
         });
-        refresh.setOnLoadListener(new RefreshRelativeLayout.OnLoadListener() {
-            @Override
-            //上拉加载
-            public void onLoad() {
-                initGoodsData();
-                refresh.setLoading(false);
-            }
+        //上拉加载
+        refresh.setOnLoadListener(() -> {
+            initGoodsData();
+            refresh.setLoading(false);
         });
     }
 
@@ -433,18 +407,11 @@ public class FXFragment extends BaseFragment {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
 
                 Message message = new Message();
-//                try {
                 String responseBody = response.body().string();
                 Map<String, Object> map = JSON.parseObject(responseBody);
                 List<GoodsUserVO> goodsList = JSONObject.parseArray(((JSONArray) map.get("data")).toJSONString(), GoodsUserVO.class);
                 message.obj = goodsList;
                 handler1.sendMessage(message);
-//                } catch (Exception e) {
-//
-//                    message.obj = null;
-//                    handler1.sendMessage(message);
-//                }
-
             }
         });
     }

@@ -37,6 +37,10 @@ public class LoginService {
     Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
+            if(msg.what == -1){
+                ToastHelper.showToast("网络异常");
+                return;
+            }
             String text = (String) ((Map) msg.obj).get("msg");
             if (null != text && !text.isEmpty()) {
                 ToastHelper.showToast(text);
@@ -84,16 +88,11 @@ public class LoginService {
 
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"),userJson);
 
-
         try {
             HttpUtil.sendHttpRequest(UrlTool.LOGIN, requestBody, new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    Message msg = new Message();
-                    Map map = new HashMap<>();
-                    map.put("msg", "连接服务器失败");
-                    msg.obj = map;
-                    handler.sendMessage(msg);
+                    handler.sendEmptyMessage(-1);
                 }
 
                 @Override

@@ -5,7 +5,8 @@ package com.example.zhuffei.ffei.tool;
  */
 
 public class UrlTool {
-    public static final String host = "192.168.1.6";
+    //    public static final String host = "192.168.1.6";
+    public static final String host = "192.168.137.1";
     public static final String prefix = "http://" + host + ":8080/ffei/";
     public static final String AVATOR = prefix + "avator/";
     public static final String GOODSIMG = prefix + "goodsImg/";
@@ -20,6 +21,11 @@ public class UrlTool {
     public static final String LISTCOMMENTBYGID = prefix + "goods/listCommentByGid";
     public static final String CHECKCOLLECT = prefix + "relation/checkCollect";
     public static final String COLLECT = prefix + "relation/collect";
-    public static final String CANCELCOLLECT = prefix +"relation/cancelCollect";
-    public static final String REPORRT = prefix +"relation/report";
+    public static final String CANCELCOLLECT = prefix + "relation/cancelCollect";
+    public static final String REPORRT = prefix + "relation/report";
+    public static final String COMMENT = prefix + "relation/comment";
+    public static final String DELETECOMMENT = prefix + "relation/deleteComment";
+    public static final String SEARCHGOODS = prefix + "goods/searchGoods";
+    public static final String LISTFOCUSGOODS = prefix +"goods/listFocusGoods";
+    public static final String ADDBUY = prefix + "goods/addBuy";
 }

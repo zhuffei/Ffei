@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,7 +43,6 @@ public class GoodsItemAdapter extends RecyclerView.Adapter<GoodsItemAdapter.Good
     private View mHeaderView;
 
 
-
     public GoodsItemAdapter(List<GoodsUserVO> data, Context context) {
         this.data = data;
         this.mContext = context;
@@ -74,9 +74,13 @@ public class GoodsItemAdapter extends RecyclerView.Adapter<GoodsItemAdapter.Good
         holder.name.setText(goods.getName());
         holder.time.setText(Tool.parseTime(goods.getCreateTime()));
         holder.userName.setText(goods.getUserName());
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) holder.goodsImage.getLayoutParams();
+        layoutParams.width = (Tool.getScreenWidth(mContext) / 2 - 10);
+        layoutParams.height = (int) (layoutParams.width * goods.getRatio());
+        holder.goodsImage.setLayoutParams(layoutParams);
         asyncImageLoader.asyncloadImage(holder.goodsImage, UrlTool.GOODSIMG + goods.getImg1());
         asyncImageLoader.asyncloadImage(holder.avator, UrlTool.AVATOR + goods.getAvator());
-        holder.setImgHeigh(mContext);
+
     }
 
     public int getRealPosition(RecyclerView.ViewHolder holder) {
@@ -86,7 +90,8 @@ public class GoodsItemAdapter extends RecyclerView.Adapter<GoodsItemAdapter.Good
 
     @Override
     public int getItemCount() {
-        return data.size() + 1;
+
+        return mHeaderView == null ? data.size() : data.size() + 1;
     }
 
     static class GoodsViewHolder extends RecyclerView.ViewHolder {
@@ -109,10 +114,6 @@ public class GoodsItemAdapter extends RecyclerView.Adapter<GoodsItemAdapter.Good
             price = itemView.findViewById(R.id.goods_price);
         }
 
-        public void setImgHeigh(Context context) {
-            goodsImage.setMinimumWidth(Tool.getScreenWidth(context) / 2 - 10);
-
-        }
     }
 
     @Override

@@ -50,9 +50,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void findViews(){
-        textView = (TextView) findViewById(R.id.register);
-        homePage = (Button) findViewById(R.id.homePage);
-        button2 = (Button) findViewById(R.id.login);
+        textView = findViewById(R.id.register);
+        homePage = findViewById(R.id.homePage);
+        button2 = findViewById(R.id.login);
     }
 
     public void login(){

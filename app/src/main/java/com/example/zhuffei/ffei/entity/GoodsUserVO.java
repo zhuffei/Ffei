@@ -15,11 +15,20 @@ public class GoodsUserVO {
     private String img4;
     private String img5;
     private String img6;
+    private double ratio;
     private String location;
     private String state;
     private Integer browse;
     private String createTime;
     private String updateTime;
+
+    public double getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(double ratio) {
+        this.ratio = ratio;
+    }
 
     public int getId() {
         return id;
