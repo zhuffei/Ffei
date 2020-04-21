@@ -405,7 +405,6 @@ public class FXFragment extends BaseFragment {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
                 Message message = new Message();
                 String responseBody = response.body().string();
                 Map<String, Object> map = JSON.parseObject(responseBody);

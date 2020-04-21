@@ -193,7 +193,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         hint(transaction);
         switch (index){
             case LT:
-                //设置当前的文字和ImageButton为橙色
                 mLTTv.setTextColor(getResources().getColor(R.color.pressed));
                 mLTIBtn.setBackgroundResource(R.mipmap.chat_pressed);
                 //初次加载Fragment先判断是否为空

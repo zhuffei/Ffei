@@ -22,11 +22,13 @@ import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
+import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.activity.CropActivity;
 import com.example.zhuffei.ffei.activity.FocusActivity;
 import com.example.zhuffei.ffei.activity.MyGoodsActivity;
 import com.example.zhuffei.ffei.tool.AsyncImageLoader;
+import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.example.zhuffei.ffei.tool.Tool;
 import com.example.zhuffei.ffei.tool.UrlTool;
 import com.leon.lib.settingview.LSettingItem;
@@ -116,32 +118,48 @@ public class WDFragment extends BaseFragment {
         itemOne.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click() {
+                if(!FfeiApplication.isLogin){
+                    ToastHelper.showToast("请登录");
+                    return;
+                }
                 Intent intent = new Intent(mContext, MyGoodsActivity.class);
-                intent.putExtra("position", MyGoodsActivity.RELEASE);
+                intent.putExtra("code", MyGoodsActivity.RELEASE);
                 startActivity(intent);
             }
         });
         itemTwo.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click() {
+                if(!FfeiApplication.isLogin){
+                    ToastHelper.showToast("请登录");
+                    return;
+                }
                 Intent intent = new Intent(mContext, MyGoodsActivity.class);
-                intent.putExtra("position", MyGoodsActivity.COLLECTION);
+                intent.putExtra("code", MyGoodsActivity.COLLECTION);
                 startActivity(intent);
             }
         });
         itemThree.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click() {
+                if(!FfeiApplication.isLogin){
+                    ToastHelper.showToast("请登录");
+                    return;
+                }
                 Intent intent = new Intent(mContext, MyGoodsActivity.class);
-                intent.putExtra("position", MyGoodsActivity.BUY);
+                intent.putExtra("code", MyGoodsActivity.BUY);
                 startActivity(intent);
             }
         });
         itemFour.setmOnLSettingItemClick(new LSettingItem.OnLSettingItemClick() {
             @Override
             public void click() {
+                if(!FfeiApplication.isLogin){
+                    ToastHelper.showToast("请登录");
+                    return;
+                }
                 Intent intent = new Intent(mContext, MyGoodsActivity.class);
-                intent.putExtra("position", MyGoodsActivity.SELL);
+                intent.putExtra("code", MyGoodsActivity.SELL);
                 startActivity(intent);
             }
         });
@@ -149,14 +167,22 @@ public class WDFragment extends BaseFragment {
         focus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!FfeiApplication.isLogin){
+                    ToastHelper.showToast("请登录");
+                    return;
+                }
                 Intent intent = new Intent(mContext, FocusActivity.class);
-                intent.putExtra("position", FocusActivity.FOCUS);
+                intent.putExtra("code", FocusActivity.FOCUS);
                 startActivity(intent);
             }
         });
         fans.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!FfeiApplication.isLogin){
+                    ToastHelper.showToast("请登录");
+                    return;
+                }
                 Intent intent = new Intent(mContext, FocusActivity.class);
                 intent.putExtra("position", FocusActivity.FANS);
                 startActivity(intent);

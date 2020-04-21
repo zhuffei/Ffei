@@ -43,10 +43,6 @@ public class FocusActivity extends AppCompatActivity {
 
     private void initData() {
         data = new ArrayList<>();
-        data.add(new User(true, "R.mipmap.m4", "用户1"));
-
-        data.add(new User(false, "R.mipmap.m5", "用户2"));
-        data.add(new User(true, "R.mipmap.m6", "用户3"));
 
     }
 }
