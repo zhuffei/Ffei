@@ -59,7 +59,7 @@ public class DetailActivity extends AppCompatActivity {
     //收藏
     LinearLayout shoucang;
     Integer gid;
-    ImageView star;
+    ImageView star,back;
     TextView scText;
     Banner banner;
     Button buy;
@@ -180,6 +180,8 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     private void setListener() {
+
+        back.setOnClickListener(v -> DetailActivity.this.finish());
         //评论
         comment.setOnClickListener(v -> {
             InputTextMsgDialog dialog = new InputTextMsgDialog(DetailActivity.this, R.style.dialog_center);
@@ -230,12 +232,14 @@ public class DetailActivity extends AppCompatActivity {
         shoucang.setOnClickListener(v -> changeCollect(isCollected ? CANCEL : ADD));
         buy.setOnClickListener(v -> {
             Intent intent = new Intent(DetailActivity.this, BuyActivity.class);
+            intent.putExtra("gid",data.getId());
             startActivity(intent);
         });
 
     }
 
     private void findViews() {
+        back = findViewById(R.id.back);
         none = findViewById(R.id.none);
         listView = findViewById(R.id.listView);
         price = findViewById(R.id.price);

@@ -22,16 +22,16 @@ public class UserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        back = (ImageView)findViewById(R.id.back);
+        back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UserActivity.this.finish();
             }
         });
-        listView = (ListView) findViewById(R.id.listView);
+        listView = findViewById(R.id.listView);
         initData();
-        listView.setAdapter(new GoodsAdapter(data,UserActivity.this));
+        listView.setAdapter(new GoodsAdapter(data,UserActivity.this,1));
     }
 
     private void initData() {

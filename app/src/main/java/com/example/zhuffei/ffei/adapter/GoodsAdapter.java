@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.entity.Goods;
 import com.example.zhuffei.ffei.tool.AsyncImageLoader;
+import com.example.zhuffei.ffei.tool.Tool;
 import com.example.zhuffei.ffei.tool.UrlTool;
 
 import java.util.List;
@@ -30,10 +31,13 @@ public class GoodsAdapter extends BaseAdapter {
 
     private OnclickListener onclickListener;
 
+    private int code;
 
-    public GoodsAdapter(List<Goods> goodsList, Context context) {
+
+    public GoodsAdapter(List<Goods> goodsList, Context context,int code) {
         this.goodsList = goodsList;
         this.context = context;
+        this.code = code;
         asyncImageLoader = new AsyncImageLoader(context);
     }
 
@@ -76,7 +80,7 @@ public class GoodsAdapter extends BaseAdapter {
             goodsName.setText(goods.getName());
         }
         goodsPrice.setText(goods.getPrice() + "");
-        goodsState.setText(goods.getState()+"");
+        goodsState.setText(Tool.getState(goods.getState(),code));
         return view;
     }
 

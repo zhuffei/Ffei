@@ -134,12 +134,7 @@ public class IssueActivity extends AppCompatActivity {
             upLoad(imagePaths);
 
         });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IssueActivity.this.finish();
-            }
-        });
+        back.setOnClickListener(v -> IssueActivity.this.finish());
 
     }
 

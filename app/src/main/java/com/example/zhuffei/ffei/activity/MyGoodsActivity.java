@@ -5,9 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,7 +19,6 @@ import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.adapter.GoodsAdapter;
 import com.example.zhuffei.ffei.entity.Goods;
-import com.example.zhuffei.ffei.entity.GoodsUserVO;
 import com.example.zhuffei.ffei.tool.HttpUtil;
 import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.example.zhuffei.ffei.tool.Tool;
@@ -51,6 +48,7 @@ public class MyGoodsActivity extends AppCompatActivity {
     public static final int COLLECTION = 2;
     public static final int BUY = 3;
     public static final int SELL = 4;
+    int code;
     ListView listView;
     private Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -64,7 +62,7 @@ public class MyGoodsActivity extends AppCompatActivity {
                         empty.setVisibility(View.VISIBLE);
                         return;
                     }
-                    GoodsAdapter goodsAdapter = new GoodsAdapter(data, MyGoodsActivity.this);
+                    GoodsAdapter goodsAdapter = new GoodsAdapter(data, MyGoodsActivity.this,code);
                     goodsAdapter.setOnclickListener(gid -> {
                         Tool.toDetail(MyGoodsActivity.this, gid);
                     });
@@ -91,7 +89,7 @@ public class MyGoodsActivity extends AppCompatActivity {
 
     void initView() {
         Intent intent = getIntent();
-        int code = intent.getIntExtra("code", 0);
+        code = intent.getIntExtra("code", 0);
         switch (code) {
             case RELEASE:
                 title.setText("我的发布");
@@ -118,7 +116,6 @@ public class MyGoodsActivity extends AppCompatActivity {
         map.put("uid", FfeiApplication.user.getId());
         String param = JSON.toJSONString(map);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), param);
-        Log.d("aaaaaaaa", url);
         HttpUtil.sendHttpRequest(url, requestBody, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {

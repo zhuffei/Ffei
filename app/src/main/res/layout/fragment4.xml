@@ -83,14 +83,16 @@
                     android:layout_weight="2">
 
                     <TextView
+                        android:id="@+id/focusNum"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center_vertical|right"
-                        android:paddingRight="10px"
+                        android:paddingRight="30px"
                         android:text="0"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"
+                        />
 
                     <TextView
                         android:layout_width="0dp"
@@ -117,12 +119,13 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2">
                 <TextView
+                    android:id="@+id/fansNum"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:gravity="center_vertical|right"
-                    android:paddingRight="10px"
+                    android:paddingRight="30px"
                     android:text="0"
                     android:textSize="20sp" />
 
@@ -130,7 +133,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:gravity="center_vertical|left"
                     android:text="粉丝"
                     android:textSize="20sp" />

@@ -15,7 +15,9 @@ import androidx.cardview.widget.CardView;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.activity.UserActivity;
 import com.example.zhuffei.ffei.entity.User;
+import com.example.zhuffei.ffei.tool.AsyncImageLoader;
 import com.example.zhuffei.ffei.tool.ToastHelper;
+import com.example.zhuffei.ffei.tool.UrlTool;
 
 import java.util.List;
 
@@ -31,9 +33,15 @@ public class UserAdapter extends BaseAdapter {
 
     List<User> data;
 
-    public UserAdapter(Context context, List<User> data) {
+    int code;
+
+    AsyncImageLoader asyncImageLoader;
+
+    public UserAdapter(Context context, List<User> data,int code) {
+        this.code = code;
         this.context = context;
         this.data = data;
+        asyncImageLoader = new AsyncImageLoader(context);
     }
 
     @Override
@@ -56,44 +64,37 @@ public class UserAdapter extends BaseAdapter {
         final User user = data.get(position);
         View view = LayoutInflater.from(context).inflate(R.layout.user_item, null);
         CircleImageView avator = view.findViewById(R.id.avator);
-//        avator.setImageResource(user.getImg());
-        avator.setImageResource(R.mipmap.fabu);
+        asyncImageLoader.asyncloadImage(avator, UrlTool.AVATOR+user.getAvator());
         TextView userName = view.findViewById(R.id.userName);
         userName.setText(user.getName());
 
-        LinearLayout userlayout = (LinearLayout) view.findViewById(R.id.user);
-        userlayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, UserActivity.class);
-                intent.putExtra("userId",user.getId());
-                context.startActivity(intent);
-            }
+        LinearLayout userlayout = view.findViewById(R.id.user);
+        userlayout.setOnClickListener(v -> {
+            Intent intent = new Intent(context, UserActivity.class);
+            intent.putExtra("userId",user.getId());
+            context.startActivity(intent);
         });
 
         final CardView focusCard = view.findViewById(R.id.focusCard);
         final TextView focus = view.findViewById(R.id.focus);
-        if(!user.isFocus()){
-            focusCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
-            focus.setTextColor(Color.parseColor("#111111"));
-            focus.setText("关注");
+        if(code != 1){
+            focusCard.setCardBackgroundColor(Color.parseColor("#DDDDDD"));
+            focus.setTextColor(Color.parseColor("#999999"));
+            focus.setText("已关注");
         }
 
-        focusCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (focus.getText().equals("已关注")) {
+        focusCard.setOnClickListener(v -> {
+            if (focus.getText().equals("已关注")) {
 
-                    ToastHelper.showToast("已取关");
-                    focusCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
-                    focus.setTextColor(Color.parseColor("#111111"));
-                    focus.setText("关注");
-                } else {
-                    focusCard.setCardBackgroundColor(Color.parseColor("#DDDDDD"));
-                    focus.setTextColor(Color.parseColor("#999999"));
-                    ToastHelper.showToast("已关注");
-                    focus.setText("已关注");
-                }
+                ToastHelper.showToast("已取关");
+                focusCard.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
+                focus.setTextColor(Color.parseColor("#111111"));
+                focus.setText("关注");
+            } else {
+                focusCard.setCardBackgroundColor(Color.parseColor("#DDDDDD"));
+                focus.setTextColor(Color.parseColor("#999999"));
+                ToastHelper.showToast("已关注");
+                focus.setText("已关注");
             }
         });
 

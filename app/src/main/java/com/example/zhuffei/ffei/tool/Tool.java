@@ -21,12 +21,14 @@ import java.util.regex.Pattern;
 
 public class Tool {
 
-    public static Bitmap bitmap ;
+    public static Bitmap bitmap;
 
 
-    private static  SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
     /**
      * 检测字符串是否为手机号
+     *
      * @param phone
      * @return
      */
@@ -40,6 +42,7 @@ public class Tool {
 
     /**
      * 检查密码格式
+     *
      * @param password
      * @return
      */
@@ -50,19 +53,20 @@ public class Tool {
 
         return m.matches();
     }
-    public static int getScreenWidth(Context context){
+
+    public static int getScreenWidth(Context context) {
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         return dm.widthPixels;
     }
 
-    public static int getScreenHeight(Context context){
+    public static int getScreenHeight(Context context) {
         DisplayMetrics dm = context.getResources().getDisplayMetrics();
         return dm.heightPixels;
     }
 
-    public static void toDetail(Context context,Integer gid){
+    public static void toDetail(Context context, Integer gid) {
         Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("gid",gid);
+        intent.putExtra("gid", gid);
         context.startActivity(intent);
     }
 
@@ -90,20 +94,22 @@ public class Tool {
             long s = (l / 1000 - day * 24 * 60 * 60 - hour * 60 * 60 - min * 60);
             String s1 = "";
             if (day > 0) {
-                if(day>10){
-                    return time.substring(0,10);
-                }else{
-                s1 = day + "天前";
-                return s1;}
+                if (day > 10) {
+                    return time.substring(0, 10);
+                } else {
+                    s1 = day + "天前";
+                    return s1;
+                }
             }
             if (hour > 0) {
                 s1 = hour + "小时前";
                 return s1;
             }
-            if (min > 0){
+            if (min > 0) {
                 s1 = min + "分钟前";
-                return s1;}else {
-                return  "刚刚";
+                return s1;
+            } else {
+                return "刚刚";
             }
 
         } catch (ParseException e) {
@@ -111,6 +117,27 @@ public class Tool {
             return "未知时间";
         }
 
+    }
+
+    public static String getState( int state, int code) {
+        if(code==2){
+            return state==1?"可购买":"已卖出";
+        }
+        switch (state) {
+            case 0:
+                return "待审核";
+            case 1:
+                return "已发布";
+            case 2:
+                return code == 4 ? "对方已付款" : "已下单";
+            case 3:
+                return code == 4 ? "待确认" : "待对方确认";
+            case 4:
+                return code == 4 ? "待对方确认" : "待确认";
+            case 5:
+                return "订单完成";
+        }
+        return "状态异常";
     }
 
 

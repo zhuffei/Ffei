@@ -61,7 +61,7 @@ public class LoginService {
                 sp.edit().putString("name", user.getName())
                         .putString("pwd", user.getPwd())
                         .putString("phone", user.getPhone())
-                        .putString("img", user.getImg())
+                        .putString("img", user.getAvator())
                         .putInt("uId", user.getId())
                         .apply();
                 context.startActivity(new Intent(context, HomeActivity.class));

@@ -22,9 +22,7 @@ public class User {
 
     private int schoolId;
 
-    private String img;
-
-    private boolean focus;
+    private String avator;
 
     public int getId() {
         return id;
@@ -82,27 +80,14 @@ public class User {
         this.schoolId = schoolId;
     }
 
-    public String getImg() {
-        return img;
+    public String getAvator() {
+        return avator;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setAvator(String avator) {
+        this.avator = avator;
     }
 
-    public boolean isFocus() {
-        return focus;
-    }
-
-    public void setFocus(boolean focus) {
-        this.focus = focus;
-    }
-
-    public User(boolean focus, String  img, String name) {
-        this.focus = focus;
-        this.img = img;
-        this.name = name;
-    }
 
     public User() {
     }

@@ -37,16 +37,20 @@
                     android:textSize="10sp"/>
                 <TextView
                     android:id="@+id/goodsPrice"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:textColor="#f34"
                     android:text="60.00"
                     android:textSize="15sp"/>
                 <TextView
                     android:id="@+id/goodsState"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="150dp"
+                    android:maxLines="1"
+                    android:gravity="right"
+                    android:paddingRight="10dp"
                     android:text="已上架"/>
             </LinearLayout>
         </LinearLayout>
