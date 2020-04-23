@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.SystemClock;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -98,6 +97,7 @@ public class FXFragment extends BaseFragment {
 
     Thread thread;
 
+
     OkHttpClient client = new OkHttpClient();
 
 
@@ -116,37 +116,37 @@ public class FXFragment extends BaseFragment {
                         index = 0;
                     }
                     if (mWarningTextList.size() > 1) {
-//                        handler.postDelayed(
-//                        new Runnable() {
-//                            @Override
-//                            public void run() {
-                                try {
-                                    mTextSwitcher.setText(mWarningTextList.get(0));
-                                } catch (Exception e) {
 
-                                }
-                                index = 0;
-//                            }};
-//                        }, 4000);
+                        try {
+                            mTextSwitcher.setText(mWarningTextList.get(0));
+                        } catch (Exception e) {
 
+                        }
+                        index = 0;
                         thread = new Thread() {
                             @Override
                             public void run() {
-                                while (textIndex < mWarningTextList.size()) {
-                                    synchronized (this) {
-                                        SystemClock.sleep(4000);//每隔4秒滚动一次
+//                                while (textIndex < mWarningTextList.size()) {
+                                    while (!isRefreshing) {
+                                        try {
+                                            Thread.sleep(4000);//每隔4秒滚动一次
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
                                         textHandler.sendEmptyMessage(1);
+
                                     }
-                                }
+//                                    break;
+//                                }
                             }
                         };
                         thread.start();
                     }
                     break;
                 case 1:
-                    if (textIndex == mWarningTextList.size()-1) {
+                    if (textIndex == mWarningTextList.size() - 1) {
                         textIndex = 0;
-                    }else{
+                    } else {
                         textIndex++;
                     }
                     try {
@@ -178,7 +178,7 @@ public class FXFragment extends BaseFragment {
                 //没有数据时设置不能上拉加载
                 refresh.setPullUpType(RefreshRelativeLayout.PULL_UP_TYPE_NOT_PULL);
             }
-            if(list.size()==0) return;
+            if (list.size() == 0) return;
             data.addAll(list);
             pageNumber++;
             if (isRefreshing) return;
@@ -307,16 +307,23 @@ public class FXFragment extends BaseFragment {
 
         //下拉刷新
         refresh.setOnRefreshListener(() -> {
+//            ActivityManager am = (ActivityManager) mContext
+//                    .getSystemService(Context.ACTIVITY_SERVICE);
+//            // 获取正在运行的进程信息
+//            List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = am
+//                    .getRunningAppProcesses();
+//            Log.d("aaaaaaa", runningAppProcesses.size() + "");
             isRefreshing = true;
-            data .clear();
+            thread.interrupt();
+            data.clear();
             pageNumber = 1;
             initBannerData(false);
-            initTextData();
             initGoodsData();
             refresh.setRefreshing(false);
             adapter.notifyDataSetChanged();
             refresh.setPullUpType(RefreshRelativeLayout.PULL_UP_TYPE_LOAD_PULL);
             isRefreshing = false;
+            initTextData();
 
         });
         //上拉加载

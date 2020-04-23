@@ -10,7 +10,7 @@ public class GlideImageLoader extends ImageLoader {
     @Override
     public void displayImage(Context context, Object path, ImageView imageView) {
         AsyncImageLoader asyncImageLoader = new AsyncImageLoader(FfeiApplication.context);
-        asyncImageLoader.asyncloadImage(imageView,UrlTool.GOODSIMG+(String) path);
+        asyncImageLoader.asyncloadImage(imageView,UrlTool.GOODSIMG+ path);
     }
 
     //提供createImageView 方法，如果不用可以不重写这个方法，主要是方便自定义ImageView的创建

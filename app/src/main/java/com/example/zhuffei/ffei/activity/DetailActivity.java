@@ -59,16 +59,17 @@ public class DetailActivity extends AppCompatActivity {
     //收藏
     LinearLayout shoucang;
     Integer gid;
-    ImageView star,back;
+    ImageView star, back;
     TextView scText;
     Banner banner;
-    Button buy;
+    Button buy, chat;
     CircleImageView avator;
     MyListView listView;
     GoodsUserVO data;
     List<String> images = new ArrayList();
     List<CommentUserVO> comments;
     CommentAdapter adapter;
+    ImageView selled;
     boolean isCollected = false;
     public static final int CHECK = 2;
     public static final int ADD = 3;
@@ -230,11 +231,7 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         shoucang.setOnClickListener(v -> changeCollect(isCollected ? CANCEL : ADD));
-        buy.setOnClickListener(v -> {
-            Intent intent = new Intent(DetailActivity.this, BuyActivity.class);
-            intent.putExtra("gid",data.getId());
-            startActivity(intent);
-        });
+
 
     }
 
@@ -255,15 +252,17 @@ public class DetailActivity extends AppCompatActivity {
         banner = findViewById(R.id.banner);
         buy = findViewById(R.id.buy);
         avator = findViewById(R.id.avator);
+        selled = findViewById(R.id.selled);
         //收藏
         shoucang = findViewById(R.id.shoucang);
         star = findViewById(R.id.star);
         scText = findViewById(R.id.scText);
         listView.setItemsCanFocus(true);
+        chat = findViewById(R.id.chat);
     }
 
     private void displayData() {
-        price.setText(data.getPrice() + "");
+        price.setText(String.format("%.2f",data.getPrice()) );
         title.setText(data.getName());
         describe.setText(data.getDes());
         browser.setText("浏览：" + data.getBrowse());
@@ -274,7 +273,42 @@ public class DetailActivity extends AppCompatActivity {
         AsyncImageLoader asyncImageLoader = new AsyncImageLoader(this);
         asyncImageLoader.asyncloadImage(avator, UrlTool.AVATOR + data.getAvator());
 
+        if (FfeiApplication.isLogin) {
+            if (FfeiApplication.user.getId() == data.getuId()) {
+                chat.setText(R.string.xiajia);
+                buy.setText(R.string.shangqiang);
+                if (data.getState() != 1) {
+                    selled.setVisibility(View.VISIBLE);
+                } else {
+                    buy.setOnClickListener(v -> {
+                    });
+                    chat.setOnClickListener(v -> {
+                    });
+                }
+            } else {
+                if (data.getState() != 1) {
+                    selled.setVisibility(View.VISIBLE);
+                } else {
+                    buy.setOnClickListener(v -> {
+                        Intent intent = new Intent(DetailActivity.this, BuyActivity.class);
+                        intent.putExtra("gid", data.getId());
+                        startActivity(intent);
+                    });
+                    chat.setOnClickListener(v -> {
+                    });
+                }
+            }
+        } else {
+            buy.setOnClickListener(v -> {
+                ToastHelper.showToast("请登录");
+            });
+            chat.setOnClickListener(v -> {
+                ToastHelper.showToast("请登录");
+            });
+        }
+
     }
+
 
     private void initImages() {
         images.add(data.getImg1());
@@ -309,12 +343,7 @@ public class DetailActivity extends AppCompatActivity {
         HttpUtil.sendHttpRequest(UrlTool.VIEWGOODS, requestBody, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        handler.sendEmptyMessage(-1);
-                    }
-                });
+                runOnUiThread(() -> handler.sendEmptyMessage(-1));
             }
 
             @Override
@@ -336,12 +365,7 @@ public class DetailActivity extends AppCompatActivity {
         HttpUtil.sendHttpRequest(UrlTool.LISTCOMMENTBYGID, requestBody, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        handler.sendEmptyMessage(-1);
-                    }
-                });
+                runOnUiThread(() -> handler.sendEmptyMessage(-1));
             }
 
             @Override
@@ -384,7 +408,7 @@ public class DetailActivity extends AppCompatActivity {
                     String json = response.body().string();
                     Map map = JSON.parseObject(json, HashMap.class);
                     Message msg = new Message();
-                    msg.obj = (Integer) map.get("data");
+                    msg.obj = map.get("data");
                     msg.what = code;
                     handler.sendMessage(msg);
                 }

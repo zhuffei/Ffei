@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:orientation="vertical"
+    tools:context="com.example.zhuffei.ffei.activity.FocusActivity">
+
+    <LinearLayout
+        android:id="@+id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:orientation="horizontal"
+        android:paddingBottom="50px">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="80px"
+            android:layout_height="80px"
+            android:layout_marginLeft="40px"
+            android:layout_marginTop="50px"
+            android:src="@drawable/back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="80px"
+            android:layout_gravity="center"
+            android:layout_marginTop="20px"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="搜索用户"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear1"
+        android:layout_below="@id/linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <EditText
+            android:id="@+id/param"
+            android:layout_width="0dp"
+            android:layout_weight="5"
+            android:layout_height="100px"
+            android:background="@drawable/left_round_white"
+            android:paddingTop="0px"
+            android:paddingBottom="0px"
+            android:maxLength="10"
+            android:textSize="15sp"
+            android:paddingLeft="8dp"/>
+
+        <ImageView
+            android:id="@+id/search"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="101px"
+            android:layout_gravity="right"
+            android:background="@drawable/button_search"
+            android:paddingLeft="40px"
+            android:paddingTop="20px"
+            android:paddingBottom="20px"
+            android:src="@mipmap/search" />
+    </LinearLayout>
+    <ListView
+        android:layout_below="@+id/linear1"
+        android:id="@+id/listView"
+        android:layout_marginTop="10px"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ListView>
+
+    <ImageView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/empty"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:visibility="gone"
+        ></ImageView>
+</RelativeLayout>

@@ -1,5 +1,6 @@
 package com.example.zhuffei.ffei.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -60,6 +61,8 @@ public class FocusActivity extends AppCompatActivity {
 
     private int code;
 
+    private ImageView search;
+
     private Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -72,7 +75,7 @@ public class FocusActivity extends AppCompatActivity {
                         empty.setVisibility(View.VISIBLE);
                         return;
                     }
-                    listView.setAdapter(new UserAdapter(FocusActivity.this, data, code));
+                    listView.setAdapter(new UserAdapter(FocusActivity.this, data));
                     break;
             }
         }
@@ -86,12 +89,16 @@ public class FocusActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         title = findViewById(R.id.title);
         empty = findViewById(R.id.empty);
+        search = findViewById(R.id.searchUser);
         initView();
         initData();
         back = findViewById(R.id.back);
         back.setOnClickListener(v ->
-        {   FocusActivity.this.setResult(1);
-            FocusActivity.this.finish();});
+        {
+            FocusActivity.this.setResult(1);
+            FocusActivity.this.finish();
+        });
+        search.setOnClickListener(v -> startActivity(new Intent(FocusActivity.this, UserSearchActivity.class)));
     }
 
     private void initView() {

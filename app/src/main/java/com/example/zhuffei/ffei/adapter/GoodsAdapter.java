@@ -34,7 +34,7 @@ public class GoodsAdapter extends BaseAdapter {
     private int code;
 
 
-    public GoodsAdapter(List<Goods> goodsList, Context context,int code) {
+    public GoodsAdapter(List<Goods> goodsList, Context context, int code) {
         this.goodsList = goodsList;
         this.context = context;
         this.code = code;
@@ -69,7 +69,7 @@ public class GoodsAdapter extends BaseAdapter {
         TextView goodsPrice = view.findViewById(R.id.goodsPrice);
         TextView goodsState = view.findViewById(R.id.goodsState);
         Goods goods = goodsList.get(position);
-        view.setOnClickListener(v->{
+        view.setOnClickListener(v -> {
             GoodsAdapter.this.onclickListener.onClick(goods.getId());
         });
         if (goods.getType() == 2) {
@@ -79,12 +79,12 @@ public class GoodsAdapter extends BaseAdapter {
             asyncImageLoader.asyncloadImage(img, UrlTool.GOODSIMG + goods.getImg1());
             goodsName.setText(goods.getName());
         }
-        goodsPrice.setText(goods.getPrice() + "");
-        goodsState.setText(Tool.getState(goods.getState(),code));
+        goodsPrice.setText(String.format("%.2f", goods.getPrice()));
+        goodsState.setText(Tool.getState(goods.getState(), code));
         return view;
     }
 
-   public  interface OnclickListener{
+    public interface OnclickListener {
         void onClick(int gid);
     }
 }

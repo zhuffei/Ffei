@@ -16,13 +16,15 @@ public class User {
 
     private String pwd;
 
-    private int role;
+//    private int role;
 
     private int state;
 
-    private int schoolId;
+//    private int schoolId;
 
     private String avator;
+
+    private Integer isFocused;
 
     public int getId() {
         return id;
@@ -56,13 +58,13 @@ public class User {
         this.pwd = pwd;
     }
 
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
-    }
+//    public int getRole() {
+//        return role;
+//    }
+//
+//    public void setRole(int role) {
+//        this.role = role;
+//    }
 
     public int getState() {
         return state;
@@ -71,14 +73,14 @@ public class User {
     public void setState(int state) {
         this.state = state;
     }
-
-    public int getSchoolId() {
-        return schoolId;
-    }
-
-    public void setSchoolId(int schoolId) {
-        this.schoolId = schoolId;
-    }
+//
+//    public int getSchoolId() {
+//        return schoolId;
+//    }
+//
+//    public void setSchoolId(int schoolId) {
+//        this.schoolId = schoolId;
+//    }
 
     public String getAvator() {
         return avator;
@@ -88,6 +90,13 @@ public class User {
         this.avator = avator;
     }
 
+    public Integer getIsFocused() {
+        return isFocused;
+    }
+
+    public void setIsFocused(Integer isFocused) {
+        this.isFocused = isFocused;
+    }
 
     public User() {
     }

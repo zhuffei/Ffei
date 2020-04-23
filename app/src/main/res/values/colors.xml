@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black_overlay">#66000000</color>
-    <color name="lightslategrey">#999999</color>
     <color name="white">#ffff</color>
-    <color name="seagreen">#0b680c</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="pressed">#0099ff</color>
-    <color name="normal">#a9b7b7 </color>
+    <color name="normal">#a9b7b7</color>
     <color name="photopicker_background">#181819</color>
     <color name="touming">#00000000</color>
     <color name="red">#990022</color>
+    <color name="line">#eeeeee</color>
+    <color name="text_color_grey">#777777</color>
+    <color name="bg_btn">#237aec</color>
+    <color name="blue_light">#2e88ff</color>
+    <color name="colorstatus">#3da1ff</color>
+    <color name="gray_line">#ebebeb</color>
+    <color name="black_text">#212121</color>
+    <color name="blue_text">#72ACE3</color>
+    <color name="gray_btn">#EBEBEB</color>
+    <color name="gray_bg">#f0eff5</color>
 </resources>

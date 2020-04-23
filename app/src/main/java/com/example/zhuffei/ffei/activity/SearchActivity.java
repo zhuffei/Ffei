@@ -2,6 +2,7 @@ package com.example.zhuffei.ffei.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.widget.EditText;
@@ -49,15 +50,16 @@ public class SearchActivity extends AppCompatActivity {
     private TextView none;
     private List<GoodsUserVO> data;
     private GoodsItemAdapter adapter;
-    private Handler handler = new Handler(){
+    private ImageView back;
+    private Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case -1:
                     ToastHelper.showToast("网络异常");
                     break;
                 case 0:
-                    if(data.size()==0){
+                    if (data.size() == 0) {
                         none.setVisibility(View.VISIBLE);
                         break;
                     }
@@ -67,6 +69,7 @@ public class SearchActivity extends AppCompatActivity {
             }
         }
     };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +78,15 @@ public class SearchActivity extends AppCompatActivity {
         initWaterFall();
         setListener();
     }
-    private  void findViews(){
+
+    private void findViews() {
         recyclerView = findViewById(R.id.recyclerView);
         param = findViewById(R.id.param);
         search = findViewById(R.id.search);
         none = findViewById(R.id.none);
+        back = findViewById(R.id.back);
     }
+
     private void initWaterFall() {
         //使用瀑布流布局,第一个参数 spanCount 列数,第二个参数 orentation 排列方向
         StaggeredGridLayoutManager recyclerViewLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -91,13 +97,15 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    private void setListener(){
-        search.setOnClickListener(v->{
+    private void setListener() {
+        search.setOnClickListener(v -> {
             initData();
         });
+        back.setOnClickListener(v -> finish());
     }
+
     private void initData() {
-        if(param.getText().toString().isEmpty()){
+        if (param.getText().toString().isEmpty()) {
             ToastHelper.showToast("请输入搜索内容");
             return;
         }

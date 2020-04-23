@@ -70,7 +70,7 @@ public class GoodsItemAdapter extends RecyclerView.Adapter<GoodsItemAdapter.Good
                 Tool.toDetail(mContext, goods.getId());
             }
         });
-        holder.price.setText(goods.getPrice() + "");
+        holder.price.setText(String.format("%.2f", goods.getPrice()));
         holder.name.setText(goods.getName());
         holder.time.setText(Tool.parseTime(goods.getCreateTime()));
         holder.userName.setText(goods.getUserName());

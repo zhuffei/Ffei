@@ -7,9 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.alibaba.fastjson.JSON;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.example.zhuffei.ffei.R;
@@ -45,7 +43,9 @@ import org.json.JSONArray;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -73,14 +73,6 @@ public class IssueActivity extends AppCompatActivity {
     private EditText title, describe, location, price;
     private String TAG = IssueActivity.class.getSimpleName();
     private ImageView back;
-
-    private Handler handler = new Handler(Looper.getMainLooper()){
-        @Override
-        public void handleMessage(Message msg) {
-            LoadingViewManager.dismiss();
-        }
-
-    };
 
 
     @Override
@@ -123,11 +115,11 @@ public class IssueActivity extends AppCompatActivity {
                     describe.getText().toString().isEmpty() ||
                     location.getText().toString().isEmpty() ||
                     price.getText().toString().isEmpty()) {
-                ToastHelper.showToast( "请填写完整信息");
+                ToastHelper.showToast("请填写完整信息");
                 return;
             }
             if (imagePaths.size() < 2) {
-                ToastHelper.showToast( "请上传至少一张图片");
+                ToastHelper.showToast("请上传至少一张图片");
                 return;
             }
             imagePaths.remove("000000");
@@ -145,7 +137,7 @@ public class IssueActivity extends AppCompatActivity {
         //获取已登录用户的id
         int uId = this.getSharedPreferences("user", Context.MODE_PRIVATE).getInt("uId", 0);
         if (uId == 0) {
-            ToastHelper.showToast( "登录失效，请重新登录");
+            ToastHelper.showToast("登录失效，请重新登录");
             return;
         }
         File file;
@@ -157,8 +149,8 @@ public class IssueActivity extends AppCompatActivity {
             //不加载图片到内存而获取其宽高比
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            Bitmap bitmap = BitmapFactory.decodeFile(list.get(0),options);
-            ratio = (double) options.outHeight/options.outWidth;
+            Bitmap bitmap = BitmapFactory.decodeFile(list.get(0), options);
+            ratio = (double) options.outHeight / options.outWidth;
 
             for (int i = 0; i < list.size(); i++) {
                 file = new File(list.get(i));
@@ -173,7 +165,7 @@ public class IssueActivity extends AppCompatActivity {
             builder.addFormDataPart("describe", describe.getText().toString());
             builder.addFormDataPart("location", location.getText().toString());
             builder.addFormDataPart("price", price.getText().toString());
-            builder.addFormDataPart("ratio", ratio+"");
+            builder.addFormDataPart("ratio", ratio + "");
             RequestBody requestBody = builder.build();
             Request request = new Request.Builder()
                     .url(UrlTool.ADDGOODS)
@@ -183,28 +175,26 @@ public class IssueActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    Log.e("TAG", "onFailure: " + e);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(IssueActivity.this, "发布失败，请稍后再试", Toast.LENGTH_SHORT).show();
-                            handler.sendEmptyMessage(0);
-                        }
+                    runOnUiThread(() -> {
+                        Toast.makeText(IssueActivity.this, "发布失败，请稍后再试", Toast.LENGTH_SHORT).show();
                     });
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    Log.e("TAG", "成功" + response);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            handler.sendEmptyMessage(0);
+                    String json = response.body().string();
+                    Map map = JSON.parseObject(json, HashMap.class);
+                    if ((boolean) map.get("state")) {
+                        runOnUiThread(() -> {
                             Toast.makeText(IssueActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(IssueActivity.this,HomeActivity.class));
+                            startActivity(new Intent(IssueActivity.this, HomeActivity.class));
                             finish();
-                        }
-                    });
+                        });
+                    } else {
+                        runOnUiThread(() -> {
+                            Toast.makeText(IssueActivity.this, "发布失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                        });
+                    }
                 }
             });
 

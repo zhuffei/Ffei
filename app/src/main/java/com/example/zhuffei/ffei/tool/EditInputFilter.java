@@ -104,7 +104,7 @@ public class EditInputFilter implements InputFilter {
          */
         String first = destText.substring(0,dstart);
 
-        String second = destText.substring(dstart,destText.length());
+        String second = destText.substring(dstart);
 //        dend
         String sum = first + sourceText + second;
         //验证输入金额的大小

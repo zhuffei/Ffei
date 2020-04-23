@@ -13,6 +13,5 @@
         >
     </FrameLayout>
 
-    <include layout="@layout/foot_bar" android:id="@+id/mFootBar"
-        />
+    <include layout="@layout/foot_bar" />
 </LinearLayout>

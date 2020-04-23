@@ -35,4 +35,10 @@ public class UrlTool {
     public static final String LISTFOCUS = prefix + "relation/listFocus";
     public static final String LISTFANS = prefix + "relation/listFans";
     public static final String COUNTFOCUSANDFANS = prefix + "relation/countFocusAndFans";
+    public static final String CHECKFOCUS = prefix + "relation/checkFocus";
+    public static final String FOCUS = prefix + "relation/focus";
+    public static final String CANCELFOCUS = prefix + "relation/cancelFocus";
+    public static final String SEARCHUSER = prefix + "user/searchUser";
+    public static final String GETUSERINFO = prefix + "user/getUserInfo";
+    public static final String CHANGEAVATOR = prefix + "user/changeAvator";
 }

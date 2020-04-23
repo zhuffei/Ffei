@@ -32,8 +32,10 @@ import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.activity.CropActivity;
 import com.example.zhuffei.ffei.activity.FocusActivity;
+import com.example.zhuffei.ffei.activity.LoginActivity;
 import com.example.zhuffei.ffei.activity.MyGoodsActivity;
 import com.example.zhuffei.ffei.tool.AsyncImageLoader;
+import com.example.zhuffei.ffei.tool.FileUtil;
 import com.example.zhuffei.ffei.tool.HttpUtil;
 import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.example.zhuffei.ffei.tool.Tool;
@@ -50,6 +52,9 @@ import java.util.Map;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
@@ -94,6 +99,14 @@ public class WDFragment extends BaseFragment {
                     Map<String, Integer> map = (Map<String, Integer>) msg.obj;
                     fansNum.setText(map.get("fans") + "");
                     focusNum.setText(map.get("focus") + "");
+                    break;
+                case 1:
+                    ToastHelper.showToast("头像上传成功");
+                    break;
+                case 2:
+                    ToastHelper.showToast("头像上传失败");
+                    break;
+
             }
 
         }
@@ -142,24 +155,28 @@ public class WDFragment extends BaseFragment {
 
     private void setListener() {
         avator.setOnClickListener(v -> {
-            dialog = new Dialog(mContext, R.style.BottomDialogStyle);
-            View view1 = View.inflate(mContext, R.layout.activity_avator, null);
-            dialog.setContentView(view1);
-            dialog.setCanceledOnTouchOutside(true);
-            view1.setMinimumHeight((int) (Tool.getScreenHeight(mContext) * 0.2f));
-            Window dialogWindow = dialog.getWindow();
-            WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-            lp.width = Tool.getScreenWidth(mContext);
-            lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-            lp.gravity = Gravity.BOTTOM;
-            dialogWindow.setAttributes(lp);
-            cancel = view1.findViewById(R.id.cancle);
-            local = view1.findViewById(R.id.local);
-            camera = view1.findViewById(R.id.camera);
-            cancel.setOnClickListener(v13 -> dialog.dismiss());
-            local.setOnClickListener(v12 -> choseHeadImageFromGallery());
-            camera.setOnClickListener(v1 -> choseHeadImageFromCameraCapture());
-            dialog.show();
+            if (FfeiApplication.isLogin) {
+                dialog = new Dialog(mContext, R.style.BottomDialogStyle);
+                View view1 = View.inflate(mContext, R.layout.activity_avator, null);
+                dialog.setContentView(view1);
+                dialog.setCanceledOnTouchOutside(true);
+                view1.setMinimumHeight((int) (Tool.getScreenHeight(mContext) * 0.2f));
+                Window dialogWindow = dialog.getWindow();
+                WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+                lp.width = Tool.getScreenWidth(mContext);
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                lp.gravity = Gravity.BOTTOM;
+                dialogWindow.setAttributes(lp);
+                cancel = view1.findViewById(R.id.cancle);
+                local = view1.findViewById(R.id.local);
+                camera = view1.findViewById(R.id.camera);
+                cancel.setOnClickListener(v13 -> dialog.dismiss());
+                local.setOnClickListener(v12 -> choseHeadImageFromGallery());
+                camera.setOnClickListener(v1 -> choseHeadImageFromCameraCapture());
+                dialog.show();
+            } else {
+                startActivity(new Intent(mContext, LoginActivity.class));
+            }
         });
         itemOne.setmOnLSettingItemClick(() -> {
             if (!FfeiApplication.isLogin) {
@@ -282,7 +299,7 @@ public class WDFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent intent) {
-        if(resultCode == 1){
+        if (resultCode == 1) {
             countFocusAndFans();
             return;
         }
@@ -334,17 +351,46 @@ public class WDFragment extends BaseFragment {
      * 提取保存裁剪之后的图片数据，并设置头像部分的View
      */
     private void setImageToHeadView(Intent intent) {
-//        Bundle extras = intent.getExtras();
-//        if (extras != null) {
-//            Bitmap photo = extras.getParcelable("bitmap");
-//            avator.setImageBitmap(photo);
-//        }
+
         if (null != Tool.bitmap) {
+            File file = FileUtil.getFile(Tool.bitmap);
+            uploadAvator(file);
             avator.setImageBitmap(Tool.bitmap);
         }
         if (null != dialog) {
             dialog.dismiss();
         }
+    }
+
+    private void uploadAvator(File file) {
+        OkHttpClient okHttpClient = new OkHttpClient();
+        MultipartBody.Builder builder = new MultipartBody.Builder()
+                .setType(MultipartBody.MIXED);
+        builder.addFormDataPart("img", file.getName(), RequestBody.create(MediaType.parse("image/jpeg"), file));
+        builder.addFormDataPart("uid", String.valueOf(FfeiApplication.user.getId()));
+        RequestBody requestBody = builder.build();
+        Request request = new Request.Builder()
+                .url(UrlTool.CHANGEAVATOR)
+                .post(requestBody)
+                .build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                handler.sendEmptyMessage(-1);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String json = response.body().string();
+                Map map = JSON.parseObject(json, HashMap.class);
+                if ((boolean) map.get("state")) {
+                    handler.sendEmptyMessage(1);
+                } else {
+                    handler.sendEmptyMessage(2);
+                }
+            }
+        });
     }
 
 

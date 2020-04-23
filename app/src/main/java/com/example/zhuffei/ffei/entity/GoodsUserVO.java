@@ -17,7 +17,7 @@ public class GoodsUserVO {
     private String img6;
     private double ratio;
     private String location;
-    private String state;
+    private Integer state;
     private Integer browse;
     private String createTime;
     private String updateTime;
@@ -150,11 +150,11 @@ public class GoodsUserVO {
         this.location = location;
     }
 
-    public String getState() {
+    public Integer getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 

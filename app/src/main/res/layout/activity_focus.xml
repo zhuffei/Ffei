@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_focus"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eeeeee"
@@ -13,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#ffffff"
-        android:paddingBottom="50px">
+        android:paddingBottom="50px"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/back"
@@ -25,14 +25,22 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="80px"
             android:layout_gravity="center"
             android:layout_marginTop="20px"
-            android:layout_marginRight="120px"
             android:gravity="center"
             android:text="我的关注"
             android:textSize="18sp" />
+        <ImageView
+            android:id="@+id/searchUser"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:src="@mipmap/usersearch"
+            android:layout_marginTop="50px"
+            android:layout_marginRight="50px"
+            ></ImageView>
     </LinearLayout>
 
     <ListView

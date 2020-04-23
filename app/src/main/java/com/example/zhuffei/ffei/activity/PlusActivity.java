@@ -26,14 +26,14 @@ public class PlusActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.plus_layout);
-        back = (ImageView)findViewById(R.id.back);
+        back = findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PlusActivity.this.finish();
             }
         });
-        issueGoods = (Button) findViewById(R.id.issueGoods);
+        issueGoods = findViewById(R.id.issueGoods);
         issueGoods.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,7 +41,7 @@ public class PlusActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        issueBuy = (Button) findViewById(R.id.issueBuy);
+        issueBuy = findViewById(R.id.issueBuy);
         issueBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

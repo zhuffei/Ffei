@@ -708,7 +708,7 @@ public class RefreshRelativeLayout extends RelativeLayout {
      * 接口
      */
     public interface OnRefreshListener {
-        void onRefresh();
+        void onRefresh() ;
     }
 
     public interface OnLoadListener {
