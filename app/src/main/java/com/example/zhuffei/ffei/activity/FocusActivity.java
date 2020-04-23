@@ -95,7 +95,6 @@ public class FocusActivity extends AppCompatActivity {
         back = findViewById(R.id.back);
         back.setOnClickListener(v ->
         {
-            FocusActivity.this.setResult(1);
             FocusActivity.this.finish();
         });
         search.setOnClickListener(v -> startActivity(new Intent(FocusActivity.this, UserSearchActivity.class)));
@@ -129,15 +128,6 @@ public class FocusActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            setResult(1);
-            return super.onKeyDown(keyCode, event);
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 }

@@ -70,6 +70,9 @@ public class DetailActivity extends AppCompatActivity {
     List<CommentUserVO> comments;
     CommentAdapter adapter;
     ImageView selled;
+    private LinearLayout button;
+    private LinearLayout buttons;
+    private Button chat1;
     boolean isCollected = false;
     public static final int CHECK = 2;
     public static final int ADD = 3;
@@ -92,6 +95,7 @@ public class DetailActivity extends AppCompatActivity {
                         break;
                     }
                     adapter = new CommentAdapter(comments, DetailActivity.this);
+                    listView.setAdapter(adapter);
                     listView.setAdapter(adapter);
                     adapter.setOnDeletelistener(id -> {
                         Map map = new HashMap();
@@ -259,10 +263,14 @@ public class DetailActivity extends AppCompatActivity {
         scText = findViewById(R.id.scText);
         listView.setItemsCanFocus(true);
         chat = findViewById(R.id.chat);
+        button = findViewById(R.id.button);
+        buttons = findViewById(R.id.buttons);
+        chat1 = findViewById(R.id.chat1);
+
     }
 
     private void displayData() {
-        price.setText(String.format("%.2f",data.getPrice()) );
+        price.setText(String.format("%.2f", data.getPrice()));
         title.setText(data.getName());
         describe.setText(data.getDes());
         browser.setText("浏览：" + data.getBrowse());
@@ -272,43 +280,60 @@ public class DetailActivity extends AppCompatActivity {
         location.setText(data.getLocation());
         AsyncImageLoader asyncImageLoader = new AsyncImageLoader(this);
         asyncImageLoader.asyncloadImage(avator, UrlTool.AVATOR + data.getAvator());
-
-        if (FfeiApplication.isLogin) {
-            if (FfeiApplication.user.getId() == data.getuId()) {
+        boolean isSell = data.getType() == 1;
+        boolean isLogin = FfeiApplication.isLogin;
+        boolean isSelled = data.getState() > 1;
+        if (data.getState() == 0) {
+            buttons.setVisibility(View.GONE);
+            button.setVisibility(View.VISIBLE);
+            chat1.setText(R.string.yixiajia);
+        } else if (isSelled) {
+            buy.setVisibility(View.GONE);
+            chat.setVisibility(View.GONE);
+            selled.setVisibility(View.VISIBLE);
+        } else if (isSell) {
+            if (isLogin && isOwner()) {
                 chat.setText(R.string.xiajia);
                 buy.setText(R.string.shangqiang);
-                if (data.getState() != 1) {
-                    selled.setVisibility(View.VISIBLE);
-                } else {
-                    buy.setOnClickListener(v -> {
-                    });
-                    chat.setOnClickListener(v -> {
-                    });
-                }
+            } else if (isLogin) {
+                buy.setOnClickListener(v -> {
+                    Intent intent = new Intent(DetailActivity.this, BuyActivity.class);
+                    intent.putExtra("gid", data.getId());
+                    startActivity(intent);
+                    finish();
+                });
+                chat.setOnClickListener(v -> {
+                });
             } else {
-                if (data.getState() != 1) {
-                    selled.setVisibility(View.VISIBLE);
-                } else {
-                    buy.setOnClickListener(v -> {
-                        Intent intent = new Intent(DetailActivity.this, BuyActivity.class);
-                        intent.putExtra("gid", data.getId());
-                        startActivity(intent);
-                    });
-                    chat.setOnClickListener(v -> {
-                    });
-                }
+                buy.setOnClickListener(v ->
+                        ToastHelper.showToast("请登录")
+                );
+                chat.setOnClickListener(v ->
+                        ToastHelper.showToast("请登录")
+                );
             }
         } else {
-            buy.setOnClickListener(v -> {
-                ToastHelper.showToast("请登录");
-            });
-            chat.setOnClickListener(v -> {
-                ToastHelper.showToast("请登录");
-            });
+            buttons.setVisibility(View.GONE);
+            button.setVisibility(View.VISIBLE);
+            //求购商品
+            if (isLogin && isOwner()) {
+                chat1.setText(R.string.xiajia);
+                chat1.setOnClickListener(v -> {
+                    //下架
+                });
+            } else if (isLogin) {
+                chat1.setOnClickListener(v -> {
+                    //聊聊
+                });
+            }
         }
 
     }
 
+
+    private boolean isOwner() {
+        return FfeiApplication.user.getId() == data.getuId();
+    }
 
     private void initImages() {
         images.add(data.getImg1());

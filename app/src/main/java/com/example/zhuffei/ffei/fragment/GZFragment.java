@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,20 +54,25 @@ public class GZFragment extends BaseFragment {
     private List<GoodsUserVO> data;
     private Context mContext;
     private GoodsItemAdapter adapter;
+    private ImageView empty;
     private int pageNumber = 1;
     private int pageSize = 10;
     Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case -1:
                     ToastHelper.showToast("网络异常");
                     break;
                 case 0:
-                    if(((List<GoodsUserVO>)msg.obj).size()<10){
+                    if (((List<GoodsUserVO>) msg.obj).size() < 10) {
                         refresh.setPullUpType(RefreshRelativeLayout.PULL_UP_TYPE_NOT_PULL);
                     }
-                    if(((List<GoodsUserVO>)msg.obj).size()==0) return;
+                    if (((List<GoodsUserVO>) msg.obj).size() == 0) {
+                        empty.setVisibility(View.VISIBLE);
+                        return;
+                    }
+                    empty.setVisibility(View.GONE);
                     adapter.notifyDataSetChanged();
                     pageNumber++;
                     break;
@@ -92,6 +98,7 @@ public class GZFragment extends BaseFragment {
             view = inflater.inflate(R.layout.fragment2, container, false);
             refresh = view.findViewById(R.id.refresh);
             recyclerView = refresh.getRecyclerView();
+            empty = view.findViewById(R.id.empty);
             data = new ArrayList<>();
             initWaterFall();
             initData();
@@ -106,11 +113,9 @@ public class GZFragment extends BaseFragment {
             refresh.setLoading(false);
 
         });
-        refresh.setOnRefreshListener(()->{
+        refresh.setOnRefreshListener(() -> {
             refresh.setPullUpType(RefreshRelativeLayout.PULL_UP_TYPE_LOAD_PULL);
-            pageNumber = 1;
-            data.clear();
-            initData();
+            refresh();
             refresh.setRefreshing(false);
         });
     }
@@ -128,8 +133,8 @@ public class GZFragment extends BaseFragment {
     private void initData() {
         Map<String, Integer> map = new HashMap<>();
         map.put("uid", FfeiApplication.user.getId());
-        map.put("pageNumber",pageNumber);
-        map.put("pageSize",pageSize);
+        map.put("pageNumber", pageNumber);
+        map.put("pageSize", pageSize);
         String param = JSON.toJSONString(map);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), param);
         HttpUtil.sendHttpRequest(UrlTool.LISTFOCUSGOODS, requestBody, new Callback() {
@@ -146,9 +151,15 @@ public class GZFragment extends BaseFragment {
                 data.addAll(goodsList);
                 Message msg = new Message();
                 msg.what = 0;
-                msg.obj  = goodsList;
+                msg.obj = goodsList;
                 handler.sendMessage(msg);
             }
         });
+    }
+
+    public void refresh() {
+        pageNumber = 1;
+        data.clear();
+        initData();
     }
 }

@@ -24,13 +24,13 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+
 /**
  * @author zhuffei
  * @version 1.0
  * @date 2020/3/20 15:21
  */
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
-
     //聊天页面常量
     private final int LT = 3;
     //发现页面常量
@@ -50,13 +50,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout mLinWD;
 
     //聊天Fragment
-    private Fragment mLTFragment;
+    private LTFragment mLTFragment;
     //发现Fragment
-    private Fragment mFXFragment;
+    private FXFragment mFXFragment;
     //我的Fragment
-    private Fragment mWDFragment;
+    private WDFragment mWDFragment;
     //关注Fragment
-    private Fragment mGZFragment;
+    private GZFragment mGZFragment;
 
     private ImageView btnPlus;
 
@@ -138,19 +138,20 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 隐藏所有已经显示了Fragment
+     *
      * @param transaction
      */
     private void hint(FragmentTransaction transaction) {
-        if(mFXFragment != null){
+        if (mFXFragment != null) {
             transaction.hide(mFXFragment);
         }
-        if(mLTFragment != null){
+        if (mLTFragment != null) {
             transaction.hide(mLTFragment);
         }
-        if(mWDFragment != null){
+        if (mWDFragment != null) {
             transaction.hide(mWDFragment);
         }
-        if(mGZFragment != null){
+        if (mGZFragment != null) {
             transaction.hide(mGZFragment);
         }
     }
@@ -158,8 +159,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        initColor();
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.mLinLiaoTian:
                 //添加聊天布局的Fragment
                 addFragment(LT);
@@ -177,30 +177,33 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 addFragment(FX);
                 break;
             case R.id.mBtnPlus:
-                Intent intent = new Intent(this,PlusActivity.class);
+                Intent intent = new Intent(this, PlusActivity.class);
                 startActivity(intent);
+                break;
         }
     }
 
     /**
      * 添加对应的布局，根据传来的ID进行添加
+     *
      * @param index
      */
-    private void addFragment(int index){
+    private void addFragment(int index) {
+        initColor();
         //获取事物
         transaction = manager.beginTransaction();
         //每次先隐藏所有的Fragment，然后加载当前要显示的Fragment
         hint(transaction);
-        switch (index){
+        switch (index) {
             case LT:
                 mLTTv.setTextColor(getResources().getColor(R.color.pressed));
                 mLTIBtn.setBackgroundResource(R.mipmap.chat_pressed);
                 //初次加载Fragment先判断是否为空
-                if(mLTFragment == null){
+                if (mLTFragment == null) {
                     mLTFragment = new LTFragment();
                     //第一次添加到Fragment中
-                    transaction.add(R.id.mFrame,mLTFragment);
-                }else{
+                    transaction.add(R.id.mFrame, mLTFragment);
+                } else {
                     //以后的每一次只需要显示即可
                     transaction.show(mLTFragment);
                 }
@@ -208,30 +211,31 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case GZ:
                 mGZTv.setTextColor(getResources().getColor(R.color.pressed));
                 mGZIBtn.setBackgroundResource(R.mipmap.focus_pressed);
-                if(mGZFragment == null){
+                if (mGZFragment == null) {
                     mGZFragment = new GZFragment();
-                    transaction.add(R.id.mFrame,mGZFragment);
-                }else{
+                    transaction.add(R.id.mFrame, mGZFragment);
+                } else {
                     transaction.show(mGZFragment);
+                    mGZFragment.refresh();
                 }
                 break;
             case WD:
                 mWDTv.setTextColor(getResources().getColor(R.color.pressed));
                 mWDIBtn.setBackgroundResource(R.mipmap.user_pressed);
-                if(mWDFragment == null){
+                if (mWDFragment == null) {
                     mWDFragment = new WDFragment();
-                    transaction.add(R.id.mFrame,mWDFragment);
-                }else{
+                    transaction.add(R.id.mFrame, mWDFragment);
+                } else {
                     transaction.show(mWDFragment);
                 }
                 break;
             case FX:
                 mFXTv.setTextColor(getResources().getColor(R.color.pressed));
                 mFXIBtn.setBackgroundResource(R.mipmap.faxian_pressed);
-                if(mFXFragment == null){
+                if (mFXFragment == null) {
                     mFXFragment = new FXFragment();
-                    transaction.add(R.id.mFrame,mFXFragment);
-                }else{
+                    transaction.add(R.id.mFrame, mFXFragment);
+                } else {
                     transaction.show(mFXFragment);
                 }
                 break;
@@ -239,8 +243,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         //最后记得提交
         transaction.commit();
     }
-    public void login(){
-        LoginInfo info = new LoginInfo("zhuffei1","woca.1234");
+
+    //登录聊天系统
+    public void login() {
+        LoginInfo info = new LoginInfo("zhuffei1", "woca.1234");
         RequestCallback<LoginInfo> callbak = new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
@@ -260,4 +266,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         };
         NIMClient.getService(AuthService.class).login(info).setCallback(callbak);
     }
+
+
 }

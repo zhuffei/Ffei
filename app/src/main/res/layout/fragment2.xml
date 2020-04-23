@@ -10,4 +10,13 @@
        android:layout_width="match_parent"
        android:layout_height="match_parent">
    </com.example.zhuffei.ffei.view.RefreshRelativeLayout>
+   <ImageView
+       android:id="@+id/empty"
+       android:layout_marginTop="90dp"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:src="@mipmap/empty"
+       android:layout_marginLeft="80dp"
+       android:layout_marginRight="80dp"
+       android:visibility="gone"></ImageView>
 </RelativeLayout>

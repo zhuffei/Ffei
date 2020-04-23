@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -49,22 +50,23 @@ public class MainActivity extends AppCompatActivity {
 //        LoadingViewManager.with(this).setHintText("bbbb").setMaxAnimTime(2000).build();
     }
 
-    public void findViews(){
+    public void findViews() {
         textView = findViewById(R.id.register);
         homePage = findViewById(R.id.homePage);
         button2 = findViewById(R.id.login);
     }
 
-    public void login(){
+    public void login() {
         SharedPreferences sp = this.getSharedPreferences("user", Context.MODE_PRIVATE);
         String phone = sp.getString("phone", "");
         String pwd = sp.getString("pwd", "");
-        if (null!=phone&&!phone.isEmpty()) {
-            LoginService loginService = new LoginService(phone,pwd,this);
+        if (null != phone && !phone.isEmpty()) {
+            LoginService loginService = new LoginService(phone, pwd, this);
             loginService.login();
         }
     }
-    public void setEvent(){
+
+    public void setEvent() {
         homePage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     public void test() throws Exception {
         DefaultHttpClient httpClient = new DefaultHttpClient();
         String url = "https://api.netease.im/nimserver/user/create.action";
@@ -129,5 +132,11 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 }

@@ -302,7 +302,28 @@
                     android:layout_weight="1"></LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/button"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10px"
+                    android:layout_weight="3"
+                    android:orientation="vertical"
+                    android:padding="10px"
+                    android:visibility="gone">
 
+                    <Button
+                        android:id="@+id/chat1"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:background="@drawable/btn_talk"
+                        android:gravity="center"
+                        android:text="聊聊"
+                        android:textSize="16sp"></Button>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/buttons"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_margin="10px"
@@ -315,9 +336,9 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/button_want"
+                        android:padding="0px"
                         android:text="聊聊"
-                        android:textSize="15sp"
-                        android:padding="0px"/>
+                        android:textSize="15sp" />
 
                     <Button
                         android:id="@+id/buy"
@@ -325,10 +346,10 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/button_buy"
+                        android:padding="0px"
                         android:text="购买"
                         android:textColor="@color/white"
-                        android:textSize="15sp"
-                        android:padding="0px"/>
+                        android:textSize="15sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

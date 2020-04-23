@@ -10,5 +10,6 @@
     <string name="homePage">主页</string>
     <string name="xiajia">下架</string>
     <string name="shangqiang">上墙</string>
+    <string name="yixiajia">已下架</string>
 
 </resources>

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
+import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.entity.Goods;
 import com.example.zhuffei.ffei.fragment.PayDetailFragment;
@@ -169,7 +170,10 @@ public class BuyActivity extends AppCompatActivity implements PwdView.InputCallB
     public void onInputFinish(String result) {
         if (result.equals("123456")) {
             fragment.dismiss();
-            startActivity(new Intent(this,PaySuccessActivity.class));
+            Intent intent = new Intent(this,PaySuccessActivity.class);
+            intent.putExtra("gid",gid);
+            intent.putExtra("uid", FfeiApplication.user.getId());
+            startActivity(intent);
             finish();
         }else {
             showPwdError();

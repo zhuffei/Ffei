@@ -95,7 +95,23 @@ public class FXFragment extends BaseFragment {
 
     private int textIndex = 0;
 
-    Thread thread;
+    Thread thread = new Thread() {
+        @Override
+        public void run() {
+//                                while (textIndex < mWarningTextList.size()) {
+            while (!isRefreshing) {
+                try {
+                    Thread.sleep(4000);//每隔4秒滚动一次
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                textHandler.sendEmptyMessage(1);
+
+            }
+//                                    break;
+//                                }
+        }
+    };
 
 
     OkHttpClient client = new OkHttpClient();
@@ -123,46 +139,40 @@ public class FXFragment extends BaseFragment {
 
                         }
                         index = 0;
-                        thread = new Thread() {
-                            @Override
-                            public void run() {
-//                                while (textIndex < mWarningTextList.size()) {
-                                    while (!isRefreshing) {
-                                        try {
-                                            Thread.sleep(4000);//每隔4秒滚动一次
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                        textHandler.sendEmptyMessage(1);
-
-                                    }
-//                                    break;
+//                        thread = new Thread() {
+//                            @Override
+//                            public void run() {
+////                                while (textIndex < mWarningTextList.size()) {
+//                                while (!isRefreshing) {
+//                                    try {
+//                                        Thread.sleep(4000);//每隔4秒滚动一次
+//                                    } catch (InterruptedException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                    textHandler.sendEmptyMessage(1);
+//
 //                                }
-                            }
-                        };
-                        thread.start();
+////                                    break;
+////                                }
+//                            }
+//                        };
+//                        thread.start();
                     }
                     break;
                 case 1:
-                    if (textIndex == mWarningTextList.size() - 1) {
+                    if (textIndex >= mWarningTextList.size() - 1) {
                         textIndex = 0;
                     } else {
                         textIndex++;
                     }
                     try {
-
                         mTextSwitcher.setText(mWarningTextList.get(textIndex));
-
                     } catch (Exception e) {
-
                     }
-
                     break;
                 default:
                     break;
             }
-
-
         }
     };
 
@@ -241,6 +251,7 @@ public class FXFragment extends BaseFragment {
         //解决滑动冲突
 //        recyclerView.setNestedScrollingEnabled(false);
         setListener();
+        thread.start();
         return view;
     }
 
@@ -314,7 +325,6 @@ public class FXFragment extends BaseFragment {
 //                    .getRunningAppProcesses();
 //            Log.d("aaaaaaa", runningAppProcesses.size() + "");
             isRefreshing = true;
-            thread.interrupt();
             data.clear();
             pageNumber = 1;
             initBannerData(false);
@@ -421,5 +431,6 @@ public class FXFragment extends BaseFragment {
             }
         });
     }
+
 
 }

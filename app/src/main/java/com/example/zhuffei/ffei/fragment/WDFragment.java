@@ -81,12 +81,12 @@ public class WDFragment extends BaseFragment {
     private static final String IMAGE_FILE_NAME = "temp_head_image.jpg";
 
 
-    Dialog dialog;
-    LSettingItem itemOne, itemTwo, itemThree, itemFour;
+    private Dialog dialog;
+    private LSettingItem itemOne, itemTwo, itemThree, itemFour;
 
-    LinearLayout focus, fans;
+    private LinearLayout focus, fans;
 
-    TextView cancel, local, camera, userName, phone;
+    private TextView cancel, local, camera, userName, phone;
 
     private Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -222,7 +222,7 @@ public class WDFragment extends BaseFragment {
             }
             Intent intent = new Intent(mContext, FocusActivity.class);
             intent.putExtra("code", FocusActivity.FOCUS);
-            startActivityForResult(intent, 1);
+            startActivity(intent);
         });
         fans.setOnClickListener(v -> {
             if (!FfeiApplication.isLogin) {
@@ -231,7 +231,7 @@ public class WDFragment extends BaseFragment {
             }
             Intent intent = new Intent(mContext, FocusActivity.class);
             intent.putExtra("code", FocusActivity.FANS);
-            startActivityForResult(intent, 1);
+            startActivity(intent);
         });
     }
 
@@ -299,10 +299,6 @@ public class WDFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode,
                                  Intent intent) {
-        if (resultCode == 1) {
-            countFocusAndFans();
-            return;
-        }
         // 用户没有进行有效的设置操作，返回
         if (resultCode == RESULT_CANCELED) {
             Toast.makeText(mContext, "操作取消", Toast.LENGTH_LONG).show();
@@ -399,5 +395,10 @@ public class WDFragment extends BaseFragment {
 
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        countFocusAndFans();
+        setUser();
+    }
 }

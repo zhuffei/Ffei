@@ -8,10 +8,31 @@ import android.os.Message;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.alibaba.fastjson.JSON;
 import com.example.zhuffei.ffei.R;
+import com.example.zhuffei.ffei.entity.Goods;
+import com.example.zhuffei.ffei.tool.HttpUtil;
+import com.example.zhuffei.ffei.tool.ToastHelper;
+import com.example.zhuffei.ffei.tool.UrlTool;
 import com.example.zhuffei.ffei.view.MdStyleProgress;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class PaySuccessActivity extends AppCompatActivity {
+
+    private int gid;
+
+    private int uid;
 
     private MdStyleProgress progress;
 
@@ -19,16 +40,57 @@ public class PaySuccessActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
+                case -1:
+                    ToastHelper.showToast("网络异常");
                 case 0:
-                    if (progress.getStatus() != MdStyleProgress.Status.LoadSuccess) {
-                        progress.setStatus(MdStyleProgress.Status.LoadSuccess);
-                        progress.startAnima();
-                    }
+
                     break;
                 case 1:
-                    startActivity(new Intent(PaySuccessActivity.this, HomeActivity.class));
+                    if ((Integer) msg.obj == 1) {
+                        if (progress.getStatus() != MdStyleProgress.Status.LoadSuccess) {
+                            progress.setStatus(MdStyleProgress.Status.LoadSuccess);
+                            progress.startAnima();
+                           new Thread(){
+                               @Override
+                               public void run() {
+                                   try {
+                                       Thread.sleep(1500);
+                                   } catch (InterruptedException e) {
+                                       e.printStackTrace();
+                                   }
+                                   handler.sendEmptyMessage(2);
+                               }
+                           }.start();
+
+                        }
+                    } else {
+                        if (progress.getStatus() != MdStyleProgress.Status.LoadFail) {
+                            progress.setStatus(MdStyleProgress.Status.LoadFail);
+                            ToastHelper.showToast("购买失败");
+                            progress.startAnima();
+                            new Thread(){
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(1500);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    handler.sendEmptyMessage(3);
+                                }
+                            }.start();
+                        }
+                    }
+
+                    break;
+                case 2:
+                    startActivity(new Intent(PaySuccessActivity.this, MyGoodsActivity.class).putExtra("code", MyGoodsActivity.BUY));
                     finish();
                     break;
+                case 3:
+                    finish();
+
+
             }
 
         }
@@ -41,6 +103,10 @@ public class PaySuccessActivity extends AppCompatActivity {
 
         progress = findViewById(R.id.progress);
 
+        Intent intent = getIntent();
+        gid = intent.getIntExtra("gid", 0);
+        uid = intent.getIntExtra("uid", 0);
+
         new Thread() {
             @Override
             public void run() {
@@ -49,35 +115,34 @@ public class PaySuccessActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                handler.sendEmptyMessage(0);
-                try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                handler.sendEmptyMessage(1);
+                buy();
             }
 
         }.start();
 
-//        //btnLoading = (Button) findViewById(R.id.loading);
-//        //成功状态
-//        btnSuccess.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
-//
-//        //失败状态
-//        btnFail.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(progress.getStatus() != MdStyleProgress.Status.LoadFail){
-//                    progress.setStatus(MdStyleProgress.Status.LoadFail);
-//                    progress.failAnima();
-//                }
-//            }
-//        });
+    }
+
+    private void buy() {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("gid", gid);
+        map.put("uid", uid);
+        String param = JSON.toJSONString(map);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), param);
+        HttpUtil.sendHttpRequest(UrlTool.BUY, requestBody, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                handler.sendEmptyMessage(-1);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String json = response.body().string();
+                Map map = JSON.parseObject(json, HashMap.class);
+                Message msg = new Message();
+                msg.obj = (Integer) map.get("data");
+                msg.what = 1;
+                handler.sendMessage(msg);
+            }
+        });
     }
 }
