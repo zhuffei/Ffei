@@ -45,4 +45,6 @@ public class UrlTool {
     public static final String CHANGEAVATOR = prefix + "user/changeAvator";
     public static final String BUY = prefix + "relation/buy";
     public static final String GETUIDBYACCID = prefix + "user/getUidByAccid";
+    public static final String BANGOODS = prefix + "goods/banGoods";
+    public static final String CHECKWALL = prefix + "goods/checkWall";
 }

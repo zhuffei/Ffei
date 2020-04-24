@@ -20,22 +20,14 @@ import com.netease.nim.uikit.business.recent.RecentContactsFragment;
  */
 public class LTFragment extends BaseFragment {
 
-    private Context context;
-
-    private ListView listView;
-
-    private RecentContactsFragment fragment;
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        addRecentContactsFragment();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        context = this.getContext();
 
 
 //        View view;

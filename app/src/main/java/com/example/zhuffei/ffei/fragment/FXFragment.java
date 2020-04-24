@@ -139,24 +139,6 @@ public class FXFragment extends BaseFragment {
 
                         }
                         index = 0;
-//                        thread = new Thread() {
-//                            @Override
-//                            public void run() {
-////                                while (textIndex < mWarningTextList.size()) {
-//                                while (!isRefreshing) {
-//                                    try {
-//                                        Thread.sleep(4000);//每隔4秒滚动一次
-//                                    } catch (InterruptedException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                    textHandler.sendEmptyMessage(1);
-//
-//                                }
-////                                    break;
-////                                }
-//                            }
-//                        };
-//                        thread.start();
                     }
                     break;
                 case 1:

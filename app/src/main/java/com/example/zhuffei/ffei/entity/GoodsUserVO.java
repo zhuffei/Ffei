@@ -4,6 +4,7 @@ public class GoodsUserVO {
     private int id;
     private int uId;
     private String userName;
+    private String accid;
     private String avator;
     private String name;
     private String des;
@@ -21,6 +22,14 @@ public class GoodsUserVO {
     private Integer browse;
     private String createTime;
     private String updateTime;
+
+    public String getAccid() {
+        return accid;
+    }
+
+    public void setAccid(String accid) {
+        this.accid = accid;
+    }
 
     public double getRatio() {
         return ratio;

@@ -2,15 +2,18 @@ package com.example.zhuffei.ffei.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.fragment.FXFragment;
 import com.example.zhuffei.ffei.fragment.GZFragment;
@@ -23,6 +26,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.msg.MsgService;
 
 /**
  * @author zhuffei
@@ -42,7 +46,7 @@ public class HomeActivity extends UI implements View.OnClickListener {
     //发现页面布局控件
     private LinearLayout mLinFX;
     //聊天页面布局控件
-    private LinearLayout mLinLT;
+    private RelativeLayout mLinLT;
     //关注页面布局控件
     private LinearLayout mLinGZ;
     //我的页面布局控件
@@ -78,6 +82,7 @@ public class HomeActivity extends UI implements View.OnClickListener {
     private TextView mWDTv;
     private FragmentManager manager;
     private FragmentTransaction transaction;
+    private TextView bubble;
 
     @Override
 
@@ -86,8 +91,32 @@ public class HomeActivity extends UI implements View.OnClickListener {
         setContentView(R.layout.activity_home);
         initView();
         event();
-        login();
         addFragment(FX);
+        new Thread() {
+            @Override
+            public void run() {
+                while (FfeiApplication.isLogin) {
+                    int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (unreadNum == 0) {
+                                bubble.setVisibility(View.GONE);
+                            } else {
+                                bubble.setVisibility(View.VISIBLE);
+                                bubble.setText(unreadNum + "");
+                            }
+                        }
+                    });
+                    try {
+                        Thread.sleep(5001);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }.start();
+
     }
 
     /**
@@ -107,7 +136,10 @@ public class HomeActivity extends UI implements View.OnClickListener {
         mFXTv = findViewById(R.id.mTvFaXian);
         mLTTv = findViewById(R.id.mTvLiaoTian);
         mWDTv = findViewById(R.id.mTvUser);
+        bubble = findViewById(R.id.bubble);
         manager = getSupportFragmentManager();
+
+
     }
 
     /**
@@ -241,29 +273,6 @@ public class HomeActivity extends UI implements View.OnClickListener {
         }
         //最后记得提交
         transaction.commit();
-    }
-
-    //登录聊天系统
-    public void login() {
-        LoginInfo info = new LoginInfo("zhuffei", "woca.1234");
-        RequestCallback<LoginInfo> callbak = new RequestCallback<LoginInfo>() {
-            @Override
-            public void onSuccess(LoginInfo loginInfo) {
-                ToastHelper.showToast("登录成功");
-                NimUIKitImpl.setAccount(loginInfo.getAccount());
-            }
-
-            @Override
-            public void onFailed(int i) {
-//                ToastHelper.showToast(HomeActivity.this,"登录失败");
-            }
-
-            @Override
-            public void onException(Throwable throwable) {
-
-            }
-        };
-        NIMClient.getService(AuthService.class).login(info).setCallback(callbak);
     }
 
 

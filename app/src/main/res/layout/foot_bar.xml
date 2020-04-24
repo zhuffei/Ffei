@@ -13,12 +13,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipChildren="false"
-        android:orientation="vertical"
         android:layout_gravity="bottom"
-        android:background="#eeeeee">
+        android:background="#eeeeee"
+        android:clipChildren="false"
+        android:orientation="vertical">
 
         <LinearLayout
+            android:clipChildren="false"
             android:layout_width="match_parent"
             android:layout_height="150px"
             android:layout_alignParentBottom="true"
@@ -86,7 +87,8 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
+                android:clipChildren="false"
                 android:id="@+id/mLinLiaoTian"
                 android:layout_width="0px"
                 android:layout_height="wrap_content"
@@ -94,21 +96,42 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/mBtnLT"
-                    android:layout_width="70px"
-                    android:layout_height="70px"
-                    android:background="@mipmap/chat_normal"
-                    android:clickable="false" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
+                    <ImageButton
+                        android:id="@+id/mBtnLT"
+                        android:layout_width="70px"
+                        android:layout_height="70px"
+                        android:layout_gravity="center"
+                        android:background="@mipmap/chat_normal"
+                        android:clickable="false" />
+
+                    <TextView
+                        android:id="@+id/mTvLiaoTian"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/mBtnLT"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10px"
+                        android:text="聊天" />
+                </LinearLayout>
                 <TextView
-                    android:id="@+id/mTvLiaoTian"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10px"
-                    android:text="聊天" />
-
-            </LinearLayout>
+                    android:id="@+id/bubble"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20px"
+                    android:layout_marginTop="-10px"
+                    android:background="@drawable/unread_bubble"
+                    android:textColor="@color/white"
+                    android:padding="0px"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    ></TextView>
+            </RelativeLayout>
 
 
             <LinearLayout
@@ -138,16 +161,15 @@
         </LinearLayout>
 
 
+        <ImageView
+            android:id="@+id/mBtnPlus"
+            android:layout_width="170px"
+            android:layout_height="170px"
+            android:layout_gravity="center"
+            android:layout_marginTop="-180px"
+            android:clickable="false"
+            android:src="@mipmap/plus"
 
-            <ImageView
-                android:id="@+id/mBtnPlus"
-                android:layout_width="170px"
-                android:layout_height="170px"
-                android:src="@mipmap/plus"
-                android:clickable="false"
-                android:layout_gravity="center"
-                android:layout_marginTop="-180px"
-
-                />
+            />
     </LinearLayout>
 </LinearLayout>

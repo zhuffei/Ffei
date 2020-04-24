@@ -16,6 +16,11 @@ import com.example.zhuffei.ffei.tool.HttpUtil;
 import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.example.zhuffei.ffei.tool.Tool;
 import com.example.zhuffei.ffei.tool.UrlTool;
+import com.netease.nim.uikit.impl.NimUIKitImpl;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -56,6 +61,7 @@ public class LoginService {
                 User user = ((JSONObject) ((Map) msg.obj).get("data")).toJavaObject(User.class);
                 FfeiApplication.isLogin = true;
                 FfeiApplication.user = user;
+                loginChat(user);
                 //保存登录信息
                 SharedPreferences sp = context.getSharedPreferences("user", Context.MODE_PRIVATE);
                 sp.edit().putString("name", user.getName())
@@ -112,5 +118,27 @@ public class LoginService {
             msg.obj = map;
             handler.sendMessage(msg);
         }
+    }
+    //登录聊天系统
+    public void loginChat(User user) {
+        LoginInfo info = new LoginInfo(user.getAccid(), user.getPwd());
+        RequestCallback<LoginInfo> callbak = new RequestCallback<LoginInfo>() {
+            @Override
+            public void onSuccess(LoginInfo loginInfo) {
+                NimUIKitImpl.setAccount(loginInfo.getAccount());
+                NIMClient.toggleNotification(true);
+            }
+
+            @Override
+            public void onFailed(int i) {
+                ToastHelper.showToast(context,"聊天系统登录失败");
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                ToastHelper.showToast(context,"聊天系统登录失败");
+            }
+        };
+        NIMClient.getService(AuthService.class).login(info).setCallback(callbak);
     }
 }

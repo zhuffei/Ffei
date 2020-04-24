@@ -255,9 +255,13 @@ public class WDFragment extends BaseFragment {
             startActivity(intent);
         });
         logout.setOnClickListener(v -> {
-            Tool.logout();
-            HomeActivity activity = (HomeActivity) mContext;
-            activity.finish();
+            if (FfeiApplication.isLogin) {
+                Tool.logout();
+                HomeActivity activity = (HomeActivity) mContext;
+                activity.finish();
+            } else {
+                ToastHelper.showToast("未登录");
+            }
         });
     }
 

@@ -16,6 +16,8 @@ public class User {
 
     private String pwd;
 
+    private String accid;
+
 //    private int role;
 
     private int state;
@@ -25,6 +27,14 @@ public class User {
     private String avator;
 
     private Integer isFocused;
+
+    public String getAccid() {
+        return accid;
+    }
+
+    public void setAccid(String accid) {
+        this.accid = accid;
+    }
 
     public int getId() {
         return id;

@@ -57,6 +57,7 @@ public class GZFragment extends BaseFragment {
     private ImageView empty;
     private int pageNumber = 1;
     private int pageSize = 10;
+    private int code = 1;
     Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -95,6 +96,7 @@ public class GZFragment extends BaseFragment {
                 startActivity(new Intent(mContext, LoginActivity.class));
             });
         } else {
+            code = 2;
             view = inflater.inflate(R.layout.fragment2, container, false);
             refresh = view.findViewById(R.id.refresh);
             recyclerView = refresh.getRecyclerView();
@@ -158,6 +160,7 @@ public class GZFragment extends BaseFragment {
     }
 
     public void refresh() {
+        if(code == 1)return;
         pageNumber = 1;
         data.clear();
         initData();

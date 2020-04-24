@@ -1,10 +1,12 @@
 package com.example.zhuffei.ffei.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.fastjson.JSON;
@@ -27,6 +30,7 @@ import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.example.zhuffei.ffei.tool.Tool;
 import com.example.zhuffei.ffei.tool.UrlTool;
 import com.example.zhuffei.ffei.view.MyListView;
+import com.netease.nim.uikit.api.NimUIKit;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
@@ -283,6 +287,14 @@ public class DetailActivity extends AppCompatActivity {
         boolean isSell = data.getType() == 1;
         boolean isLogin = FfeiApplication.isLogin;
         boolean isSelled = data.getState() > 1;
+
+        avator.setOnClickListener(v -> {
+            if (isLogin && !isOwner()) {
+                startActivity(new Intent(DetailActivity.this, UserActivity.class).putExtra("uid", data.getuId()));
+            } else if (!isLogin) {
+                ToastHelper.showToast("请登录");
+            }
+        });
         if (data.getState() == -1) {
             buy.setVisibility(View.GONE);
             chat.setVisibility(View.GONE);
@@ -300,7 +312,13 @@ public class DetailActivity extends AppCompatActivity {
         } else if (isSell) {
             if (isLogin && isOwner()) {
                 chat.setText(R.string.xiajia);
+                chat.setOnClickListener(v ->
+                        ban(data.getId())
+                );
                 buy.setText(R.string.shangqiang);
+                buy.setOnClickListener(v -> {
+                    //上墙
+                });
             } else if (isLogin) {
                 buy.setOnClickListener(v -> {
                     Intent intent = new Intent(DetailActivity.this, BuyActivity.class);
@@ -309,6 +327,8 @@ public class DetailActivity extends AppCompatActivity {
                     finish();
                 });
                 chat.setOnClickListener(v -> {
+
+                    NimUIKit.startP2PSession(this, data.getAccid());
                 });
             } else {
                 buy.setOnClickListener(v ->
@@ -325,6 +345,7 @@ public class DetailActivity extends AppCompatActivity {
                 buy.setText("上墙");
                 chat1.setOnClickListener(v -> {
                     //下架
+                    ban(data.getId());
                 });
                 buy.setOnClickListener(v -> {
                     //上墙
@@ -334,12 +355,59 @@ public class DetailActivity extends AppCompatActivity {
                 button.setVisibility(View.VISIBLE);
                 chat1.setOnClickListener(v -> {
                     //聊聊
+                    NimUIKit.startP2PSession(this, data.getAccid());
+                });
+            } else {
+                buttons.setVisibility(View.GONE);
+                button.setVisibility(View.VISIBLE);
+                chat1.setOnClickListener(v -> {
+                    ToastHelper.showToast("请登录");
                 });
             }
         }
 
     }
 
+    private void ban(int gid) {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setMessage("确定下架 " + data.getName() + " 吗？");
+        dialog.setTitle("下架确认");
+        dialog.setPositiveButton("确定", (dialog1, which) -> {
+            Map<String, Integer> map = new HashMap<>();
+            map.put("gid", gid);
+            String param = JSON.toJSONString(map);
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), param);
+            HttpUtil.sendHttpRequest(UrlTool.BANGOODS, requestBody, new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    runOnUiThread(() -> handler.sendEmptyMessage(-1));
+                }
+
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    String json = response.body().string();
+                    Map map = JSON.parseObject(json, HashMap.class);
+                    try {
+                        int code = (int) map.get("data");
+                        if (code == 1) {
+                            runOnUiThread(() -> {
+                                ToastHelper.showToast("下架成功");
+                                startActivity(new Intent(DetailActivity.this, DetailActivity.class).putExtra("gid", data.getId()));
+                                DetailActivity.this.finish();
+                            });
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        handler.sendEmptyMessage(-1);
+                    }
+                }
+            });
+        });
+        dialog.setNegativeButton("取消", (dialog1, which) -> {
+            dialog1.dismiss();
+        });
+        dialog.show();
+    }
 
     private boolean isOwner() {
         return FfeiApplication.user.getId() == data.getuId();

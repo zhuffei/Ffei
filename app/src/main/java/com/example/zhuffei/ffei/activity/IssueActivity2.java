@@ -109,7 +109,7 @@ public class IssueActivity2 extends AppCompatActivity {
         //开启加载动画
         LoadingViewManager.with(IssueActivity2.this).setHintText("请稍后").setMinAnimTime(1500).build();
         Goods goods = new Goods();
-        goods.setName(title.getText().toString());
+        goods.setName("【求购】"+title.getText().toString());
         goods.setDes(describe.getText().toString());
         goods.setLocation(location.getText().toString());
         goods.setPrice(Double.valueOf(price.getText().toString()));
