@@ -319,7 +319,8 @@
                         android:background="@drawable/btn_talk"
                         android:gravity="center"
                         android:text="聊聊"
-                        android:textSize="16sp"></Button>
+                        android:padding="0px"
+                        android:textSize="15sp"></Button>
                 </LinearLayout>
 
                 <LinearLayout
@@ -371,5 +372,14 @@
         android:layout_alignParentBottom="true"
         android:layout_marginRight="-50px"
         android:src="@mipmap/shouqing"
+        android:visibility="gone"></ImageView>
+    <ImageView
+        android:id="@+id/xiajia"
+        android:layout_width="220dp"
+        android:layout_height="100dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginRight="-50px"
+        android:src="@mipmap/xiajia"
         android:visibility="gone"></ImageView>
 </RelativeLayout>

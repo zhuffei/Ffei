@@ -176,6 +176,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/logout"
         android:layout_width="match_parent"
         android:layout_height="130px"
         android:layout_marginBottom="50px"

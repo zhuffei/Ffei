@@ -41,6 +41,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class UserActivity extends AppCompatActivity {
+    public static final int UID = 0;
+    public static final int ACCID = 1;
     private ImageView back;
     private ListView listView;
     private List<Goods> data;
@@ -48,6 +50,7 @@ public class UserActivity extends AppCompatActivity {
     private TextView userName;
     private User user;
     private int uid;
+    private int code;
     private CardView focusCard;
     private TextView focus;
     private GoodsAdapter adapter;
@@ -99,6 +102,9 @@ public class UserActivity extends AppCompatActivity {
                     }
 
                     break;
+                case 4:
+                    initData();
+                    break;
             }
 
         }
@@ -112,8 +118,35 @@ public class UserActivity extends AppCompatActivity {
         uid = getIntent().getIntExtra("uid", 0);
         back.setOnClickListener(v -> UserActivity.this.finish());
 //        listView.setAdapter(new GoodsAdapter(data, UserActivity.this, 1));
-        initData();
+        code = getIntent().getIntExtra("code",0);
+        if(code == 1){
+
+            getUid(getIntent().getStringExtra("accid"));
+        }else{
+            initData();
+        }
         setListener();
+    }
+
+    private void getUid(String accid) {
+        Map<String, String> map = new HashMap<>();
+        map.put("accid", accid);
+        String param = JSON.toJSONString(map);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), param);
+        HttpUtil.sendHttpRequest(UrlTool.GETUIDBYACCID, requestBody, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                handler.sendEmptyMessage(-1);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String responseBody = response.body().string();
+                Map<String, Object> map = JSON.parseObject(responseBody);
+                uid = (int) map.get("data");
+                handler.sendEmptyMessage(4);
+            }
+        });
     }
 
     void findViews() {

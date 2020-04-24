@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout android:id="@+id/messages_list_layout"
-             xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"
-        />
+        android:cacheColorHint="@android:color/transparent" />
 
     <TextView
         android:id="@+id/emptyBg"
@@ -21,6 +19,7 @@
         android:contentDescription="@string/empty"
         android:drawableTop="@drawable/nim_messages_list_empty_bg"
         android:lineSpacingExtra="@dimen/dp_size_5"
-        android:text="还没有会话，在通讯录中找个人聊聊吧！"/>
+        android:gravity="center"
+        android:text="还没有会话，找个人聊聊吧！" />
 
 </FrameLayout>

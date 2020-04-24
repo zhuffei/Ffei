@@ -74,10 +74,11 @@ public class Tool {
      * 退出登录，清除用户数据
      */
     public static void logout() {
+        FfeiApplication.user = null;
+        FfeiApplication.isLogin = false;
         SharedPreferences preferences = FfeiApplication.context.getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
-
         editor.apply();
     }
 
@@ -119,11 +120,15 @@ public class Tool {
 
     }
 
-    public static String getState( int state, int code) {
-        if(code==2){
-            return state==1?"可购买":"已卖出";
+    public static String getState(int state, int code) {
+        if (code == 2) {
+            if (state == -1) return "已下架";
+            if (state == 0) return "待审核";
+            return state == 1 ? "可购买" : "已卖出";
         }
         switch (state) {
+            case -1:
+                return "已下架";
             case 0:
                 return "待审核";
             case 1:
@@ -139,8 +144,4 @@ public class Tool {
         }
         return "状态异常";
     }
-
-
-
-
 }

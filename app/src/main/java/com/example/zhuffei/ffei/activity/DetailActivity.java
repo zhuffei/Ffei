@@ -283,10 +283,16 @@ public class DetailActivity extends AppCompatActivity {
         boolean isSell = data.getType() == 1;
         boolean isLogin = FfeiApplication.isLogin;
         boolean isSelled = data.getState() > 1;
-        if (data.getState() == 0) {
-            buttons.setVisibility(View.GONE);
-            button.setVisibility(View.VISIBLE);
-            chat1.setText(R.string.yixiajia);
+        if (data.getState() == -1) {
+            buy.setVisibility(View.GONE);
+            chat.setVisibility(View.GONE);
+            selled.setVisibility(View.VISIBLE);
+            selled.setImageResource(R.mipmap.xiajia);
+        } else if (data.getState() == 0) {
+            buy.setVisibility(View.GONE);
+            chat.setVisibility(View.GONE);
+            selled.setVisibility(View.VISIBLE);
+            selled.setImageResource(R.mipmap.shenghe);
         } else if (isSelled) {
             buy.setVisibility(View.GONE);
             chat.setVisibility(View.GONE);
@@ -313,15 +319,19 @@ public class DetailActivity extends AppCompatActivity {
                 );
             }
         } else {
-            buttons.setVisibility(View.GONE);
-            button.setVisibility(View.VISIBLE);
             //求购商品
             if (isLogin && isOwner()) {
-                chat1.setText(R.string.xiajia);
+                chat.setText(R.string.xiajia);
+                buy.setText("上墙");
                 chat1.setOnClickListener(v -> {
                     //下架
                 });
+                buy.setOnClickListener(v -> {
+                    //上墙
+                });
             } else if (isLogin) {
+                buttons.setVisibility(View.GONE);
+                button.setVisibility(View.VISIBLE);
                 chat1.setOnClickListener(v -> {
                     //聊聊
                 });

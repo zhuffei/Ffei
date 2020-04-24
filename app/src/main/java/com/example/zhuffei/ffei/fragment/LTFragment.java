@@ -2,24 +2,17 @@ package com.example.zhuffei.ffei.fragment;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.zhuffei.ffei.FfeiApplication;
-import com.example.zhuffei.ffei.R;
-import com.example.zhuffei.ffei.activity.LoginActivity;
-import com.example.zhuffei.ffei.adapter.ChatAdapter;
-import com.netease.nim.uikit.api.NimUIKit;
+import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.example.zhuffei.ffei.R;
+import com.netease.nim.uikit.business.recent.RecentContactsFragment;
 
 
 /**
@@ -31,40 +24,61 @@ public class LTFragment extends BaseFragment {
 
     private ListView listView;
 
+    private RecentContactsFragment fragment;
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+//        addRecentContactsFragment();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         context = this.getContext();
-        View view;
-        if (!FfeiApplication.isLogin) {
-            view = inflater.inflate(R.layout.not_login, container, false);
-            Button button = view.findViewById(R.id.button);
-            button.setOnClickListener(v -> {
-                startActivity(new Intent(context, LoginActivity.class));
-            });
-        } else {
-            view = inflater.inflate(R.layout.fragment3, container, false);
-            listView = view.findViewById(R.id.listView);
-            listView.setDivider(null);
 
 
-            List data = new ArrayList<>();
-            data.add(new Object());
-            data.add(new Object());
-
-
-            listView.setAdapter(new ChatAdapter(context, data));
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    NimUIKit.startP2PSession(context, "zhuffei");
-                }
-            });
-        }
-
+//        View view;
+//        if (!FfeiApplication.isLogin) {
+//            view = inflater.inflate(R.layout.not_login, container, false);
+//            Button button = view.findViewById(R.id.button);
+//            button.setOnClickListener(v -> {
+//                startActivity(new Intent(context, LoginActivity.class));
+//            });
+//        } else {
+            View view = inflater.inflate(R.layout.fragment3, container, false);
+//            listView = view.findViewById(R.id.listView);
+//            listView.setDivider(null);
+//
+//
+//            List data = new ArrayList<>();
+//            data.add(new Object());
+//            data.add(new Object());
+//
+//
+//            listView.setAdapter(new ChatAdapter(context, data));
+//            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    NimUIKit.startP2PSession(context, "zhuffei");
+//                }
+//            });
+//        }
+//
         return view;
     }
 
+//    // 将最近联系人列表fragment动态集成进来。
+//    private void addRecentContactsFragment() {
+//        fragment = new RecentContactsFragment();
+//        // 设置要集成联系人列表fragment的布局文件
+//        fragment.setContainerId(R.layout.fragment3);
+//
+//        final UI activity = (UI) getActivity();
+//
+//        // 如果是activity从堆栈恢复，FM中已经存在恢复而来的fragment，此时会使用恢复来的，而new出来这个会被丢弃掉
+//        fragment = (RecentContactsFragment) activity.addFragment(fragment);
+//    }
     /**
      * 设置对应的内容即可
      *

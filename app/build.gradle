@@ -64,6 +64,7 @@ dependencies {
 //    implementation 'com.netease.nimlib:basesdk:7.5.0'
     implementation project(':uikit')
     implementation 'com.github:MyCropBitmap:1.1.2'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
 }
 //packagingOptions {

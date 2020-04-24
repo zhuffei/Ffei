@@ -4,7 +4,6 @@ package com.example.zhuffei.ffei.fragment;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -32,8 +31,10 @@ import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.activity.CropActivity;
 import com.example.zhuffei.ffei.activity.FocusActivity;
+import com.example.zhuffei.ffei.activity.HomeActivity;
 import com.example.zhuffei.ffei.activity.LoginActivity;
 import com.example.zhuffei.ffei.activity.MyGoodsActivity;
+import com.example.zhuffei.ffei.entity.User;
 import com.example.zhuffei.ffei.tool.AsyncImageLoader;
 import com.example.zhuffei.ffei.tool.FileUtil;
 import com.example.zhuffei.ffei.tool.HttpUtil;
@@ -41,6 +42,10 @@ import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.example.zhuffei.ffei.tool.Tool;
 import com.example.zhuffei.ffei.tool.UrlTool;
 import com.leon.lib.settingview.LSettingItem;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallbackWrapper;
+import com.netease.nimlib.sdk.uinfo.UserService;
+import com.netease.nimlib.sdk.uinfo.constant.UserInfoFieldEnum;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -68,7 +73,7 @@ public class WDFragment extends BaseFragment {
 
     private Context mContext;
 
-    private TextView focusNum, fansNum;
+    private TextView focusNum, fansNum, logout;
 
     private ImageView avator;
     /* 请求识别码 */
@@ -102,6 +107,10 @@ public class WDFragment extends BaseFragment {
                     break;
                 case 1:
                     ToastHelper.showToast("头像上传成功");
+                    String avator = (String) msg.obj;
+                    FfeiApplication.user.setAvator(avator);
+                    setUser();
+                    uploadAvatorToNIM(avator);
                     break;
                 case 2:
                     ToastHelper.showToast("头像上传失败");
@@ -111,6 +120,18 @@ public class WDFragment extends BaseFragment {
 
         }
     };
+
+    private void uploadAvatorToNIM(String fileName) {
+        Map<UserInfoFieldEnum, Object> fields = new HashMap<>(1);
+        fields.put(UserInfoFieldEnum.AVATAR, fileName);
+        NIMClient.getService(UserService.class).updateUserInfo(fields)
+                .setCallback(new RequestCallbackWrapper<Void>() {
+                    @Override
+                    public void onResult(int i, Void aVoid, Throwable throwable) {
+
+                    }
+                });
+    }
 
 
     @Override
@@ -233,6 +254,11 @@ public class WDFragment extends BaseFragment {
             intent.putExtra("code", FocusActivity.FANS);
             startActivity(intent);
         });
+        logout.setOnClickListener(v -> {
+            Tool.logout();
+            HomeActivity activity = (HomeActivity) mContext;
+            activity.finish();
+        });
     }
 
     private void findViews(View view) {
@@ -247,22 +273,18 @@ public class WDFragment extends BaseFragment {
         userName = view.findViewById(R.id.userName);
         focusNum = view.findViewById(R.id.focusNum);
         fansNum = view.findViewById(R.id.fansNum);
+        logout = view.findViewById(R.id.logout);
     }
 
 
     //展示已登录用户的信息
     public void setUser() {
-        SharedPreferences sp = mContext.getSharedPreferences("user", Context.MODE_PRIVATE);
-        String name = sp.getString("name", "");
-        String img = sp.getString("img", "");
-        String phoneNumber = sp.getString("phone", "");
-
-        if (null != name && !name.isEmpty()) {
-            phoneNumber = phoneNumber.substring(0, 3) + "****" + phoneNumber.substring(7, 11);
-            userName.setText(name);
-            phone.setText(phoneNumber);
+        if (FfeiApplication.isLogin) {
+            User user = FfeiApplication.user;
+            userName.setText(user.getName());
+            phone.setText(user.getPhone().substring(0, 3) + "****" + user.getPhone().substring(7, 11));
             AsyncImageLoader asyncImageLoader = new AsyncImageLoader(mContext);
-            asyncImageLoader.asyncloadImage(avator, UrlTool.prefix + "avator/" + img);
+            asyncImageLoader.asyncloadImage(avator, UrlTool.AVATOR + user.getAvator());
         }
 
     }
@@ -381,7 +403,10 @@ public class WDFragment extends BaseFragment {
                 String json = response.body().string();
                 Map map = JSON.parseObject(json, HashMap.class);
                 if ((boolean) map.get("state")) {
-                    handler.sendEmptyMessage(1);
+                    Message msg = new Message();
+                    msg.obj = map.get("data");
+                    msg.what = 1;
+                    handler.sendMessage(msg);
                 } else {
                     handler.sendEmptyMessage(2);
                 }

@@ -86,7 +86,7 @@ public class BuyActivity extends AppCompatActivity implements PwdView.InputCallB
 
     private void setListener() {
         confirm.setOnClickListener(v -> {
-                    PayDetailFragment payDetailFragment = new PayDetailFragment(data.getPrice(),this);
+                    PayDetailFragment payDetailFragment = new PayDetailFragment(data,this);
                     payDetailFragment.show(getSupportFragmentManager(), "payDetailFragment");
                 }
         );

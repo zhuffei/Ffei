@@ -1,12 +1,14 @@
 package com.example.zhuffei.ffei.tool;
 
+import com.example.zhuffei.ffei.FfeiApplication;
+import com.example.zhuffei.ffei.R;
+
 /**
  * Created by zhuffei on 2020/3/15.
  */
 
 public class UrlTool {
-    //    public static final String host = "192.168.137.1";
-    public static final String host = "192.168.1.6";
+    public static final String host = FfeiApplication.context.getResources().getString(R.string.host);
     public static final String prefix = "http://" + host + ":8080/ffei/";
     public static final String AVATOR = prefix + "avator/";
     public static final String GOODSIMG = prefix + "goodsImg/";
@@ -42,4 +44,5 @@ public class UrlTool {
     public static final String GETUSERINFO = prefix + "user/getUserInfo";
     public static final String CHANGEAVATOR = prefix + "user/changeAvator";
     public static final String BUY = prefix + "relation/buy";
+    public static final String GETUIDBYACCID = prefix + "user/getUidByAccid";
 }

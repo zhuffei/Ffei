@@ -182,17 +182,17 @@ public class PhotoPickerActivity extends AppCompatActivity{
         mCxt = this;
         captureManager = new ImageCaptureManager(mCxt);
         // ActionBar Setting
-        Toolbar toolbar = (Toolbar) findViewById(R.id.pickerToolbar);
+        Toolbar toolbar = findViewById(R.id.pickerToolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(getResources().getString(R.string.image));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mGridView = (GridView) findViewById(R.id.grid);
+        mGridView = findViewById(R.id.grid);
         mGridView.setNumColumns(getNumColnums());
 
         mPopupAnchorView = findViewById(R.id.photo_picker_footer);
-        btnAlbum = (Button) findViewById(R.id.btnAlbum);
-        btnPreview = (Button) findViewById(R.id.btnPreview);
+        btnAlbum = findViewById(R.id.btnAlbum);
+        btnPreview = findViewById(R.id.btnPreview);
     }
 
     private void createPopupFolderList(){
@@ -278,9 +278,7 @@ public class PhotoPickerActivity extends AppCompatActivity{
     }
 
     public void onImageUnselected(String path) {
-        if(resultList.contains(path)){
-            resultList.remove(path);
-        }
+        resultList.remove(path);
         refreshActionStatus();
     }
 
@@ -379,9 +377,7 @@ public class PhotoPickerActivity extends AppCompatActivity{
      * 刷新操作按钮状态
      */
     private void refreshActionStatus(){
-        if(resultList.contains("000000")){
-            resultList.remove("000000");
-        }
+        resultList.remove("000000");
         String text = getString(R.string.done_with_count, resultList.size(), mDesireImageCount);
         menuDoneItem.setTitle(text);
         boolean hasSelected = resultList.size() > 0;

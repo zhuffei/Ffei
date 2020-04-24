@@ -77,8 +77,8 @@ public class PhotoPreviewActivity extends AppCompatActivity implements PhotoPage
     }
 
     private void initViews(){
-        mViewPager = (ViewPagerFixed) findViewById(R.id.vp_photos);
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.pickerToolbar);
+        mViewPager = findViewById(R.id.vp_photos);
+        Toolbar mToolbar = findViewById(R.id.pickerToolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

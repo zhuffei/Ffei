@@ -17,12 +17,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.activity.BuyActivity;
+import com.example.zhuffei.ffei.entity.Goods;
 
 
 /**
@@ -34,12 +36,14 @@ public class PayDetailFragment extends DialogFragment {
     private ListView lv;
     private Button btnPay;
     private EditText gridPasswordView;
-    private Double price;
     private ImageView imageCloseOne, imageCloseTwo, imageCloseThree;
     private BuyActivity buyActivity;
+    private Goods goods;
+    private TextView price1, price2;
+    private TextView goodsName;
 
-    public PayDetailFragment(double price,BuyActivity buyActivity) {
-        this.price = price;
+    public PayDetailFragment(Goods goods, BuyActivity buyActivity) {
+        this.goods = goods;
         this.buyActivity = buyActivity;
     }
 
@@ -90,6 +94,12 @@ public class PayDetailFragment extends DialogFragment {
     }
 
     private void initView(Dialog dialog) {
+        price1 = dialog.findViewById(R.id.price1);
+        price2 = dialog.findViewById(R.id.price2);
+        price1.setText(String.format("%.2f", goods.getPrice()));
+        price2.setText(String.format("%.2f", goods.getPrice()));
+        goodsName = dialog.findViewById(R.id.goodsName);
+        goodsName.setText(goods.getName());
         rePayWay = dialog.findViewById(R.id.re_pay_way);
         rePayDetail = dialog.findViewById(R.id.re_pay_detail);//付款详情
         LinPayWay = dialog.findViewById(R.id.lin_pay_way);//付款方式

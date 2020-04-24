@@ -8,8 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -19,6 +17,7 @@ import com.example.zhuffei.ffei.fragment.GZFragment;
 import com.example.zhuffei.ffei.fragment.LTFragment;
 import com.example.zhuffei.ffei.fragment.WDFragment;
 import com.example.zhuffei.ffei.tool.ToastHelper;
+import com.netease.nim.uikit.common.activity.UI;
 import com.netease.nim.uikit.impl.NimUIKitImpl;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -30,7 +29,7 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
  * @version 1.0
  * @date 2020/3/20 15:21
  */
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
+public class HomeActivity extends UI implements View.OnClickListener {
     //聊天页面常量
     private final int LT = 3;
     //发现页面常量
@@ -246,7 +245,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     //登录聊天系统
     public void login() {
-        LoginInfo info = new LoginInfo("zhuffei1", "woca.1234");
+        LoginInfo info = new LoginInfo("zhuffei", "woca.1234");
         RequestCallback<LoginInfo> callbak = new RequestCallback<LoginInfo>() {
             @Override
             public void onSuccess(LoginInfo loginInfo) {
