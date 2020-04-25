@@ -24,6 +24,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.activity.BuyActivity;
+import com.example.zhuffei.ffei.activity.CanPayBaseActivity;
 import com.example.zhuffei.ffei.entity.Goods;
 
 
@@ -37,14 +38,14 @@ public class PayDetailFragment extends DialogFragment {
     private Button btnPay;
     private EditText gridPasswordView;
     private ImageView imageCloseOne, imageCloseTwo, imageCloseThree;
-    private BuyActivity buyActivity;
+    private CanPayBaseActivity canPayBaseActivity;
     private Goods goods;
     private TextView price1, price2;
     private TextView goodsName;
 
-    public PayDetailFragment(Goods goods, BuyActivity buyActivity) {
+    public PayDetailFragment(Goods goods, CanPayBaseActivity canPayBaseActivity) {
         this.goods = goods;
-        this.buyActivity = buyActivity;
+        this.canPayBaseActivity = canPayBaseActivity;
     }
 
     @Override
@@ -143,7 +144,7 @@ public class PayDetailFragment extends DialogFragment {
                     break;
                 case R.id.btn_confirm_pay://确认付款
                     getDialog().dismiss();
-                    buyActivity.intoPwdFragment();
+                    canPayBaseActivity.intoPwdFragment();
                     break;
                 case R.id.close_one:
                     getDialog().dismiss();

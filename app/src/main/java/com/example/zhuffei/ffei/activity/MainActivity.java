@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.service.LoginService;
 import com.example.zhuffei.ffei.tool.CheckSumBuilder;
+import com.example.zhuffei.ffei.tool.ToastHelper;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -31,7 +33,7 @@ import java.util.List;
 /**
  * @author zhuffei
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private Button homePage;
 
@@ -45,9 +47,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         findViews();
         setEvent();
-        login();
-//        new MThread().start();
-//        LoadingViewManager.with(this).setHintText("bbbb").setMaxAnimTime(2000).build();
     }
 
     public void findViews() {
@@ -56,87 +55,43 @@ public class MainActivity extends AppCompatActivity {
         button2 = findViewById(R.id.login);
     }
 
-    public void login() {
-        SharedPreferences sp = this.getSharedPreferences("user", Context.MODE_PRIVATE);
-        String phone = sp.getString("phone", "");
-        String pwd = sp.getString("pwd", "");
-        if (null != phone && !phone.isEmpty()) {
-            LoginService loginService = new LoginService(phone, pwd, this);
-            loginService.login();
-        }
-    }
+
 
     public void setEvent() {
-        homePage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                startActivityForResult(intent, 1);
-            }
+        homePage.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            startActivityForResult(intent, 1);
         });
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
-                startActivityForResult(intent, 1);
+        textView.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+            startActivityForResult(intent, 1);
 
-            }
         });
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                startActivityForResult(intent, 1);
+        button2.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivityForResult(intent, 1);
 
-            }
         });
     }
 
-    public void test() throws Exception {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        String url = "https://api.netease.im/nimserver/user/create.action";
-        HttpPost httpPost = new HttpPost(url);
 
-        String appKey = "5f87c2f24f10a12a75200cabb84c8f9c";
-        String appSecret = "c3d99d7e5dc5";
-        String nonce = "12345";
-        String curTime = String.valueOf((new Date()).getTime() / 1000L);
-        String checkSum = CheckSumBuilder.getCheckSum(appSecret, nonce, curTime);//参考 计算CheckSum的java代码
 
-        // 设置请求的header
-        httpPost.addHeader("AppKey", appKey);
-        httpPost.addHeader("Nonce", nonce);
-        httpPost.addHeader("CurTime", curTime);
-        httpPost.addHeader("CheckSum", checkSum);
-        httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        // 设置请求的参数
-        List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-        nvps.add(new BasicNameValuePair("accid", "zhuffei1"));
-        nvps.add(new BasicNameValuePair("token", "woca.1234"));
-        nvps.add(new BasicNameValuePair("name", "朱飞飞"));
-        httpPost.setEntity(new UrlEncodedFormEntity(nvps, "utf-8"));
 
-        // 执行请求
-        HttpResponse response = httpClient.execute(httpPost);
-        // 打印执行结果
-        System.out.println(EntityUtils.toString(response.getEntity(), "utf-8"));
-    }
 
-    class MThread extends Thread {
-        @Override
-        public void run() {
-            try {
-                test();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
+    long exitTime = 0;
     @Override
-    protected void onResume() {
-        super.onResume();
-
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
+            if((System.currentTimeMillis()-exitTime) > 2000){
+                ToastHelper.showToast("再按一次退出");
+                exitTime = System.currentTimeMillis();
+            } else {
+                finishAffinity();
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

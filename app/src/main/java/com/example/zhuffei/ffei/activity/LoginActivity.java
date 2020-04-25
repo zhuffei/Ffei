@@ -15,7 +15,7 @@ import com.example.zhuffei.ffei.service.LoginService;
 import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.example.zhuffei.ffei.tool.Tool;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     private EditText phoneInput;
 
     private EditText passwordInput;

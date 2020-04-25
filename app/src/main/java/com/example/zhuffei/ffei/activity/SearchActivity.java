@@ -43,7 +43,7 @@ import okhttp3.Response;
  * @version 1.0
  * @date 2020/3/26 11:59
  */
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private EditText param;
     private ImageView search;

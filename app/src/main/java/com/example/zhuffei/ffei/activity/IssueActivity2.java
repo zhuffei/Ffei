@@ -38,7 +38,7 @@ import okhttp3.Response;
  * @version 1.0
  * @date 2020/4/6 11:55
  */
-public class IssueActivity2 extends AppCompatActivity {
+public class IssueActivity2 extends BaseActivity {
     private Button mButton;
     private EditText title, describe, location, price;
     private ImageView back;

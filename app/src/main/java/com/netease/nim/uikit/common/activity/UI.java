@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.example.zhuffei.ffei.activity.BaseActivity;
 import com.netease.nim.uikit.common.fragment.TFragment;
 import com.netease.nim.uikit.common.util.log.LogUtil;
 import com.netease.nim.uikit.common.util.sys.ReflectionUtil;
@@ -22,7 +23,7 @@ import com.netease.nim.uikit.common.util.sys.ReflectionUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UI extends AppCompatActivity {
+public abstract class UI extends BaseActivity {
 
     private boolean destroyed = false;
 

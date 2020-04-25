@@ -37,7 +37,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class UserSearchActivity extends AppCompatActivity {
+public class UserSearchActivity extends BaseActivity {
     ImageView back;
     ImageView search;
     EditText param;

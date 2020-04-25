@@ -28,11 +28,13 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class PaySuccessActivity extends AppCompatActivity {
+public class PaySuccessActivity extends BaseActivity {
 
     private int gid;
 
     private int uid;
+
+    private int code;
 
     private MdStyleProgress progress;
 
@@ -50,17 +52,17 @@ public class PaySuccessActivity extends AppCompatActivity {
                         if (progress.getStatus() != MdStyleProgress.Status.LoadSuccess) {
                             progress.setStatus(MdStyleProgress.Status.LoadSuccess);
                             progress.startAnima();
-                           new Thread(){
-                               @Override
-                               public void run() {
-                                   try {
-                                       Thread.sleep(1500);
-                                   } catch (InterruptedException e) {
-                                       e.printStackTrace();
-                                   }
-                                   handler.sendEmptyMessage(2);
-                               }
-                           }.start();
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(1500);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    handler.sendEmptyMessage(2);
+                                }
+                            }.start();
 
                         }
                     } else {
@@ -68,7 +70,7 @@ public class PaySuccessActivity extends AppCompatActivity {
                             progress.setStatus(MdStyleProgress.Status.LoadFail);
                             ToastHelper.showToast("购买失败");
                             progress.startAnima();
-                            new Thread(){
+                            new Thread() {
                                 @Override
                                 public void run() {
                                     try {
@@ -84,7 +86,11 @@ public class PaySuccessActivity extends AppCompatActivity {
 
                     break;
                 case 2:
-                    startActivity(new Intent(PaySuccessActivity.this, MyGoodsActivity.class).putExtra("code", MyGoodsActivity.BUY));
+                    if (code == 1) {
+                        startActivity(new Intent(PaySuccessActivity.this, MyGoodsActivity.class).putExtra("code", MyGoodsActivity.BUY));
+                    } else {
+                        startActivity(new Intent(PaySuccessActivity.this, HomeActivity.class));
+                    }
                     finish();
                     break;
                 case 3:
@@ -106,6 +112,7 @@ public class PaySuccessActivity extends AppCompatActivity {
         Intent intent = getIntent();
         gid = intent.getIntExtra("gid", 0);
         uid = intent.getIntExtra("uid", 0);
+        code = intent.getIntExtra("code ", 0);
 
         new Thread() {
             @Override
@@ -115,11 +122,38 @@ public class PaySuccessActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                buy();
+                if (code == 1) {
+                    buy();
+                } else {
+                    upWall();
+                }
             }
 
         }.start();
 
+    }
+
+    private void upWall() {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("gid", gid);
+        String param = JSON.toJSONString(map);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), param);
+        HttpUtil.sendHttpRequest(UrlTool.UPWALL, requestBody, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                handler.sendEmptyMessage(-1);
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String json = response.body().string();
+                Map map = JSON.parseObject(json, HashMap.class);
+                Message msg = new Message();
+                msg.obj = (Integer) map.get("data");
+                msg.what = 1;
+                handler.sendMessage(msg);
+            }
+        });
     }
 
     private void buy() {

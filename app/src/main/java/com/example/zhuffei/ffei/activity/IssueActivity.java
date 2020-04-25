@@ -61,7 +61,7 @@ import okhttp3.Response;
  * @version 1.0
  * @date 2020/3/24 13:11
  */
-public class IssueActivity extends AppCompatActivity {
+public class IssueActivity extends BaseActivity {
 
     private static final int REQUEST_CAMERA_CODE = 10;
     private static final int REQUEST_PREVIEW_CODE = 20;
@@ -80,8 +80,6 @@ public class IssueActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_issue);
         findViews();
-        //判断和申请权限
-        initPermission();
         InputFilter[] filters = {new EditInputFilter()};
         price.setFilters(filters);
         int cols = getResources().getDisplayMetrics().widthPixels / getResources().getDisplayMetrics().densityDpi;
@@ -212,61 +210,7 @@ public class IssueActivity extends AppCompatActivity {
         price = findViewById(R.id.price);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        boolean hasPermissionDismiss = false;//有权限没有通过
-        if (mRequestCode == requestCode) {
-            for (int i = 0; i < grantResults.length; i++) {
-                if (grantResults[i] == -1) {
-                    hasPermissionDismiss = true;
-                }
-            }
-            //如果有权限没有被允许
-            if (hasPermissionDismiss) {
-                finish();//跳转到系统设置权限页面，或者直接关闭页面，不让他继续访问
-            } else {
-                //全部权限通过，可以进行下一步操作。。。
 
-            }
-        }
-    }
-
-
-    //申请两个权限，录音和文件读写
-    //1、首先声明一个数组permissions，将需要的权限都放在里面
-    String[] permissions = new String[]{Manifest.permission.CAMERA,
-            Manifest.permission.READ_EXTERNAL_STORAGE};
-    //2、创建一个mPermissionList，逐个判断哪些权限未授予，未授予的权限存储到mPerrrmissionList中
-    List<String> mPermissionList = new ArrayList<>();
-
-    private final int mRequestCode = 100;//权限请求码
-
-    //权限判断和申请
-    private void initPermission() {
-
-        mPermissionList.clear();//清空没有通过的权限
-
-        //逐个判断你要的权限是否已经通过
-        for (int i = 0; i < permissions.length; i++) {
-            if (ContextCompat.checkSelfPermission(this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
-                mPermissionList.add(permissions[i]);//添加还未授予的权限
-            }
-        }
-
-        //申请权限
-        if (mPermissionList.size() > 0) {//有权限没有通过，需要申请
-            ActivityCompat.requestPermissions(this, permissions, mRequestCode);
-        } else {
-            //说明权限都已经通过，可以做你想做的事情去
-        }
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

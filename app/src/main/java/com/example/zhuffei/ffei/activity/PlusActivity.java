@@ -15,7 +15,7 @@ import com.example.zhuffei.ffei.R;
  * @version 1.0
  * @date 2020/3/28 15:57
  */
-public class PlusActivity extends AppCompatActivity {
+public class PlusActivity extends BaseActivity {
 
     private Button issueGoods;
 

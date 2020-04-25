@@ -41,7 +41,7 @@ import okhttp3.Response;
  * @version 1.0
  * @date 2020/4/3 12:49
  */
-public class BuyActivity extends AppCompatActivity implements PwdView.InputCallBack {
+public class BuyActivity extends CanPayBaseActivity implements PwdView.InputCallBack {
 
     private ImageView goodsImg;
 
@@ -86,7 +86,7 @@ public class BuyActivity extends AppCompatActivity implements PwdView.InputCallB
 
     private void setListener() {
         confirm.setOnClickListener(v -> {
-                    PayDetailFragment payDetailFragment = new PayDetailFragment(data,this);
+                    PayDetailFragment payDetailFragment = new PayDetailFragment(data, this);
                     payDetailFragment.show(getSupportFragmentManager(), "payDetailFragment");
                 }
         );
@@ -137,70 +137,19 @@ public class BuyActivity extends AppCompatActivity implements PwdView.InputCallB
     }
 
 
-
-
-
-    private PwdFragment fragment;
-
-    public void intoPwdFragment() {
-        if (count <= 0)
-            showPwdError();
-        else {
-            synchronized (MainActivity.class){
-                if (fragment == null || fragment.getType() != 0 || !fragment.isResumed()){
-                    createDialogFragment(0);
-                }
-            }
-        }
-    }
-
-    private void createDialogFragment(int type) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(PwdFragment.TYPE, type);
-        fragment = new PwdFragment();
-        fragment.setArguments(bundle);
-        fragment.setPaySuccessCallBack(BuyActivity.this);
-        fragment.show(getSupportFragmentManager(), "Pwd");
-    }
-
-    //还可以输入密码次数
-    private int count = 5;
-
     @Override
     public void onInputFinish(String result) {
         if (result.equals("123456")) {
             fragment.dismiss();
-            Intent intent = new Intent(this,PaySuccessActivity.class);
-            intent.putExtra("gid",gid);
+            Intent intent = new Intent(this, PaySuccessActivity.class);
+            intent.putExtra("gid", gid);
             intent.putExtra("uid", FfeiApplication.user.getId());
+            intent.putExtra("code", 1);
             startActivity(intent);
             finish();
-        }else {
+        } else {
             showPwdError();
         }
-    }
-
-    private void showPwdError() {
-        count--;
-        if (count <= 0){
-            showTintDialog("提示：", "密码输入达到上限", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    fragment.dismiss();
-                }
-            });
-        }else {
-            showTintDialog("密码错误","密码输入有误，你还可以输入" + count + "次",null);
-        }
-    }
-
-    public void showTintDialog(String title,String msg,DialogInterface.OnClickListener listener) {
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        builder.setTitle(title);
-        builder.setMessage(msg);
-        builder.setCancelable(false);
-        builder.setPositiveButton("确定", listener);
-        builder.create().show();
     }
 
 

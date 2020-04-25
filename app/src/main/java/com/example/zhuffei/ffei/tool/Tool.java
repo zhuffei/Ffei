@@ -8,6 +8,9 @@ import android.util.DisplayMetrics;
 
 import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.activity.DetailActivity;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -76,6 +79,7 @@ public class Tool {
     public static void logout() {
         FfeiApplication.user = null;
         FfeiApplication.isLogin = false;
+        NIMClient.getService(AuthService.class).logout();
         SharedPreferences preferences = FfeiApplication.context.getSharedPreferences("user", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear();
@@ -134,11 +138,11 @@ public class Tool {
             case 1:
                 return "已发布";
             case 2:
-                return code == 4 ? "对方已付款" : "已下单";
+                return code == 4||code ==1 ? "对方已付款" : "已下单";
             case 3:
-                return code == 4 ? "待确认" : "待对方确认";
+                return code == 4 ? "对方已确认" : "待对方确认";
             case 4:
-                return code == 4 ? "待对方确认" : "待确认";
+                return code == 4 ? "待对方确认" : "对方已确认";
             case 5:
                 return "订单完成";
         }

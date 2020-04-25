@@ -18,7 +18,7 @@ import com.github.cropbitmap.LikeQQCropView;
  * @version 1.0
  * @date 2020/4/11 16:17
  */
-public class CropActivity extends AppCompatActivity {
+public class CropActivity extends BaseActivity {
     private LikeQQCropView likeView;
 
     private Button confirm, cancel;

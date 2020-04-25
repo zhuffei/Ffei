@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.example.zhuffei.ffei.tool.HttpUtil;
 import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.example.zhuffei.ffei.tool.Tool;
 import com.example.zhuffei.ffei.tool.UrlTool;
+import com.netease.nim.uikit.api.NimUIKit;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,8 +42,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class UserActivity extends AppCompatActivity {
-    public static final int UID = 0;
+public class UserActivity extends BaseActivity {
     public static final int ACCID = 1;
     private ImageView back;
     private ListView listView;
@@ -54,6 +55,7 @@ public class UserActivity extends AppCompatActivity {
     private CardView focusCard;
     private TextView focus;
     private GoodsAdapter adapter;
+    private Button chat;
     Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -118,11 +120,11 @@ public class UserActivity extends AppCompatActivity {
         uid = getIntent().getIntExtra("uid", 0);
         back.setOnClickListener(v -> UserActivity.this.finish());
 //        listView.setAdapter(new GoodsAdapter(data, UserActivity.this, 1));
-        code = getIntent().getIntExtra("code",0);
-        if(code == 1){
+        code = getIntent().getIntExtra("code", 0);
+        if (code == 1) {
 
             getUid(getIntent().getStringExtra("accid"));
-        }else{
+        } else {
             initData();
         }
         setListener();
@@ -156,6 +158,7 @@ public class UserActivity extends AppCompatActivity {
         avator = findViewById(R.id.avator);
         focus = findViewById(R.id.focus);
         focusCard = findViewById(R.id.focusCard);
+        chat = findViewById(R.id.chat);
     }
 
     private void initData() {
@@ -196,6 +199,9 @@ public class UserActivity extends AppCompatActivity {
     }
 
     void setListener() {
+        chat.setOnClickListener(v ->
+                NimUIKit.startP2PSession(this, user.getAccid())
+        );
         focusCard.setOnClickListener(v -> {
             String url;
             Integer option;

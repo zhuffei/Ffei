@@ -21,7 +21,15 @@
         <item name="android:textSize">@dimen/action_text_size</item>
         <item name="android:textStyle">normal</item>
     </style>
-
+    <style name="LunchTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <!--下面这句如果你加上觉得好看就加，不好看就不加咯-->
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@drawable/main</item>
+    </style>
     <style name="BottomDialogStyle">
         <!-- 对话框背景 -->
         <item name="android:windowBackground">@android:color/transparent</item>

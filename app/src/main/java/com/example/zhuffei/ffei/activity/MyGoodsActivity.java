@@ -27,6 +27,7 @@ import com.example.zhuffei.ffei.tool.UrlTool;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,10 +38,12 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class MyGoodsActivity extends AppCompatActivity {
+public class MyGoodsActivity extends BaseActivity {
     private ImageView back, empty;
 
     private String url;
+
+    private GoodsAdapter adapter;
 
     List<Goods> data;
     TextView title;
@@ -62,11 +65,8 @@ public class MyGoodsActivity extends AppCompatActivity {
                         empty.setVisibility(View.VISIBLE);
                         return;
                     }
-                    GoodsAdapter goodsAdapter = new GoodsAdapter(data, MyGoodsActivity.this,code);
-                    goodsAdapter.setOnclickListener(gid -> {
-                        Tool.toDetail(MyGoodsActivity.this, gid);
-                    });
-                    listView.setAdapter(goodsAdapter);
+                    empty.setVisibility(View.GONE);
+                    adapter.notifyDataSetChanged();
                     break;
 
             }
@@ -82,9 +82,13 @@ public class MyGoodsActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         back = findViewById(R.id.back);
         back.setOnClickListener(v -> MyGoodsActivity.this.finish());
+        data = new ArrayList<>();
         initView();
-//        listView.setAdapter(new GoodsAdapter(goodsList, this));
-
+        adapter = new GoodsAdapter(data, MyGoodsActivity.this, code);
+        adapter.setOnclickListener(gid -> {
+            Tool.toDetail(MyGoodsActivity.this, gid);
+        });
+        listView.setAdapter(adapter);
     }
 
     void initView() {
@@ -111,7 +115,8 @@ public class MyGoodsActivity extends AppCompatActivity {
         getData();
     }
 
-    void getData() {
+    public void getData() {
+        data.clear();
         Map<String, Integer> map = new HashMap<>();
         map.put("uid", FfeiApplication.user.getId());
         String param = JSON.toJSONString(map);
@@ -126,7 +131,8 @@ public class MyGoodsActivity extends AppCompatActivity {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String responseBody = response.body().string();
                 Map<String, Object> map = JSON.parseObject(responseBody);
-                data = JSONObject.parseArray(((JSONArray) map.get("data")).toJSONString(), Goods.class);
+                List<Goods> list = JSONObject.parseArray(((JSONArray) map.get("data")).toJSONString(), Goods.class);
+                data.addAll(list);
                 handler.sendEmptyMessage(1);
             }
         });

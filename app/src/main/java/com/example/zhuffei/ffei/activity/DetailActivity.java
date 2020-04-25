@@ -1,5 +1,6 @@
 package com.example.zhuffei.ffei.activity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +23,9 @@ import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.adapter.CommentAdapter;
 import com.example.zhuffei.ffei.entity.CommentUserVO;
+import com.example.zhuffei.ffei.entity.Goods;
 import com.example.zhuffei.ffei.entity.GoodsUserVO;
+import com.example.zhuffei.ffei.fragment.PayDetailFragment;
 import com.example.zhuffei.ffei.tool.AsyncImageLoader;
 import com.example.zhuffei.ffei.tool.GlideImageLoader;
 import com.example.zhuffei.ffei.tool.HttpUtil;
@@ -34,6 +37,7 @@ import com.netease.nim.uikit.api.NimUIKit;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 
+import org.apache.lucene.util.automaton.RunAutomaton;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -55,7 +59,7 @@ import okhttp3.Response;
  * @version 1.0
  * @date 2020/3/26 13:17
  */
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends CanPayBaseActivity {
     TextView title, describe, browser, userName, createTime, updateTime, location, price, none;
     LinearLayout comment;
     //举报
@@ -158,7 +162,16 @@ public class DetailActivity extends AppCompatActivity {
                         ToastHelper.showToast("评论删除失败");
                     }
                     break;
-
+                case 7:
+                    Goods goods = new Goods();
+                    goods.setPrice(10.00d);
+                    goods.setName(data.getName() + "上墙——24小时");
+                    PayDetailFragment payDetailFragment = new PayDetailFragment(goods, DetailActivity.this);
+                    payDetailFragment.show(getSupportFragmentManager(), "payDetailFragment");
+                    break;
+                case 8:
+                    ToastHelper.showToast("已在墙上！");
+                    break;
             }
         }
     };
@@ -318,6 +331,7 @@ public class DetailActivity extends AppCompatActivity {
                 buy.setText(R.string.shangqiang);
                 buy.setOnClickListener(v -> {
                     //上墙
+                    checkWall();
                 });
             } else if (isLogin) {
                 buy.setOnClickListener(v -> {
@@ -349,6 +363,7 @@ public class DetailActivity extends AppCompatActivity {
                 });
                 buy.setOnClickListener(v -> {
                     //上墙
+                    checkWall();
                 });
             } else if (isLogin) {
                 buttons.setVisibility(View.GONE);
@@ -528,5 +543,47 @@ public class DetailActivity extends AppCompatActivity {
         comments = new ArrayList<>();
         none.setVisibility(View.GONE);
         getComments();
+    }
+
+    /**
+     * 用户点击上墙后先判断是不是已经在墙上
+     */
+    void checkWall() {
+        Map<String, Integer> map = new HashMap<>();
+        map.put("gid", gid);
+        String param = JSON.toJSONString(map);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), param);
+        HttpUtil.sendHttpRequest(UrlTool.CHECKWALL, requestBody, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                runOnUiThread(() -> handler.sendEmptyMessage(-1));
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String json = response.body().string();
+                Map map = JSON.parseObject(json, HashMap.class);
+
+                int code = (int) map.get("data");
+                if (code == 0) {
+                    handler.sendEmptyMessage(7);
+                } else {
+                    handler.sendEmptyMessage(8);
+                }
+            }
+        });
+    }
+    @Override
+    public void onInputFinish(String result) {
+        if (result.equals("123456")) {
+            fragment.dismiss();
+            Intent intent = new Intent(this,PaySuccessActivity.class);
+            intent.putExtra("gid",gid);
+            intent.putExtra("code", 2);
+            startActivity(intent);
+            finish();
+        }else {
+            showPwdError();
+        }
     }
 }

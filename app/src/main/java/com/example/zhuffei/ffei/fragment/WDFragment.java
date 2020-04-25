@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ import com.example.zhuffei.ffei.activity.CropActivity;
 import com.example.zhuffei.ffei.activity.FocusActivity;
 import com.example.zhuffei.ffei.activity.HomeActivity;
 import com.example.zhuffei.ffei.activity.LoginActivity;
+import com.example.zhuffei.ffei.activity.MainActivity;
 import com.example.zhuffei.ffei.activity.MyGoodsActivity;
 import com.example.zhuffei.ffei.entity.User;
 import com.example.zhuffei.ffei.tool.AsyncImageLoader;
@@ -140,8 +142,6 @@ public class WDFragment extends BaseFragment {
         findViews(view);
         mContext = this.getActivity();
         setListener();
-        countFocusAndFans();
-        setUser();
         return view;
     }
 
@@ -175,6 +175,12 @@ public class WDFragment extends BaseFragment {
     }
 
     private void setListener() {
+
+        userName.setOnClickListener(v -> {
+            if (!FfeiApplication.isLogin) {
+                startActivity(new Intent(mContext, LoginActivity.class));
+            }
+        });
         avator.setOnClickListener(v -> {
             if (FfeiApplication.isLogin) {
                 dialog = new Dialog(mContext, R.style.BottomDialogStyle);
@@ -258,6 +264,7 @@ public class WDFragment extends BaseFragment {
             if (FfeiApplication.isLogin) {
                 Tool.logout();
                 HomeActivity activity = (HomeActivity) mContext;
+                startActivity(new Intent(activity, MainActivity.class));
                 activity.finish();
             } else {
                 ToastHelper.showToast("未登录");
@@ -289,6 +296,10 @@ public class WDFragment extends BaseFragment {
             phone.setText(user.getPhone().substring(0, 3) + "****" + user.getPhone().substring(7, 11));
             AsyncImageLoader asyncImageLoader = new AsyncImageLoader(mContext);
             asyncImageLoader.asyncloadImage(avator, UrlTool.AVATOR + user.getAvator());
+        } else {
+            User user = FfeiApplication.user;
+            userName.setText("未登录");
+            phone.setText("登录发现更多精彩");
         }
 
     }

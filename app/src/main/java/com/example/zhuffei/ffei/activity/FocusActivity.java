@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,7 +44,7 @@ import okhttp3.Response;
  * @version 1.0
  * @date 2020/4/3 12:49
  */
-public class FocusActivity extends AppCompatActivity {
+public class FocusActivity extends BaseActivity {
 
     public static final int FOCUS = 1;
 
@@ -63,6 +64,8 @@ public class FocusActivity extends AppCompatActivity {
 
     private ImageView search;
 
+    private UserAdapter adapter;
+
     private Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -75,7 +78,8 @@ public class FocusActivity extends AppCompatActivity {
                         empty.setVisibility(View.VISIBLE);
                         return;
                     }
-                    listView.setAdapter(new UserAdapter(FocusActivity.this, data));
+                    empty.setVisibility(View.GONE);
+                    adapter.notifyDataSetChanged();
                     break;
             }
         }
@@ -90,8 +94,10 @@ public class FocusActivity extends AppCompatActivity {
         title = findViewById(R.id.title);
         empty = findViewById(R.id.empty);
         search = findViewById(R.id.searchUser);
+        data = new ArrayList<>();
         initView();
-        initData();
+        adapter = new UserAdapter(FocusActivity.this, data);
+        listView.setAdapter(adapter);
         back = findViewById(R.id.back);
         back.setOnClickListener(v ->
         {
@@ -107,7 +113,6 @@ public class FocusActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        data = new ArrayList<>();
         Map<String, Integer> map = new HashMap<>();
         map.put("uid", FfeiApplication.user.getId());
         String param = JSON.toJSONString(map);
@@ -123,11 +128,17 @@ public class FocusActivity extends AppCompatActivity {
                 String responseBody = response.body().string();
                 Map<String, Object> map = JSON.parseObject(responseBody);
                 List<User> list = JSONObject.parseArray(((JSONArray) map.get("data")).toJSONString(), User.class);
-                data = list;
+                data.clear();
+                data.addAll(list);
                 handler.sendEmptyMessage(0);
             }
         });
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData();
+    }
 }

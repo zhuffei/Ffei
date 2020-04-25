@@ -40,7 +40,7 @@ import okhttp3.Response;
  * @version 1.0
  * @date 2020/4/3 12:49
  */
-public class ReportActivity  extends AppCompatActivity{
+public class ReportActivity  extends BaseActivity{
     private ImageView back;
 
     private TextView goodsName ,publisher;
