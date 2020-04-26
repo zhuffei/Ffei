@@ -11,5 +11,6 @@
     <string name="xiajia">下架</string>
     <string name="shangqiang">上墙</string>
     <string name="yixiajia">已下架</string>
+    <string name="shareLocation">位置共享</string>
 
 </resources>

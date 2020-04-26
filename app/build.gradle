@@ -65,6 +65,11 @@ dependencies {
     implementation project(':uikit')
     implementation 'com.github:MyCropBitmap:1.1.2'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+//    implementation 'com.amap.api:map2d:latest.integration'
+    implementation 'com.amap.api:location:latest.integration'
+    implementation 'com.amap.api:3dmap:latest.integration'
+    implementation 'com.neovisionaries:nv-websocket-client:2.2'
+
 
 }
 //packagingOptions {

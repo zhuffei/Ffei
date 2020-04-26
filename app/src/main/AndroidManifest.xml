@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.zhuffei.ffei">
 
@@ -25,7 +26,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-
     <permission
         android:name="com.example.zhuffei.ffei.permission.RECEIVE_MSG"
         android:protectionLevel="signature" />
@@ -40,6 +40,7 @@
         android:theme="@style/AppTheme">
 
 
+        <meta-data android:name="com.amap.api.v2.apikey" android:value="27982e96dfaeb1cf90c9dfa0ee588f22"></meta-data>
         <meta-data
             android:name="com.netease.nim.appKey"
             android:value="5f87c2f24f10a12a75200cabb84c8f9c" />
@@ -127,6 +128,9 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activity.PlusActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activity.MapActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activity.IssueActivity"

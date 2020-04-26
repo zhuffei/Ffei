@@ -6,15 +6,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.zhuffei.ffei.R;
+import com.example.zhuffei.ffei.diymessage.CustomAttachParser;
 import com.example.zhuffei.ffei.service.LoginService;
 import com.example.zhuffei.ffei.tool.ToastHelper;
+import com.netease.nim.uikit.api.NimUIKit;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.util.NIMUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +33,14 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(NIMUtil.isMainProcess(this)){
+            NimUIKit.init(this);
+            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
+        }else{
+            Log.d("aaaaaaaaaa","不是主线程？？？");
+        }
         initPermission();
+
 
     }
 
