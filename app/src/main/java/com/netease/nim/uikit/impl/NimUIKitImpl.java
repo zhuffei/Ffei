@@ -528,6 +528,8 @@ public final class NimUIKitImpl {
     }
 
     public static void setAccount(String account) {
+        Log.d("aaaaaaaaa","调用了");
+        Log.d("aaaaaaaaa",(account==null)+"");
         NimUIKitImpl.account = account;
     }
 

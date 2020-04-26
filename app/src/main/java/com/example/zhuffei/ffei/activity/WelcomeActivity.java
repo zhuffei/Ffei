@@ -14,6 +14,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.example.zhuffei.ffei.diymessage.CustomAttachParser;
+import com.example.zhuffei.ffei.diymessage.MsgViewHolderShareLocation;
+import com.example.zhuffei.ffei.diymessage.ShareLocationAttachment;
 import com.example.zhuffei.ffei.service.LoginService;
 import com.example.zhuffei.ffei.tool.ToastHelper;
 import com.netease.nim.uikit.api.NimUIKit;
@@ -33,12 +35,6 @@ public class WelcomeActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(NIMUtil.isMainProcess(this)){
-            NimUIKit.init(this);
-            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
-        }else{
-            Log.d("aaaaaaaaaa","不是主线程？？？");
-        }
         initPermission();
 
 
@@ -87,7 +83,7 @@ public class WelcomeActivity extends BaseActivity {
 
     //1、首先声明一个数组permissions，将需要的权限都放在里面
     String[] permissions = new String[]{Manifest.permission.CAMERA,
-            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
+            Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO, Manifest.permission.ACCESS_FINE_LOCATION};
     //2、创建一个mPermissionList，逐个判断哪些权限未授予，未授予的权限存储到mPerrrmissionList中
     List<String> mPermissionList = new ArrayList<>();
 

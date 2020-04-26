@@ -2,6 +2,7 @@ package com.netease.nim.uikit.business.uinfo;
 
 import android.text.TextUtils;
 
+import com.example.zhuffei.ffei.FfeiApplication;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nim.uikit.business.team.helper.TeamHelper;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -12,6 +13,7 @@ public class UserInfoHelper {
     // 获取用户显示在标题栏和最近联系人中的名字
     public static String getUserTitleName(String id, SessionTypeEnum sessionType) {
         if (sessionType == SessionTypeEnum.P2P) {
+            System.out.println(NimUIKit.getAccount());
             if (NimUIKit.getAccount().equals(id)) {
                 return "我的电脑";
             } else {

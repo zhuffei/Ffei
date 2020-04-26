@@ -1,6 +1,11 @@
 package com.example.zhuffei.ffei.diymessage;
 
+import android.content.Intent;
+import android.util.Log;
+
+import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
+import com.example.zhuffei.ffei.activity.MapActivity;
 import com.netease.nim.uikit.business.session.viewholder.MsgViewHolderBase;
 import com.netease.nim.uikit.common.ui.recyclerview.adapter.BaseMultiItemFetchLoadAdapter;
 
@@ -28,7 +33,7 @@ public class MsgViewHolderShareLocation extends MsgViewHolderBase {
 
     @Override
     public void bindContentView() {
-        ShareLocationAttachment attachment = (ShareLocationAttachment)message.getAttachment();
+        ShareLocationAttachment attachment = (ShareLocationAttachment) message.getAttachment();
     }
 
     @Override
@@ -43,6 +48,9 @@ public class MsgViewHolderShareLocation extends MsgViewHolderBase {
 
     @Override
     public void onItemClick() {
+        FfeiApplication.context.startActivity(new Intent(FfeiApplication.context, MapActivity.class)
+                .putExtra("accid1", message.getSessionId()).putExtra("accid2", message.getFromAccount()));
+
     }
 }
 

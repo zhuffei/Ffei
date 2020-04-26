@@ -2,12 +2,16 @@ package com.example.zhuffei.ffei;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
+import com.example.zhuffei.ffei.diymessage.CustomAttachParser;
 import com.example.zhuffei.ffei.diymessage.ShareLocationAttachment;
 import com.example.zhuffei.ffei.diymessage.MsgViewHolderShareLocation;
 import com.example.zhuffei.ffei.entity.User;
 import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.util.NIMUtil;
 
 /**
  * @author zhuffei
@@ -27,8 +31,18 @@ public class FfeiApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        NIMClient.init(this,null,null);
-        NimUIKit.registerMsgItemViewHolder(ShareLocationAttachment.class, MsgViewHolderShareLocation.class);
+        NIMClient.init(context,null,null);
+        if (NIMUtil.isMainProcess(this)) {
+
+            Log.d("aaaaaaaaaa", "初始化");
+            NimUIKit.init(this);
+
+            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
+
+            NimUIKit.registerMsgItemViewHolder(ShareLocationAttachment.class, MsgViewHolderShareLocation.class);
+        } else {
+            Log.d("aaaaaaaaaa", "不是主线程？？？");
+        }
 
     }
 }

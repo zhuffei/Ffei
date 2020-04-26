@@ -1,6 +1,8 @@
 package com.netease.nim.uikit.common.util.log;
 
 
+import android.util.Log;
+
 import com.netease.nim.uikit.common.util.log.sdk.LogBase;
 import com.netease.nim.uikit.common.util.log.sdk.wrapper.NimLog;
 import com.netease.nim.uikit.common.util.storage.ExternalStorage;

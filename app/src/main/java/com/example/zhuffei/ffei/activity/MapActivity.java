@@ -17,8 +17,8 @@ import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
+import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
-import com.example.zhuffei.ffei.entity.Send;
 import com.example.zhuffei.ffei.tool.WsManager;
 
 import java.math.BigDecimal;
@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MapActivity extends Activity implements LocationSource, AMapLocationListener {
-
+    private String targetAccid;
     private AMap aMap;
     private MapView mapView;
     private OnLocationChangedListener mListener;
@@ -36,8 +36,6 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
     private AMapLocationClientOption mLocationOption;// 高德相关
     private boolean isFirst = true;
     private static double lat, lng;//实时定位的经纬度
-    //    private Button start;//共享位置按钮
-    private Send send = new Send(MapActivity.this);
     private double latitude, longitude;//接收共享位置的经纬度
     private List<Marker> list;//存放共享位置的list
     private Marker marker, markerOwner;//接收的marker,自己位置的marker
@@ -47,6 +45,9 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        String accid1 = getIntent().getStringExtra("accid1");
+        String accid2 = getIntent().getStringExtra("accid2");
+        targetAccid = FfeiApplication.user.getAccid().equals(accid1) ? accid2 : accid1;
         mapView = findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         initMap();
@@ -92,7 +93,7 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
                 lat = aMapLocation.getLatitude();
                 lng = aMapLocation.getLongitude();
                 Map map = new HashMap<String, Object>();
-                map.put("uid", 3);
+                map.put("target", targetAccid);
                 map.put("lat", lat);
                 map.put("lng", lng);
                 String json = JSON.toJSONString(map);
@@ -196,7 +197,7 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
             Map map = JSON.parseObject(text, HashMap.class);
             BigDecimal lat = (BigDecimal) map.get("lat");
             BigDecimal lng = (BigDecimal) map.get("lng");
-            LatLng latLng = new LatLng(lat.doubleValue(),lng.doubleValue());
+            LatLng latLng = new LatLng(lat.doubleValue(), lng.doubleValue());
             marker = aMap.addMarker(help_add_icon(latLng, R.mipmap.icon_tourist));
             list.add(marker);
         } catch (Exception e) {

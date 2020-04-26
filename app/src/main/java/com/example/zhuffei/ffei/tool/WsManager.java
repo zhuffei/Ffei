@@ -2,6 +2,7 @@ package com.example.zhuffei.ffei.tool;
 
 import android.util.Log;
 
+import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.activity.MapActivity;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -27,7 +28,7 @@ public class WsManager {
 //    private static final String DEF_TEST_URL = "测试服地址";//测试服默认地址
 //    private static final String DEF_RELEASE_URL = "正式服地址";//正式服默认地址
 //    private static final String DEF_URL = BuildConfig.DEBUG ? DEF_TEST_URL : DEF_RELEASE_URL;
-    private String url = UrlTool.prefix+"websocket/2";
+    private String url = UrlTool.prefix+"websocket/"+ FfeiApplication.user.getAccid();
 
     private WsStatus mStatus;
     private WebSocket ws;
