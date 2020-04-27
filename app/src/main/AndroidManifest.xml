@@ -15,8 +15,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-<!--    //录音-->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <!-- 8.0 系统需要-->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />

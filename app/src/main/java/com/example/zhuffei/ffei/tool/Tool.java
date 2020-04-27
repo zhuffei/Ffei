@@ -4,14 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.DisplayMetrics;
 
 import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.activity.DetailActivity;
-import com.netease.nim.uikit.api.NimUIKit;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.AuthService;
 
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -44,11 +45,38 @@ public class Tool {
     }
 
     /**
-     * 检查密码格式
-     *
-     * @param password
+     * 从网络获取bitmap
+     * @param Url
      * @return
+     * @throws Exception
      */
+    public static Bitmap getImage(String Url)  {
+
+        try {
+
+            URL url = new URL(Url);
+
+            String responseCode = url.openConnection().getHeaderField(0);
+
+            if (responseCode.indexOf("200") < 0)
+
+                throw new Exception("图片文件不存在或路径错误，错误代码：" + responseCode);
+
+            return BitmapFactory.decodeStream(url.openStream());
+
+        } catch (Exception e) {
+
+            return null;
+        }
+
+    }
+
+        /**
+         * 检查密码格式
+         *
+         * @param password
+         * @return
+         */
     public static boolean TestPassword(String password) {
         Pattern p = Pattern.compile("^[\\da-zA-Z!@#$.%^&*]*$");
 

@@ -2,29 +2,31 @@ package com.example.zhuffei.ffei.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.LocationSource;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
+import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdateFactory;
+import com.amap.api.maps2d.LocationSource;
+import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
+import com.amap.api.maps2d.model.MarkerOptions;
 import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.tool.WsManager;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MapActivity extends Activity implements LocationSource, AMapLocationListener {
@@ -37,9 +39,22 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
     private boolean isFirst = true;
     private static double lat, lng;//实时定位的经纬度
     private double latitude, longitude;//接收共享位置的经纬度
-    private List<Marker> list;//存放共享位置的list
     private Marker marker, markerOwner;//接收的marker,自己位置的marker
     private WsManager wsManager;
+    private TextView tip;
+    private Handler handler = new Handler(Looper.getMainLooper()) {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 0:
+                    tip.setText("正在共享位置");
+                    break;
+                case 1:
+                    tip.setText("对方尚未加入");
+                    break;
+            }
+       }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +64,15 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
         String accid2 = getIntent().getStringExtra("accid2");
         targetAccid = FfeiApplication.user.getAccid().equals(accid1) ? accid2 : accid1;
         mapView = findViewById(R.id.map);
+        tip = findViewById(R.id.tip);
+        tip.getBackground().setAlpha(180);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         initMap();
-        initView();
-//        new Thread(send).start();
         wsManager = WsManager.getInstance();
         wsManager.setMapActivity(this);
         wsManager.init();
     }
 
-    private void initView() {
-
-        list = new ArrayList<>();
-    }
 
     private void initMap() {
         if (aMap == null) {
@@ -76,7 +87,7 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
     private void setUpMap() {
         aMap.setLocationSource(this);
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-        aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);// 跟随模式
+        aMap.setMyLocationType(AMap.MAP_TYPE_SATELLITE);// 跟随模式
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
     }
@@ -85,7 +96,7 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (mListener != null && aMapLocation != null) {
             if (aMapLocation != null && aMapLocation.getErrorCode() == 0) {
-                mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
+//                mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
                 if (isFirst) {
                     aMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude()), 18));//定位成功移到当前定位点
                     isFirst = false;
@@ -93,6 +104,7 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
                 lat = aMapLocation.getLatitude();
                 lng = aMapLocation.getLongitude();
                 Map map = new HashMap<String, Object>();
+                map.put("type", "normal");
                 map.put("target", targetAccid);
                 map.put("lat", lat);
                 map.put("lng", lng);
@@ -101,7 +113,7 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
                 if (markerOwner != null) {
                     markerOwner.remove();//每次定位发生改变的时候,把自己的marker先移除再添加
                 }
-                markerOwner = aMap.addMarker((help_add_icon(new LatLng(lat, lng), R.mipmap.icon_myp)));
+                    markerOwner = aMap.addMarker((help_add_icon(new LatLng(lat, lng), R.mipmap.icon_myp)));
             } else {
                 Log.i("aaaaaaaa", aMapLocation.getErrorCode() + "错误码" + aMapLocation.getErrorInfo() + "错误信息");
             }
@@ -194,13 +206,28 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
 //                marker = aMap.addMarker(help_add_icon(latLng, R.mipmap.icon_tourist));
 //                list.add(marker);
 //            }
+
             Map map = JSON.parseObject(text, HashMap.class);
+            String type = (String) map.get("type");
+            String accid = (String) map.get("accid");
+            if (type.equals("close") && accid.equals(targetAccid)) {
+                handler.sendEmptyMessage(1);
+                marker.remove();
+                marker = null;
+                return;
+            }
+            if (marker == null && type.equals("normal")) {
+                handler.sendEmptyMessage(0);
+            }
             BigDecimal lat = (BigDecimal) map.get("lat");
             BigDecimal lng = (BigDecimal) map.get("lng");
             LatLng latLng = new LatLng(lat.doubleValue(), lng.doubleValue());
+            if (null != marker) {
+                marker.remove();
+            }
             marker = aMap.addMarker(help_add_icon(latLng, R.mipmap.icon_tourist));
-            list.add(marker);
         } catch (Exception e) {
+            e.printStackTrace();
             Log.i("aaaaaaa", "解析出错" + e.getMessage());
         }
     }
@@ -217,17 +244,6 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
                 .icon(BitmapDescriptorFactory.fromResource(id));
         return markOptiopns;
     }
-
-    /**
-     * 移除
-     *
-     * @param list
-     */
-    public static void Remove(List<Marker> list) {
-        if (list != null) {
-            for (Marker marker : list) {
-                marker.remove();
-            }
-        }
-    }
 }
+
+

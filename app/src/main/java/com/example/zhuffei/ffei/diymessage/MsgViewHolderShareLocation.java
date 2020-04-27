@@ -1,7 +1,6 @@
 package com.example.zhuffei.ffei.diymessage;
 
 import android.content.Intent;
-import android.util.Log;
 
 import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
