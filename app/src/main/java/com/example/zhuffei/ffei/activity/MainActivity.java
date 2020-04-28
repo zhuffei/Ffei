@@ -43,7 +43,7 @@ public class MainActivity extends BaseActivity {
             startActivityForResult(intent, 1);
         });
         textView.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, MapActivity.class);
+            Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
             startActivityForResult(intent, 1);
 
         });

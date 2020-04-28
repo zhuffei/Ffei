@@ -13,14 +13,14 @@ import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
-import com.amap.api.maps2d.AMap;
-import com.amap.api.maps2d.CameraUpdateFactory;
-import com.amap.api.maps2d.LocationSource;
-import com.amap.api.maps2d.MapView;
-import com.amap.api.maps2d.model.BitmapDescriptorFactory;
-import com.amap.api.maps2d.model.LatLng;
-import com.amap.api.maps2d.model.Marker;
-import com.amap.api.maps2d.model.MarkerOptions;
+import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
+import com.amap.api.maps.LocationSource;
+import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MarkerOptions;
 import com.example.zhuffei.ffei.FfeiApplication;
 import com.example.zhuffei.ffei.R;
 import com.example.zhuffei.ffei.tool.WsManager;
@@ -113,9 +113,9 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
                 if (markerOwner != null) {
                     markerOwner.remove();//每次定位发生改变的时候,把自己的marker先移除再添加
                 }
-                    markerOwner = aMap.addMarker((help_add_icon(new LatLng(lat, lng), R.mipmap.icon_myp)));
+                    markerOwner = aMap.addMarker((help_add_icon(new LatLng(lat, lng), R.mipmap.location_mine)));
             } else {
-                Log.i("aaaaaaaa", aMapLocation.getErrorCode() + "错误码" + aMapLocation.getErrorInfo() + "错误信息");
+                Log.d("aaaaaaaa", aMapLocation.getErrorCode() + "错误码" + aMapLocation.getErrorInfo() + "错误信息");
             }
         }
     }
@@ -225,7 +225,7 @@ public class MapActivity extends Activity implements LocationSource, AMapLocatio
             if (null != marker) {
                 marker.remove();
             }
-            marker = aMap.addMarker(help_add_icon(latLng, R.mipmap.icon_tourist));
+            marker = aMap.addMarker(help_add_icon(latLng, R.mipmap.location_his));
         } catch (Exception e) {
             e.printStackTrace();
             Log.i("aaaaaaa", "解析出错" + e.getMessage());

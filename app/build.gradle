@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\11\\zhuffei.keystore')
+            storePassword 'woca.1234'
+            keyAlias = 'zhuffei'
+            keyPassword 'woca.1234'
+        }
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -67,9 +75,9 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 //    implementation 'com.amap.api:map2d:latest.integration'
     implementation 'com.amap.api:location:latest.integration'
-//    implementation 'com.amap.api:3dmap:latest.integration'
+    implementation 'com.amap.api:3dmap:latest.integration'
     implementation 'com.neovisionaries:nv-websocket-client:2.2'
-    implementation 'com.amap.api:map2d:latest.integration'
+//    implementation 'com.amap.api:map2d:latest.integration'
 
 
 }

@@ -6,25 +6,25 @@
     android:orientation="vertical">
 
 
-    <com.amap.api.maps2d.MapView
+    <com.amap.api.maps.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></com.amap.api.maps2d.MapView>
+        android:layout_height="match_parent"></com.amap.api.maps.MapView>
 
-<!--    <Button-->
-<!--        android:id="@+id/start"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="start"-->
-<!--        tools:ignore="MissingConstraints"></Button>-->
+    <!--    <Button-->
+    <!--        android:id="@+id/start"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="start"-->
+    <!--        tools:ignore="MissingConstraints"></Button>-->
     <TextView
         android:id="@+id/tip"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="#000000"
-        android:text="对方尚未加入"
-        android:textSize="18sp"
-        android:textColor="@color/white"
         android:gravity="center"
+        android:text="对方尚未加入"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         tools:ignore="MissingConstraints"></TextView>
 </androidx.constraintlayout.widget.ConstraintLayout>

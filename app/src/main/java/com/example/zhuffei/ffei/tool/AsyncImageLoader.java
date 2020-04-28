@@ -35,7 +35,7 @@ public class AsyncImageLoader {
      */
     public Bitmap getLocalOrNetBitmap(String url)
     {
-        Bitmap  bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
+        Bitmap  bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.default_error);
         if (url != null) {
             InputStream in = null;
             BufferedOutputStream out = null;

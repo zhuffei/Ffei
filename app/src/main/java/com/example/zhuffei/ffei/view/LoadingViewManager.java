@@ -99,7 +99,7 @@ public class LoadingViewManager {
         private int defaultAnimText = 20;
         private Activity mActivity;
         private long minAnimTime = 1000;
-        private long maxAnimTime = 600000;
+        private long maxAnimTime = 6000;
         private boolean isForcedDismiss = false;
         private boolean isSetToDismiss = false;
         private boolean isDismissed = false;
@@ -348,7 +348,6 @@ public class LoadingViewManager {
          * 开始构建
          */
         public void build() {
-//            Log.d("aaaaaaaaa", "kaishi"+Thread.currentThread().getName());
             animationLayoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
             textLayoutParams.addRule(RelativeLayout.BELOW, avLoadingIndicatorView.getId());
             innerRelativeLayout.setLayoutParams(new RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT));
@@ -371,7 +370,7 @@ public class LoadingViewManager {
             loadingLayoutContainer.addView(innerRectangle);
             // 设置
             loadingLayoutContainer.bringChildToFront(innerRectangle);
-            Log.d("aaaaaaaaa", "kaishi11"+Thread.currentThread().getName());
+//            Log.d("aaaaaaaaa", "kaishi11"+Thread.currentThread().getName());
             avLoadingIndicatorView.show();
             // 4
             parentView.addView(loadingLayoutContainer);
@@ -389,12 +388,13 @@ public class LoadingViewManager {
                                 if (animatingListener != null) {
                                     animatingListener.onAnimating();
                                 }
-                                if (time >= minAnimTime && isSetToDismiss) {
+                                if (time >= minAnimTime ) {
                                     mHandler.sendEmptyMessage(0);
                                     break;
+
                                 }
                             } else {
-                                Log.d("aaaaaaaaaaaaa","推出");
+//                                Log.d("aaaaaaaaaaaaa","推出");
                                 break;
                             }
                             time += 100;
@@ -421,11 +421,9 @@ public class LoadingViewManager {
 
             @Override
             public void handleMessage(Message msg) {
-//                Log.d("aaaaaaaaa", "关动画111 " );
                 super.handleMessage(msg);
                 if (activityWeakReference != null) {
                     if (!isDismissed) {
-//                        Log.d("aaaaaaaaa", "关动画"+Thread.currentThread().getName());
                         dismiss();
                     }
                 }
